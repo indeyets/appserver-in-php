@@ -25,7 +25,7 @@ class SCGI_Application
             throw new RuntimeException('Failed creating socker-server (URL: "'.$socket_url.'"): '.$errstr, $errno);
         }
 
-        echo "Initialized SCGI_Application: ".get_class($this)."\n";
+        echo 'Initialized SCGI_Application: '.get_class($this).' @ ['.$socket_url."]\n";
     }
 
     public function __destruct()
