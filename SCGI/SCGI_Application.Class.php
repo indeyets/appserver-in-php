@@ -74,6 +74,6 @@ class SCGI_Application
     {
         $this->response->addHeader('Status', '500 Internal Server Error');
         $this->response->addHeader('Content-type', 'text/html; charset=UTF-8');
-        $this->response->write("<h1>500 — Internal Server Error</h1><p>Application doesn't handle requests</p>");
+        $this->response->write("<h1>500 — Internal Server Error</h1><p>Application doesn't implement requestHandler() method :-P</p>");
     }
 }
