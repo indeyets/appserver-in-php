@@ -21,6 +21,7 @@ class MyApp extends SCGI_Application
         $out->addHeader('Status', '200 Ok');
         $out->addHeader('Content-type', 'text/html');
 
+        // replacing {data} in the "template" by our dynamic string and sending it out
         $out->write(str_replace(
             '{data}',
             $this->prepareData(),
@@ -28,7 +29,7 @@ class MyApp extends SCGI_Application
         ));
     }
 
-    public function prepareData()
+    private function prepareData()
     {
         $buffer = '<pre>';
         $buffer .= 'Hello world! #'.(++$this->counter)."\n\n";
