@@ -4,7 +4,7 @@ require '../../SCGI/autoload.php';
 
 class MyApp extends SCGI_Application
 {
-    private $counter = 0;
+    private $local_storage;
     private $tpl = null;
 
     public function __construct($socket_url = 'tcp://127.0.0.1:9999')
@@ -12,6 +12,11 @@ class MyApp extends SCGI_Application
         parent::__construct($socket_url);
 
         $this->tpl = file_get_contents('template.html'); // caching template in local-memory
+        $this->local_storage = array(
+            'counter' => 0,
+            'prev_memory_peak' => 0,
+            'memory_peak_counter' => 0
+        );
     }
 
     protected function requestHandler()
@@ -31,10 +36,20 @@ class MyApp extends SCGI_Application
 
     private function prepareData()
     {
+        $c = ++$this->local_storage['counter'];
+        $m = memory_get_usage();
+        $p = memory_get_peak_usage();
+
+        if ($p > $this->local_storage['prev_memory_peak']) {
+            $this->local_storage['prev_memory_peak'] = $p;
+            $this->local_storage['memory_peak_counter'] = $c;
+        }
+
         $buffer = '<pre>';
-        $buffer .= 'Hello world! #'.(++$this->counter)."\n\n";
-        $buffer .= 'Memory usage: '.memory_get_usage()."\n\n";
-        $buffer .= 'Peak Memory usage: '.memory_get_peak_usage()."\n\n";
+        $buffer .= 'Hello world! #'.$c."\n";
+        $buffer .= 'Memory usage: '.$m."\n";
+        $buffer .= 'Peak Memory usage: '.$p."\n";
+        $buffer .= 'Memory usage last growed at request#'.$this->local_storage['memory_peak_counter']."\n\n";
         $buffer .= var_export($this->request()->getAllVars(), true);
         $buffer .= '</pre>';
 
