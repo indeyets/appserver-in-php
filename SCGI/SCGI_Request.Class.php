@@ -75,8 +75,6 @@ class Request
         $ct = $this->headers['CONTENT_TYPE'];
         $b = $this->body;
 
-        file_put_contents('debug.bin', $b);
-
         $pos = strpos($ct, '=-') + 1;
         $boundary = '--'.substr($ct, $pos);
         $boundary_len = strlen($boundary);
