@@ -1,6 +1,6 @@
 <?php
 
-require '../../SCGI/autoload.php';
+require dirname(__FILE__).'/../../SCGI/autoload.php';
 
 class MyApp extends MFS::AppServer::SCGI::Application
 {
@@ -11,7 +11,7 @@ class MyApp extends MFS::AppServer::SCGI::Application
     {
         parent::__construct($socket_url);
 
-        $this->tpl = file_get_contents('template.html'); // caching template in local-memory
+        $this->tpl = file_get_contents(dirname(__FILE__).'/template.html'); // caching template in local-memory
         $this->local_storage = array(
             'counter' => 0,
             'prev_memory_peak' => 0,
@@ -24,7 +24,7 @@ class MyApp extends MFS::AppServer::SCGI::Application
         $out = $this->response();
 
         $out->addHeader('Status', '200 Ok');
-        $out->addHeader('Content-type', 'text/html');
+        $out->addHeader('Content-type', 'text/html; charset=utf-8');
 
         // replacing {data} in the "template" by our dynamic string and sending it out
         $out->write(str_replace(
