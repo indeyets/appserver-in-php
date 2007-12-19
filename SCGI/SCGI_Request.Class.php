@@ -38,7 +38,12 @@ class Request
             if ($this->headers['CONTENT_LENGTH'] > self::IniString_to_Bytes(ini_get('post_max_size')))
                 throw new RuntimeException("POST is larger than allowed by post_max_size");
 
-            $this->body = stream_get_line($conn, $this->headers['CONTENT_LENGTH']);
+            // $this->body = stream_get_line($conn, $this->headers['CONTENT_LENGTH'], '');
+            $this->body = stream_get_contents($conn, $this->headers['CONTENT_LENGTH']);
+
+            if (strlen($this->body) != $this->headers['CONTENT_LENGTH']) {
+                throw new RuntimeException("Didn't get all of the request: ".strlen($this->body).' of '.$this->headers['CONTENT_LENGTH']);
+            }
         }
 
         unset($this->headers['SCGI'], $this->headers['CONTENT_LENGTH']);
@@ -70,6 +75,8 @@ class Request
         $ct = $this->headers['CONTENT_TYPE'];
         $b = $this->body;
 
+        file_put_contents('debug.bin', $b);
+
         $pos = strpos($ct, '=-') + 1;
         $boundary = '--'.substr($ct, $pos);
         $boundary_len = strlen($boundary);
@@ -83,11 +90,11 @@ class Request
             $headers = array();
             foreach (explode("\r\n", substr($b, $h_start, $h_end - $h_start)) as $h_str) {
                 $divider = strpos($h_str, ':');
-                $headers[substr($h_str, 0, $divider)] = substr($h_str, $divider + 2);
+                $headers[substr($h_str, 0, $divider)] = html_entity_decode(substr($h_str, $divider + 2), ENT_QUOTES, 'UTF-8');
             }
 
             if (!isset($headers['Content-Disposition']))
-                throw new RuntimeException("Didn't find Content-disposition in one of the parts of multipart");
+                throw new RuntimeException("Didn't find Content-disposition in one of the parts of multipart: ".var_export(array_keys($headers), true));
 
             // parsing dispositin-header of part
             $disposition = array();
@@ -102,6 +109,10 @@ class Request
             // getting body of part
             $b_start = $h_end + 4;
             $b_end = strpos($b, "\r\n".$boundary, $b_start);
+
+            if (false === $b_end) {
+                throw new RuntimeException("Didn't find end of body :-/");
+            }
 
             $file_data = substr($b, $b_start, $b_end - $b_start);
 
