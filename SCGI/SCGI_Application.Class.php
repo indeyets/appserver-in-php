@@ -1,6 +1,7 @@
 <?php
+namespace MFS::AppServer::SCGI;
 
-class SCGI_Application
+class Application
 {
     private $socket = null;
     private $request = null;
@@ -11,11 +12,18 @@ class SCGI_Application
         if (PHP_SAPI !== 'cli')
             throw new LogicalException("SCGI Application should be run using CLI SAPI");
 
-        if (version_compare("5.2.1", PHP_VERSION, '>'))
-            throw new LogicalException("SCGI Application requires PHP 5.1.2+");
+        if (version_compare("5.3.0-dev", PHP_VERSION, '>'))
+            throw new LogicalException("SCGI Application requires PHP 5.3.0+");
 
         if (!extension_loaded('spl'))
             throw new LogicalException("SCGI Application requires PHP compiled with SPL support");
+
+        if (ini_get('zend.enable_gc') === '')
+            echo "WARNING: This version of PHP is compiled without GC-support. Memory-leaks are possible!\n";
+        elseif (ini_get('zend.enable_gc') === '0') {
+            ini_set('zend.enable_gc', true);
+            echo "GC-support in PHP is enabled!\n";
+        }
 
         $errno = 0;
         $errstr = "";
@@ -25,13 +33,13 @@ class SCGI_Application
             throw new RuntimeException('Failed creating socker-server (URL: "'.$socket_url.'"): '.$errstr, $errno);
         }
 
-        echo 'Initialized SCGI_Application: '.get_class($this).' @ ['.$socket_url."]\n";
+        echo 'Initialized SCGI Application: '.get_class($this).' @ ['.$socket_url."]\n";
     }
 
     public function __destruct()
     {
         fclose($this->socket);
-        echo "DeInitialized SCGI_Application: ".get_class($this)."\n";
+        echo "DeInitialized SCGI Application: ".get_class($this)."\n";
     }
 
     public function runLoop()
@@ -40,8 +48,8 @@ class SCGI_Application
 
         while ($conn = stream_socket_accept($this->socket, -1)) {
             try {
-                $this->request = new SCGI_Request($conn);
-                $this->response = new SCGI_Response($conn);
+                $this->request = new Request($conn);
+                $this->response = new Response($conn);
 
                 $this->requestHandler();
 

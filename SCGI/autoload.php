@@ -8,9 +8,9 @@ function SCGI_autoload($class_name)
         $root = dirname(__FILE__).DIRECTORY_SEPARATOR;
 
         $files = array(
-            'SCGI_Application' => $root.'SCGI_Application.Class.php',
-            'SCGI_Request' => $root.'SCGI_Request.Class.php',
-            'SCGI_Response' => $root.'SCGI_Response.Class.php',
+            'MFS::AppServer::SCGI::Application' => $root.'SCGI_Application.Class.php',
+            'MFS::AppServer::SCGI::Request' => $root.'SCGI_Request.Class.php',
+            'MFS::AppServer::SCGI::Response' => $root.'SCGI_Response.Class.php',
         );
     }
 

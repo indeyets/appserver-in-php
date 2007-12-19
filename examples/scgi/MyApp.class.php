@@ -2,7 +2,7 @@
 
 require '../../SCGI/autoload.php';
 
-class MyApp extends SCGI_Application
+class MyApp extends MFS::AppServer::SCGI::Application
 {
     private $local_storage;
     private $tpl = null;

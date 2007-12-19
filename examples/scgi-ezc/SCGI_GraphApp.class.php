@@ -1,7 +1,7 @@
 <?php
 require 'SCGI/autoload.php';
 
-class SCGI_GraphApp extends SCGI_Application
+class SCGI_GraphApp extends MFS::AppServer::SCGI::Application
 {
     public function __construct($socket_url = 'tcp://127.0.0.1:9999')
     {

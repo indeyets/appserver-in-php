@@ -1,6 +1,7 @@
 <?php
+namespace MFS::AppServer::SCGI;
 
-class SCGI_Response
+class Response
 {
     private $conn = null;
 

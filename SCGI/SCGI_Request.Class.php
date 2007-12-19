@@ -1,6 +1,7 @@
 <?php
+namespace MFS::AppServer::SCGI;
 
-class SCGI_Request
+class Request
 {
     private $headers = array();
     private $body = null;
