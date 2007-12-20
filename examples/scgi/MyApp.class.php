@@ -45,13 +45,21 @@ class MyApp extends MFS::AppServer::SCGI::Application
             $this->local_storage['memory_peak_counter'] = $c;
         }
 
+        $req = $this->request();
+
         $buffer = '<pre>';
         $buffer .= 'Hello world! #'.$c."\n";
         $buffer .= 'Memory usage: '.$m."\n";
         $buffer .= 'Peak Memory usage: '.$p."\n";
         $buffer .= 'Memory usage last growed at request#'.$this->local_storage['memory_peak_counter']."\n\n";
-        $buffer .= var_export($this->request()->headers, true);
-        $buffer .= var_export($this->request()->files, true);
+        $buffer .= "HEADERS:\n".var_export($req->headers, true)."\n";
+        $buffer .= "GET:\n".var_export($req->get, true)."\n";
+
+        if ($req instanceof MFS::AppServer::HTTP::PostRequest) {
+            $buffer .= "POST:\n".var_export($req->post, true)."\n";
+            $buffer .= "FILES:\n".var_export($req->files, true)."\n";
+        }
+
         $buffer .= '</pre>';
 
         return $buffer;
