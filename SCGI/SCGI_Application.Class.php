@@ -20,12 +20,12 @@ class Application
         if (!extension_loaded('spl'))
             throw new LogicalException("SCGI Application requires PHP compiled with SPL support");
 
+        // Checking for GarbageCollection patch
         if (false === function_exists('gc_enabled')) {
             $this->has_gc = false;
             echo "WARNING: This version of PHP is compiled without GC-support. Memory-leaks are possible!\n";
-        } elseif (gc_enabled() === false) {
+        } elseif (false === gc_enabled()) {
             gc_enable();
-            echo "GC-support in PHP is enabled!\n";
         }
 
         $errno = 0;
