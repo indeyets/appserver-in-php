@@ -1,61 +1,19 @@
 <?php
-namespace MFS::AppServer::SCGI;
+namespace MFS::AppServer::HTTP;
 
-class Request
+class PostRequest extends Request
 {
-    private $headers = array();
-    private $body = null;
-    private $get = array();
     private $post = array();
     private $files = array();
 
-    public function __construct($conn)
+    protected function __construct(array $headers, $body = null)
     {
-        if (!is_numeric($len = stream_get_line($conn, 20, ':')))
-            throw new RuntimeException("invalid protocol");
+        parent::__construct($headers, $body);
 
-        $_headers = explode("\0", stream_get_line($conn, $len)); // getting headers
-        $divider = stream_get_line($conn, 1); // ","
-
-        $first = null;
-        foreach ($_headers as $element) {
-            if (null === $first) {
-                $first = $element;
-            } else {
-                $this->headers[$first] = $element;
-                $first = null;
-            }
-        }
-        unset($_headers, $first);
-
-        if (!isset($this->headers['SCGI']) or $this->headers['SCGI'] != '1')
-            throw new RuntimeException("Reqest is not SCGI/1 Compliant");
-
-        if (!isset($this->headers['CONTENT_LENGTH']))
-            throw new RuntimeException("CONTENT_LENGTH header not present");
-
-        if ($this->headers['CONTENT_LENGTH'] > 0) {
-            if ($this->headers['CONTENT_LENGTH'] > self::IniString_to_Bytes(ini_get('post_max_size')))
-                throw new RuntimeException("POST is larger than allowed by post_max_size");
-
-            // $this->body = stream_get_line($conn, $this->headers['CONTENT_LENGTH'], '');
-            $this->body = stream_get_contents($conn, $this->headers['CONTENT_LENGTH']);
-
-            if (strlen($this->body) != $this->headers['CONTENT_LENGTH']) {
-                throw new RuntimeException("Didn't get all of the request: ".strlen($this->body).' of '.$this->headers['CONTENT_LENGTH']);
-            }
-        }
-
-        unset($this->headers['SCGI'], $this->headers['CONTENT_LENGTH']);
-
-        parse_str($this->headers['QUERY_STRING'], $this->get);
-
-        if ($this->isPost()) {
-            if (isset($this->headers['CONTENT_TYPE']) and strpos($this->headers['CONTENT_TYPE'], 'multipart/form-data') === 0) {
-                $this->parseMultipart();
-            } else {
-                parse_str(urldecode($this->body), $this->post);
-            }
+        if (isset($this->headers['CONTENT_TYPE']) and strpos($this->headers['CONTENT_TYPE'], 'multipart/form-data') === 0) {
+            $this->parseMultipart();
+        } else {
+            parse_str(urldecode($this->body), $this->post);
         }
     }
 
@@ -67,6 +25,18 @@ class Request
             }
         }
     }
+
+    public function __get($property)
+    {
+        if ($property == 'post') {
+            return $this->post;
+        } elseif ($property == 'files') {
+            return $this->files;
+        }
+
+        return parent::__get($property);
+    }
+
 
     private function parseMultipart()
     {
@@ -84,6 +54,10 @@ class Request
             // getting headers of part
             $h_start = $pos + $boundary_len + 2;
             $h_end = strpos($b, "\r\n\r\n", $h_start);
+
+            if (false === $h_end) {
+                throw new RuntimeException("Didn't find end of headers-zone");
+            }
 
             $headers = array();
             foreach (explode("\r\n", substr($b, $h_start, $h_end - $h_start)) as $h_str) {
@@ -172,86 +146,12 @@ class Request
         parse_str($vars_accu, $this->post);
     }
 
-    public function isPost()
-    {
-        return $this->headers['REQUEST_METHOD'] == 'POST';
-    }
 
-    // HEADERS from web-server
-    public function getHeader($name)
-    {
-        if (!isset($this->headers[$name]))
-            return false;
 
-        return $this->headers[$name];
-    }
 
-    public function getHeaders()
-    {
-        return $this->headers;
-    }
-
-    // vars from QUERY_STRING
-    public function getGetVar($name)
-    {
-        if (!isset($this->get[$name]))
-            return false;
-
-        return $this->get[$name];
-    }
-
-    public function getGetVars()
-    {
-        return $this->get;
-    }
-
-    // POST request vars
-    public function getPostVar($name)
-    {
-        if (!isset($this->post[$name]))
-            return false;
-
-        return $this->post[$name];
-    }
-
-    public function getPostVars()
-    {
-        return $this->post;
-    }
-
-    // FILES request vars
-    public function getFiles()
-    {
-        return $this->files;
-    }
-
-    // returns array, with keys corresponding to standars autoglobal-names _GET/_POST/_SERVER
-    public function getAllVars()
-    {
-        $res = array(
-            '_SERVER' => $this->headers,
-            '_GET' => $this->get
-        );
-
-        if ($this->isPost()) {
-            $res['_POST'] = $this->post;
-
-            if (count($this->files) > 0) {
-                $res['_FILES'] = $this->files;
-            }
-        }
-
-        return $res;
-    }
-
-    // available in POST, for example
-    public function getBody()
-    {
-        return $this->body;
-    }
 
     // utility functions
-    public static function IniString_to_Bytes($val)
+    protected static function IniString_to_Bytes($val)
     {
         $val = trim($val);
         $last = strtolower($val{strlen($val)-1});

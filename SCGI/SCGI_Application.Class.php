@@ -1,5 +1,6 @@
 <?php
 namespace MFS::AppServer::SCGI;
+use MFS::AppServer::HTTP as HTTP;
 
 class Application
 {
@@ -48,30 +49,63 @@ class Application
     {
         echo "Entering runloop…\n";
 
-        while ($conn = stream_socket_accept($this->socket, -1)) {
-            try {
-                $this->request = new Request($conn);
+        try {
+            while ($conn = stream_socket_accept($this->socket, -1)) {
+                $this->parseRequest($conn);
                 $this->response = new Response($conn);
 
                 $this->requestHandler();
 
                 unset($this->request);
                 unset($this->response);
-            } catch (RuntimeException $e) {
-                echo '[Exception] '.get_class($e).': '.$e->getMessage()."\n";
+                $this->request = null;
+                $this->response = null;
+
+                fclose($conn);
             }
+        } catch (SCGI_Exception $e) {
+            echo '[Exception] '.get_class($e).': '.$e->getMessage()."\n";
+        }
 
-            $this->request = null;
-            $this->response = null;
 
-            fclose($conn);
+        echo "Left runloop…\n";
+    }
+
+    private function parseRequest($conn)
+    {
+        if (!is_numeric($len = stream_get_line($conn, 20, ':')))
+            throw new SCGI_Exception("invalid protocol");
+
+        $_headers = explode("\0", stream_get_contents($conn, $len)); // getting headers
+        $divider = stream_get_contents($conn, 1); // ","
+
+        $headers = array();
+        $first = null;
+        foreach ($_headers as $element) {
+            if (null === $first) {
+                $first = $element;
+            } else {
+                $headers[$first] = $element;
+                $first = null;
+            }
 
             if (true === $this->has_gc) {
                 gc_collect_cycles();
             }
         }
+        unset($_headers, $first);
 
-        echo "Left runloop…\n";
+        if (!isset($headers['SCGI']) or $headers['SCGI'] != '1')
+            throw new SCGI_Exception("Reqest is not SCGI/1 Compliant");
+
+        if (!isset($headers['CONTENT_LENGTH']))
+            throw new SCGI_Exception("CONTENT_LENGTH header not present");
+
+        $body = ($headers['CONTENT_LENGTH'] > 0) ? stream_get_contents($conn, $headers['CONTENT_LENGTH']) : null;
+
+        unset($headers['SCGI'], $headers['CONTENT_LENGTH']);
+
+        $this->request = HTTP::Request::factory($headers, $body);
     }
 
     final protected function request()
