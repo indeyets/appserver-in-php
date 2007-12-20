@@ -33,7 +33,7 @@ class Application
         $this->socket = stream_socket_server($socket_url, $errno, $errstr);
 
         if (false === $this->socket) {
-            throw new RuntimeException('Failed creating socker-server (URL: "'.$socket_url.'"): '.$errstr, $errno);
+            throw new RuntimeException('Failed creating socket-server (URL: "'.$socket_url.'"): '.$errstr, $errno);
         }
 
         echo 'Initialized SCGI Application: '.get_class($this).' @ ['.$socket_url."]\n";
@@ -45,7 +45,7 @@ class Application
         echo "DeInitialized SCGI Application: ".get_class($this)."\n";
     }
 
-    public function runLoop()
+    final public function runLoop()
     {
         echo "Entering runloop…\n";
 
@@ -64,6 +64,7 @@ class Application
                 fclose($conn);
             }
         } catch (SCGI_Exception $e) {
+            fclose($conn);
             echo '[Exception] '.get_class($e).': '.$e->getMessage()."\n";
         }
 
