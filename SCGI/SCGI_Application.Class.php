@@ -63,7 +63,7 @@ class Application
 
                 fclose($conn);
             }
-        } catch (SCGI_Exception $e) {
+        } catch (Exception $e) {
             fclose($conn);
             echo '[Exception] '.get_class($e).': '.$e->getMessage()."\n";
         }
@@ -74,8 +74,15 @@ class Application
 
     private function parseRequest($conn)
     {
-        if (!is_numeric($len = stream_get_line($conn, 20, ':')))
-            throw new SCGI_Exception("invalid protocol");
+        $len = stream_get_line($conn, 20, ':');
+
+        if (false === $len) {
+            throw new Exception('error reading data');
+        }
+
+        if (!is_numeric($len)) {
+            throw new Exception('invalid protocol ('.$len.')');
+        }
 
         $_headers = explode("\0", stream_get_contents($conn, $len)); // getting headers
         $divider = stream_get_contents($conn, 1); // ","

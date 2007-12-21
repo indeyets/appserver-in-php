@@ -1,3 +1,4 @@
 <?php
+namespace MFS::AppServer::SCGI;
 
-class SCGI_Exception extends RuntimeException {}
+class Exception extends RuntimeException {}
