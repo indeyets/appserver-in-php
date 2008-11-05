@@ -1,6 +1,6 @@
 <?php
-namespace MFS::AppServer::SCGI;
-use MFS::AppServer::HTTP as HTTP;
+namespace MFS\AppServer\SCGI;
+use MFS\AppServer\HTTP as HTTP;
 
 class Application
 {
@@ -84,7 +84,9 @@ class Application
             throw new Exception('invalid protocol ('.$len.')');
         }
 
-        $_headers = explode("\0", stream_get_contents($conn, $len)); // getting headers
+        $_headers_str = stream_get_contents($conn, $len);
+
+        $_headers = explode("\0", $_headers_str); // getting headers
         $divider = stream_get_contents($conn, 1); // ","
 
         $headers = array();
@@ -104,7 +106,7 @@ class Application
         unset($_headers, $first);
 
         if (!isset($headers['SCGI']) or $headers['SCGI'] != '1')
-            throw new SCGI_Exception("Reqest is not SCGI/1 Compliant");
+            throw new SCGI_Exception("Request is not SCGI/1 Compliant");
 
         if (!isset($headers['CONTENT_LENGTH']))
             throw new SCGI_Exception("CONTENT_LENGTH header not present");
@@ -113,7 +115,7 @@ class Application
 
         unset($headers['SCGI'], $headers['CONTENT_LENGTH']);
 
-        $this->request = HTTP::Request::factory($headers, $body);
+        $this->request = HTTP\Request::factory($headers, $body);
     }
 
     final protected function request()

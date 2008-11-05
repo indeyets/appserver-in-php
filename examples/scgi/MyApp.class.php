@@ -2,7 +2,7 @@
 
 require dirname(__FILE__).'/../../SCGI/autoload.php';
 
-class MyApp extends MFS::AppServer::SCGI::Application
+class MyApp extends MFS\AppServer\SCGI\Application
 {
     private $local_storage;
     private $tpl = null;
@@ -55,7 +55,7 @@ class MyApp extends MFS::AppServer::SCGI::Application
         $buffer .= "HEADERS:\n".var_export($req->headers, true)."\n";
         $buffer .= "GET:\n".var_export($req->get, true)."\n";
 
-        if ($req instanceof MFS::AppServer::HTTP::PostRequest) {
+        if ($req instanceof MFS\AppServer\HTTP\PostRequest) {
             $buffer .= "POST:\n".var_export($req->post, true)."\n";
             $buffer .= "FILES:\n".var_export($req->files, true)."\n";
         }

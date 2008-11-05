@@ -1,5 +1,5 @@
 <?php
-namespace MFS::AppServer::HTTP;
+namespace MFS\AppServer\HTTP;
 
 class Request
 {
