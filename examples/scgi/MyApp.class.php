@@ -26,6 +26,9 @@ class MyApp extends MFS\AppServer\SCGI\Application
         $out->addHeader('Status', '200 Ok');
         $out->addHeader('Content-type', 'text/html; charset=utf-8');
 
+        if (!isset($this->request()->cookies['Hello']))
+            $out->setcookie('Hello', 'world!');
+
         // replacing {data} in the "template" by our dynamic string and sending it out
         $out->write(str_replace(
             '{data}',
@@ -53,6 +56,7 @@ class MyApp extends MFS\AppServer\SCGI\Application
         $buffer .= 'Peak Memory usage: '.$p."\n";
         $buffer .= 'Memory usage last growed at request#'.$this->local_storage['memory_peak_counter']."\n\n";
         $buffer .= "HEADERS:\n".var_export($req->headers, true)."\n";
+        $buffer .= "COOKIES:\n".var_export($req->cookies, true)."\n";
         $buffer .= "GET:\n".var_export($req->get, true)."\n";
 
         if ($req instanceof MFS\AppServer\HTTP\PostRequest) {

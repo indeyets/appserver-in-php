@@ -4,6 +4,7 @@ namespace MFS\AppServer\HTTP;
 class Request
 {
     protected $headers = null;
+    protected $cookies = null;
     protected $get = null;
     protected $body = null;
 
@@ -27,6 +28,21 @@ class Request
             }
 
             return $this->get;
+        } elseif ('cookies' == $property) {
+            if (null === $this->cookies) {
+                $this->cookies = array();
+
+                if (isset($this->headers['HTTP_COOKIE'])) {
+                    $pairs = explode('; ', $this->headers['HTTP_COOKIE']);
+
+                    foreach ($pairs as $pair) {
+                        list($name, $value) = explode('=', $pair);
+                        $this->cookies[$name] = urldecode($value);
+                    }
+                }
+            }
+
+            return $this->cookies;
         }
 
         throw new UnexpectedValueException();

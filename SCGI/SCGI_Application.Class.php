@@ -52,7 +52,7 @@ class Application
         try {
             while ($conn = stream_socket_accept($this->socket, -1)) {
                 $this->parseRequest($conn);
-                $this->response = new Response($conn);
+                $this->response = new Response($conn, $this->request);
 
                 $this->requestHandler();
 
@@ -81,7 +81,7 @@ class Application
         }
 
         if (!is_numeric($len)) {
-            throw new Exception('invalid protocol ('.$len.')');
+            throw new Exception('invalid protocol ('.var_export($len, true).')');
         }
 
         $_headers_str = stream_get_contents($conn, $len);
