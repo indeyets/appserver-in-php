@@ -1,6 +1,8 @@
 <?php
 namespace MFS\AppServer\HTTP;
 
+use \UnexpectedValueException;
+
 class Request
 {
     protected $headers = null;

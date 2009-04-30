@@ -2,6 +2,9 @@
 namespace MFS\AppServer\SCGI;
 use MFS\AppServer\HTTP\Request;
 
+use \RuntimeException;
+use \UnexpectedValueException;
+
 class Response
 {
     private $conn = null;

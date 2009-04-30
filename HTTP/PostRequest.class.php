@@ -1,6 +1,8 @@
 <?php
 namespace MFS\AppServer\HTTP;
 
+use \RuntimeException;
+
 class PostRequest extends Request
 {
     private $post = array();

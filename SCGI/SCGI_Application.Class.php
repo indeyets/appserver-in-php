@@ -2,6 +2,10 @@
 namespace MFS\AppServer\SCGI;
 use MFS\AppServer\HTTP as HTTP;
 
+use \LogicException;
+use \RuntimeException;
+use \Exception;
+
 class Application
 {
     private $socket = null;
@@ -12,13 +16,13 @@ class Application
     protected function __construct($socket_url = 'tcp://127.0.0.1:9999')
     {
         if (PHP_SAPI !== 'cli')
-            throw new LogicalException("SCGI Application should be run using CLI SAPI");
+            throw new LogicException("SCGI Application should be run using CLI SAPI");
 
         if (version_compare("5.3.0-dev", PHP_VERSION, '>'))
-            throw new LogicalException("SCGI Application requires PHP 5.3.0+");
+            throw new LogicException("SCGI Application requires PHP 5.3.0+");
 
         if (!extension_loaded('spl'))
-            throw new LogicalException("SCGI Application requires PHP compiled with SPL support");
+            throw new LogicException("SCGI Application requires PHP compiled with SPL support");
 
         // Checking for GarbageCollection patch
         if (false === function_exists('gc_enabled')) {
