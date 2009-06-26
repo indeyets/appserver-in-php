@@ -2,10 +2,6 @@
 namespace MFS\AppServer\SCGI;
 use MFS\AppServer\HTTP as HTTP;
 
-use \LogicException;
-use \RuntimeException;
-use \Exception;
-
 class Application
 {
     private $socket = null;
@@ -55,19 +51,27 @@ class Application
 
         try {
             while ($conn = stream_socket_accept($this->socket, -1)) {
-                $this->parseRequest($conn);
-                $this->response = new Response($conn, $this->request);
+                try {
+                    echo "got request\n";
+                    $this->parseRequest($conn);
+                    echo "-> parsed request\n";
+                    $this->response = new Response($conn, $this->request);
 
-                $this->requestHandler();
+                    $this->requestHandler();
+                } catch (RetryException $e) {
+                    echo "-> bad request: retrying\n";
+                }
 
+                // cleanup
                 unset($this->request);
                 unset($this->response);
                 $this->request = null;
                 $this->response = null;
 
                 fclose($conn);
+                echo "-> done with request\n";
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             fclose($conn);
             echo '[Exception] '.get_class($e).': '.$e->getMessage()."\n";
         }
@@ -81,11 +85,16 @@ class Application
         $len = stream_get_line($conn, 20, ':');
 
         if (false === $len) {
-            throw new Exception('error reading data');
+            throw new LogicException('error reading data');
+        }
+
+        if ('' === $len) {
+            // could be bug in PHP or Lighttpd. sometimes, app just gets empty request
+            throw new RetryException();
         }
 
         if (!is_numeric($len)) {
-            throw new Exception('invalid protocol ('.var_export($len, true).')');
+            throw new BadProtocolException('invalid protocol (expected length, got '.var_export($len, true).')');
         }
 
         $_headers_str = stream_get_contents($conn, $len);
@@ -110,10 +119,10 @@ class Application
         unset($_headers, $first);
 
         if (!isset($headers['SCGI']) or $headers['SCGI'] != '1')
-            throw new SCGI_Exception("Request is not SCGI/1 Compliant");
+            throw new BadProtocolException("Request is not SCGI/1 Compliant");
 
         if (!isset($headers['CONTENT_LENGTH']))
-            throw new SCGI_Exception("CONTENT_LENGTH header not present");
+            throw new BadProtocolException("CONTENT_LENGTH header not present");
 
         $body = ($headers['CONTENT_LENGTH'] > 0) ? stream_get_contents($conn, $headers['CONTENT_LENGTH']) : null;
 

@@ -1,8 +1,6 @@
 <?php
 namespace MFS\AppServer\HTTP;
 
-use \UnexpectedValueException;
-
 class Request
 {
     protected $headers = null;
@@ -53,7 +51,7 @@ class Request
     public static function factory(array $headers, $body = null)
     {
         if (!isset($headers['REQUEST_METHOD'])) {
-            throw new UnexpectedValueException("Don't know how to handle this request");
+            throw new BadProtocolException("Don't know how to handle this request");
         }
 
         switch ($headers['REQUEST_METHOD']) {
@@ -67,7 +65,7 @@ class Request
 
             case 'POST':
                 if (null === $body) {
-                    throw new UnexpectedValueException('POST request requires body');
+                    throw new BadProtocolException('POST request requires body');
                 }
 
                 return new PostRequest($headers, $body);

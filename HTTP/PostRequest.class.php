@@ -1,8 +1,6 @@
 <?php
 namespace MFS\AppServer\HTTP;
 
-use \RuntimeException;
-
 class PostRequest extends Request
 {
     private $post = array();
@@ -58,7 +56,7 @@ class PostRequest extends Request
             $h_end = strpos($b, "\r\n\r\n", $h_start);
 
             if (false === $h_end) {
-                throw new RuntimeException("Didn't find end of headers-zone");
+                throw new BadProtocolException("Didn't find end of headers-zone");
             }
 
             $headers = array();
@@ -68,7 +66,7 @@ class PostRequest extends Request
             }
 
             if (!isset($headers['Content-Disposition']))
-                throw new RuntimeException("Didn't find Content-disposition in one of the parts of multipart: ".var_export(array_keys($headers), true));
+                throw new BadProtocolException("Didn't find Content-disposition in one of the parts of multipart: ".var_export(array_keys($headers), true));
 
             // parsing dispositin-header of part
             $disposition = array();
@@ -85,7 +83,7 @@ class PostRequest extends Request
             $b_end = strpos($b, "\r\n".$boundary, $b_start);
 
             if (false === $b_end) {
-                throw new RuntimeException("Didn't find end of body :-/");
+                throw new BadProtocolException("Didn't find end of body :-/");
             }
 
             $file_data = substr($b, $b_start, $b_end - $b_start);
