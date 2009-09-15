@@ -6,7 +6,17 @@
 </head>
 <body>
     <form method="POST" enctype="multipart/form-data">
+        <input type="text" name="var1" value="">
+        <input type="text" name="var2" value="">
         <input type="file" name="some_name" value="">
+        <input type="submit" name="some_name" value="">
+    </form>
+
+    <hr>
+
+    <form method="POST">
+        <input type="text" name="var&amp;qq1" value="a&amp;b">
+        <input type="text" name="var2" value="c&amp;d">
         <input type="submit" name="some_name" value="">
     </form>
 

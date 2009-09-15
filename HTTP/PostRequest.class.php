@@ -13,7 +13,10 @@ class PostRequest extends Request
         if (isset($this->headers['CONTENT_TYPE']) and strpos($this->headers['CONTENT_TYPE'], 'multipart/form-data') === 0) {
             $this->parseMultipart();
         } else {
-            parse_str(urldecode($this->body), $this->post);
+            $result = array();
+            parse_str($body, $result);
+            array_walk($result, function(&$item, &$key){$item = urldecode($item); $key = urldecode($key);});
+            $this->post = $result;
         }
     }
 
