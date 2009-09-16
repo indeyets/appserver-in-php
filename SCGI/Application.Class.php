@@ -23,7 +23,7 @@ class Application
         // Checking for GarbageCollection patch
         if (false === function_exists('gc_enabled')) {
             $this->has_gc = false;
-            echo "WARNING: This version of PHP is compiled without GC-support. Memory-leaks are possible!\n";
+            $this->log("WARNING: This version of PHP is compiled without GC-support. Memory-leaks are possible!");
         } elseif (false === gc_enabled()) {
             gc_enable();
         }
@@ -36,30 +36,30 @@ class Application
             throw new RuntimeException('Failed creating socket-server (URL: "'.$socket_url.'"): '.$errstr, $errno);
         }
 
-        echo 'Initialized SCGI Application: '.get_class($this).' @ ['.$socket_url."]\n";
+        $this->log('Initialized SCGI Application: '.get_class($this).' @ ['.$socket_url."]");
     }
 
     public function __destruct()
     {
         fclose($this->socket);
-        echo "DeInitialized SCGI Application: ".get_class($this)."\n";
+        $this->log("DeInitialized SCGI Application: ".get_class($this));
     }
 
     final public function runLoop()
     {
-        echo "Entering runloop…\n";
+        $this->log("Entering runloop…");
 
         try {
             while ($conn = stream_socket_accept($this->socket, -1)) {
                 try {
-                    echo "got request\n";
+                    $this->log("got request");
                     $this->parseRequest($conn);
-                    echo "-> parsed request\n";
+                    $this->log("-> parsed request");
                     $this->response = new Response($conn, $this->request);
 
                     $this->requestHandler();
                 } catch (RetryException $e) {
-                    echo "-> bad request: retrying\n";
+                    $this->log("-> bad request: retrying");
                 }
 
                 // cleanup
@@ -69,15 +69,15 @@ class Application
                 $this->response = null;
 
                 fclose($conn);
-                echo "-> done with request\n";
+                $this->log("-> done with request");
             }
         } catch (\Exception $e) {
             fclose($conn);
-            echo '[Exception] '.get_class($e).': '.$e->getMessage()."\n";
+            $this->log('[Exception] '.get_class($e).': '.$e->getMessage());
         }
 
 
-        echo "Left runloop…\n";
+        $this->log("Left runloop…");
     }
 
     private function parseRequest($conn)
@@ -146,5 +146,10 @@ class Application
         $this->response->addHeader('Status', '500 Internal Server Error');
         $this->response->addHeader('Content-type', 'text/html; charset=UTF-8');
         $this->response->write("<h1>500 — Internal Server Error</h1><p>Application doesn't implement requestHandler() method :-P</p>");
+    }
+
+    public function log($message)
+    {
+        echo $message."\n";
     }
 }
