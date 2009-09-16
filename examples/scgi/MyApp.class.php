@@ -1,6 +1,6 @@
 <?php
 
-require dirname(__FILE__).'/../../SCGI/autoload.php';
+require __DIR__.'/../../SCGI/autoload.php';
 
 class MyApp extends MFS\AppServer\SCGI\Application
 {
@@ -11,7 +11,7 @@ class MyApp extends MFS\AppServer\SCGI\Application
     {
         parent::__construct($socket_url);
 
-        $this->tpl = file_get_contents(dirname(__FILE__).'/template.html'); // caching template in local-memory
+        $this->tpl = file_get_contents(__DIR__.'/template.html'); // caching template in local-memory
         $this->local_storage = array(
             'counter' => 0,
             'prev_memory_peak' => 0,

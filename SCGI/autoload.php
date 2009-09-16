@@ -2,14 +2,14 @@
 
 namespace MFS\AppServer\SCGI;
 
-require realpath(dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'HTTP').DIRECTORY_SEPARATOR.'autoload.php';
+require realpath(__DIR__.'/../HTTP').'/autoload.php';
 
 function autoload($class_name)
 {
     static $files = null;
 
     if (null === $files) {
-        $root = dirname(__FILE__).DIRECTORY_SEPARATOR;
+        $root = __DIR__.'/';
 
         $files = array(
             'MFS\AppServer\SCGI\Application'            => $root.'SCGI_Application.Class.php',

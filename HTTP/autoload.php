@@ -7,7 +7,7 @@ function autoload($class_name)
     static $files = null;
 
     if (null === $files) {
-        $root = dirname(__FILE__).DIRECTORY_SEPARATOR;
+        $root = __DIR__.'/';
 
         $files = array(
             'MFS\AppServer\HTTP\Request'                    => $root.'Request.class.php',

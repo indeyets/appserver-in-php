@@ -1,7 +1,6 @@
 <?php
-define('DIR_UP', '..'.DIRECTORY_SEPARATOR);
-define('PROJ_ROOT', realpath(dirname(__FILE__).DIRECTORY_SEPARATOR.DIR_UP.DIR_UP));
-define('EZ_ROOT', realpath(PROJ_ROOT.DIRECTORY_SEPARATOR.DIR_UP.'ezcomponents'.DIRECTORY_SEPARATOR));
+define('PROJ_ROOT', realpath(__DIR__.'/../..'));
+define('EZ_ROOT', realpath(PROJ_ROOT.'/../ezcomponents'));
 
 ini_set('include_path', '.:'.PROJ_ROOT.':'.EZ_ROOT);
 
