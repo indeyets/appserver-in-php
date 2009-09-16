@@ -59,7 +59,7 @@ class MyApp extends MFS\AppServer\SCGI\Application
         $buffer .= "COOKIES:\n".var_export($req->cookies, true)."\n";
         $buffer .= "GET:\n".var_export($req->get, true)."\n";
 
-        if ($req instanceof MFS\AppServer\HTTP\PostRequest) {
+        if ($req instanceof MFS\AppServer\HTTP\iPostRequest) {
             $buffer .= "POST:\n".var_export($req->post, true)."\n";
             $buffer .= "FILES:\n".var_export($req->files, true)."\n";
         }

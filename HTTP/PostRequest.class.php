@@ -1,7 +1,7 @@
 <?php
 namespace MFS\AppServer\HTTP;
 
-class PostRequest extends Request
+class PostRequest extends Request implements iPostRequest
 {
     private $post = array();
     private $files = array();
