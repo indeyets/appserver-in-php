@@ -48,9 +48,18 @@ class PostRequest extends Request implements iPostRequest
         $ct = $this->headers['CONTENT_TYPE'];
         $b = $this->body;
 
-        $pos = strpos($ct, '=-') + 1;
-        $boundary = '--'.substr($ct, $pos);
-        $boundary_len = strlen($boundary);
+        foreach (explode('; ', $ct) as $ct_part) {
+            $pos = strpos($ct_part, 'boundary=');
+
+            if ($pos !== 0)
+                continue;
+
+            $boundary = '--'.substr($ct_part, $pos + 9);
+            $boundary_len = strlen($boundary);
+        }
+
+        if (!isset($boundary))
+            throw new BadProtocolException("Didn't find boundary-declaration in multipart");
 
         $pos = 0;
         while (substr($b, $pos + $boundary_len, 2) != '--') {
@@ -137,16 +146,12 @@ class PostRequest extends Request implements iPostRequest
                     );
                 }
             } else {
-                $vars_accu[] = $disposition['name'].'='.urlencode($file_data);
+                $this->post[$disposition['name']] = $file_data;
             }
             unset($file_data);
 
             $pos = $b_end + 2;
         }
-
-        // registering not-files as post-vars
-        $vars_accu = implode('&', $vars_accu);
-        parse_str($vars_accu, $this->post);
     }
 
 
