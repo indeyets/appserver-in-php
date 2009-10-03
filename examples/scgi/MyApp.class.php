@@ -62,6 +62,8 @@ class MyApp extends MFS\AppServer\SCGI\Application
         if ($req instanceof MFS\AppServer\HTTP\iPostRequest) {
             $buffer .= "POST:\n".var_export($req->post, true)."\n";
             $buffer .= "FILES:\n".var_export($req->files, true)."\n";
+        } elseif ($req instanceof MFS\AppServer\HTTP\iUnknownRequest) {
+            $buffer .= "BODY:\n".var_export($req->body, true)."\n";
         }
 
         $buffer .= '</pre>';

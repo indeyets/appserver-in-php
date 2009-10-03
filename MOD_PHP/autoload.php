@@ -22,6 +22,7 @@ function autoload($class_name)
             'MFS\AppServer\MOD_PHP\GetRequest'             => $root.'GetRequest.class.php',
             'MFS\AppServer\MOD_PHP\HeadRequest'            => $root.'HeadRequest.class.php',
             'MFS\AppServer\MOD_PHP\PostRequest'            => $root.'PostRequest.class.php',
+            'MFS\AppServer\MOD_PHP\UnknownRequest'         => $root.'PostRequest.class.php',
         );
     }
 
