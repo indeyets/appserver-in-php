@@ -1,15 +1,12 @@
 <?php
 namespace MFS\AppServer\MOD_PHP;
-use MFS\AppServer\HTTP\Request;
 
 class Response
 {
-    private $conn = null;
     private $request = null;
 
-    public function __construct($conn, Request $request)
+    public function __construct(Request $request)
     {
-        $this->conn = $conn;
         $this->request = $request;
     }
 

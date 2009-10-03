@@ -30,7 +30,7 @@ class Application
             $this->log("got request");
             $this->request = Request::factory();
             $this->log("-> parsed request");
-            $this->response = new Response($conn, $this->request);
+            $this->response = new Response($this->request);
 
             $this->requestHandler();
 
