@@ -5,6 +5,7 @@
     <title>testing SCGI</title>
 </head>
 <body>
+    <p>Multipart:</p>
     <form method="POST" enctype="multipart/form-data">
         <input type="text" name="var1" value="">
         <input type="text" name="var2" value="">
@@ -14,7 +15,17 @@
 
     <hr>
 
+    <p>Post:</p>
     <form method="POST">
+        <input type="text" name="var&amp;qq1" value="a&amp;b">
+        <input type="text" name="var2" value="c&amp;d">
+        <input type="submit" name="some_name" value="">
+    </form>
+
+    <hr>
+
+    <p>Get:</p>
+    <form method="GET">
         <input type="text" name="var&amp;qq1" value="a&amp;b">
         <input type="text" name="var2" value="c&amp;d">
         <input type="submit" name="some_name" value="">
