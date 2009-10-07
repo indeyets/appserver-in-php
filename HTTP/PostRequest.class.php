@@ -125,7 +125,7 @@ class PostRequest extends Request implements iPostRequest
                         'error' => UPLOAD_ERR_INI_SIZE,
                         'size' => 0,
                     );
-                } elseif (0 === strlen($file_data)) {
+                } elseif (0 === strlen($disposition['filename'])) {
                     $this->files[$disposition['name']] = array(
                         'name' => '',
                         'type' => '',
@@ -145,12 +145,13 @@ class PostRequest extends Request implements iPostRequest
                         'size' => 0,
                     );
                 } else {
+                    $filesize = filesize($tmp_file);
                     $this->files[$disposition['name']] = array(
                         'name' => $disposition['filename'],
                         'type' => '',
                         'tmp_name' => $tmp_file,
-                        'error' => UPLOAD_ERR_OK,
-                        'size' => filesize($tmp_file),
+                        'error' => (0 === $filesize) ? 5 : UPLOAD_ERR_OK,
+                        'size' => $filesize,
                     );
                 }
             } else {

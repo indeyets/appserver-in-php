@@ -34,7 +34,6 @@ class Application
 
     public function __destruct()
     {
-        fclose($this->socket);
         $this->log("DeInitialized SCGI Application: ".get_class($this));
     }
 
