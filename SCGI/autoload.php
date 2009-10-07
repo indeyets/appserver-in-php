@@ -12,13 +12,14 @@ function autoload($class_name)
         $root = __DIR__.'/';
 
         $files = array(
-            'MFS\AppServer\SCGI\Application'            => $root.'Application.Class.php',
-            'MFS\AppServer\SCGI\Response'               => $root.'Response.Class.php',
-            'MFS\AppServer\SCGI\Exception'              => $root.'exceptions.php',
-            'MFS\AppServer\SCGI\LogicException'         => $root.'exceptions.php',
-            'MFS\AppServer\SCGI\RuntimeException'       => $root.'exceptions.php',
-            'MFS\AppServer\SCGI\BadProtocolException'   => $root.'exceptions.php',
-            'MFS\AppServer\SCGI\RetryException'         => $root.'exceptions.php',
+            'MFS\AppServer\SCGI\Protocol'                 => $root.'Protocol.Class.php',
+            'MFS\AppServer\SCGI\Application'              => $root.'Application.Class.php',
+            'MFS\AppServer\SCGI\Response'                 => $root.'Response.Class.php',
+            'MFS\AppServer\SCGI\Exception'                => $root.'exceptions.php',
+            'MFS\AppServer\SCGI\LogicException'           => $root.'exceptions.php',
+            'MFS\AppServer\SCGI\RuntimeException'         => $root.'exceptions.php',
+            'MFS\AppServer\SCGI\UnexpectedValueException' => $root.'exceptions.php',
+            'MFS\AppServer\SCGI\BadProtocolException'     => $root.'exceptions.php',
         );
     }
 

@@ -28,14 +28,7 @@ class Application
             gc_enable();
         }
 
-        $errno = 0;
-        $errstr = "";
-        $this->socket = stream_socket_server($socket_url, $errno, $errstr);
-
-        if (false === $this->socket) {
-            throw new RuntimeException('Failed creating socket-server (URL: "'.$socket_url.'"): '.$errstr, $errno);
-        }
-
+        $this->protocol = new Protocol($socket_url);
         $this->log('Initialized SCGI Application: '.get_class($this).' @ ['.$socket_url."]");
     }
 
@@ -50,17 +43,13 @@ class Application
         $this->log("Entering runloop…");
 
         try {
-            while ($conn = stream_socket_accept($this->socket, -1)) {
-                try {
-                    $this->log("got request");
-                    $this->parseRequest($conn);
-                    $this->log("-> parsed request");
-                    $this->response = new Response($conn, $this->request);
+            while ($this->protocol->readRequest()) {
+                $this->log("got request");
+                $this->request = HTTP\Request::factory($this->protocol->getHeaders(), $this->protocol->getBody());
+                $this->response = new Response($this->protocol, $this->request);
 
-                    $this->requestHandler();
-                } catch (RetryException $e) {
-                    $this->log("-> bad request: retrying");
-                }
+                $this->log("-> calling handler");
+                $this->requestHandler();
 
                 // cleanup
                 unset($this->request);
@@ -68,67 +57,20 @@ class Application
                 $this->request = null;
                 $this->response = null;
 
-                fclose($conn);
+                $this->protocol->doneWithRequest();
                 $this->log("-> done with request");
+
+                if (true === $this->has_gc) {
+                    gc_collect_cycles();
+                }
             }
         } catch (\Exception $e) {
-            fclose($conn);
+            $this->protocol->doneWithRequest();
             $this->log('[Exception] '.get_class($e).': '.$e->getMessage());
         }
 
 
         $this->log("Left runloop…");
-    }
-
-    private function parseRequest($conn)
-    {
-        $len = stream_get_line($conn, 20, ':');
-
-        if (false === $len) {
-            throw new LogicException('error reading data');
-        }
-
-        if ('' === $len) {
-            // could be bug in PHP or Lighttpd. sometimes, app just gets empty request
-            throw new RetryException();
-        }
-
-        if (!is_numeric($len)) {
-            throw new BadProtocolException('invalid protocol (expected length, got '.var_export($len, true).')');
-        }
-
-        $_headers_str = stream_get_contents($conn, $len);
-
-        $_headers = explode("\0", $_headers_str); // getting headers
-        $divider = stream_get_contents($conn, 1); // ","
-
-        $headers = array();
-        $first = null;
-        foreach ($_headers as $element) {
-            if (null === $first) {
-                $first = $element;
-            } else {
-                $headers[$first] = $element;
-                $first = null;
-            }
-
-            if (true === $this->has_gc) {
-                gc_collect_cycles();
-            }
-        }
-        unset($_headers, $first);
-
-        if (!isset($headers['SCGI']) or $headers['SCGI'] != '1')
-            throw new BadProtocolException("Request is not SCGI/1 Compliant");
-
-        if (!isset($headers['CONTENT_LENGTH']))
-            throw new BadProtocolException("CONTENT_LENGTH header not present");
-
-        $body = ($headers['CONTENT_LENGTH'] > 0) ? stream_get_contents($conn, $headers['CONTENT_LENGTH']) : null;
-
-        unset($headers['SCGI'], $headers['CONTENT_LENGTH']);
-
-        $this->request = HTTP\Request::factory($headers, $body);
     }
 
     final protected function request()

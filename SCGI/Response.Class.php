@@ -2,12 +2,9 @@
 namespace MFS\AppServer\SCGI;
 use MFS\AppServer\HTTP\Request;
 
-use \RuntimeException;
-use \UnexpectedValueException;
-
 class Response
 {
-    private $conn = null;
+    private $scgi = null;
     private $request = null;
 
     private $headers = array();
@@ -16,9 +13,9 @@ class Response
     private $content_type = null;
     private $status = '200 Ok';
 
-    public function __construct($conn, Request $request)
+    public function __construct(Protocol $scgi, Request $request)
     {
-        $this->conn = $conn;
+        $this->scgi = $scgi;
         $this->request = $request;
 
         $this->content_type = ini_get('default_mimetype');
@@ -48,7 +45,7 @@ class Response
             $this->sendHeaders();
         }
 
-        fwrite($this->conn, $string);
+        $this->scgi->write($string);
     }
 
     // compatible with PHP's setcookie() function
@@ -107,10 +104,10 @@ class Response
 
     private function sendHeaders()
     {
-        fwrite($this->conn, 'Status: '.$this->status."\r\n");
-        fwrite($this->conn, 'Content-type: '.$this->content_type."\r\n");
-        fwrite($this->conn, implode("\r\n", $this->headers));
-        fwrite($this->conn, "\r\n\r\n");
+        $this->scgi->write('Status: '.$this->status."\r\n");
+        $this->scgi->write('Content-type: '.$this->content_type."\r\n");
+        $this->scgi->write(implode("\r\n", $this->headers));
+        $this->scgi->write("\r\n\r\n");
 
         $this->sent_headers = true;
     }
