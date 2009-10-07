@@ -14,10 +14,10 @@ class Application
             throw new LogicException("MOD_PHP Application should not be run using CLI SAPI");
 
         if (version_compare("5.3.0-dev", PHP_VERSION, '>'))
-            throw new LogicException("SCGI Application requires PHP 5.3.0+");
+            throw new LogicException("Application requires PHP 5.3.0+");
 
         if (!extension_loaded('spl'))
-            throw new LogicException("SCGI Application requires PHP compiled with SPL support");
+            throw new LogicException("Application requires PHP compiled with SPL support");
     }
 
     public function __destruct()
