@@ -113,17 +113,25 @@ class PostRequest extends Request implements iPostRequest
                     $this->files[$disposition['name']] = array(
                         'name' => '',
                         'type' => '',
-                        'size' => 0,
                         'tmp_name' => '',
-                        'error' => UPLOAD_ERR_NO_TMP_DIR
+                        'error' => UPLOAD_ERR_NO_TMP_DIR,
+                        'size' => 0,
                     );
                 } elseif ($b_end - $b_start > self::IniString_to_Bytes(ini_get('upload_max_filesize'))) {
                     $this->files[$disposition['name']] = array(
                         'name' => '',
                         'type' => '',
-                        'size' => 0,
                         'tmp_name' => '',
-                        'error' => UPLOAD_ERR_INI_SIZE
+                        'error' => UPLOAD_ERR_INI_SIZE,
+                        'size' => 0,
+                    );
+                } elseif (0 === strlen($file_data)) {
+                    $this->files[$disposition['name']] = array(
+                        'name' => '',
+                        'type' => '',
+                        'tmp_name' => '',
+                        'error' => UPLOAD_ERR_NO_FILE,
+                        'size' => 0,
                     );
                 } elseif (false === $tmp_file = tempnam($tmp_dir, 'SCGI') or false === file_put_contents($tmp_file, $file_data)) {
                     if ($tmp_file !== false)
@@ -132,17 +140,17 @@ class PostRequest extends Request implements iPostRequest
                     $this->files[$disposition['name']] = array(
                         'name' => '',
                         'type' => '',
-                        'size' => 0,
                         'tmp_name' => '',
-                        'error' => UPLOAD_ERR_CANT_WRITE
+                        'error' => UPLOAD_ERR_CANT_WRITE,
+                        'size' => 0,
                     );
                 } else {
                     $this->files[$disposition['name']] = array(
                         'name' => $disposition['filename'],
                         'type' => '',
-                        'size' => filesize($tmp_file),
                         'tmp_name' => $tmp_file,
-                        'error' => UPLOAD_ERR_OK
+                        'error' => UPLOAD_ERR_OK,
+                        'size' => filesize($tmp_file),
                     );
                 }
             } else {
