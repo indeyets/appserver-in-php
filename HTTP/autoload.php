@@ -23,6 +23,7 @@ function autoload($class_name)
             'MFS\AppServer\HTTP\iHeadRequest'               => $root.'interfaces.php',
             'MFS\AppServer\HTTP\iPostRequest'               => $root.'interfaces.php',
             'MFS\AppServer\HTTP\iUnknownRequest'            => $root.'interfaces.php',
+            'MFS\AppServer\HTTP\iResponse'                  => $root.'interfaces.php',
         );
     }
 

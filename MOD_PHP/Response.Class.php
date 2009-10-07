@@ -1,7 +1,7 @@
 <?php
 namespace MFS\AppServer\MOD_PHP;
 
-class Response
+class Response implements \MFS\AppServer\HTTP\iResponse
 {
     private $request = null;
 

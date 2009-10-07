@@ -1,8 +1,7 @@
 <?php
 namespace MFS\AppServer\SCGI;
-use MFS\AppServer\HTTP\Request;
 
-class Response
+class Response implements \MFS\AppServer\HTTP\iResponse
 {
     private $scgi = null;
     private $request = null;
@@ -13,7 +12,7 @@ class Response
     private $content_type = null;
     private $status = '200 Ok';
 
-    public function __construct(Protocol $scgi, Request $request)
+    public function __construct(Protocol $scgi, \MFS\AppServer\HTTP\Request $request)
     {
         $this->scgi = $scgi;
         $this->request = $request;
@@ -60,7 +59,7 @@ class Response
     }
 
     // This one almost directly copies php_setcookie() function from php-core
-    public static function cookie_headervalue($name, $value, $expire, $path, $domain, $secure, $httponly, $raw)
+    private static function cookie_headervalue($name, $value, $expire, $path, $domain, $secure, $httponly, $raw)
     {
         if (false !== strpbrk($name, "=,; \t\r\n\013\014")) {
             throw new UnexpectedValueException("Cookie names can not contain any of the following: '=,; \\t\\r\\n\\013\\014'");
