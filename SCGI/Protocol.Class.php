@@ -23,7 +23,7 @@ class Protocol
     public function __destruct()
     {
         fclose($this->socket);
-        $this->log("DeInitialized SCGI Application: ".get_class($this));
+        // $this->log("DeInitialized SCGI Application: ".get_class($this));
     }
 
     public function readRequest()
@@ -70,7 +70,7 @@ class Protocol
             unset($_headers, $first);
 
             if (!isset($this->headers['SCGI']) or $this->headers['SCGI'] != '1')
-                throw new BadProtocolException("Request is not SCGI/1 Compliant");
+                throw new BadProtocolException("Request is not SCGI/1 Compliant (".var_dump($this->headers, true).")");
 
             if (!isset($this->headers['CONTENT_LENGTH']))
                 throw new BadProtocolException("CONTENT_LENGTH header not present");

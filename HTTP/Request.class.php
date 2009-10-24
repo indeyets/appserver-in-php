@@ -23,7 +23,7 @@ class Request
         if ($property == 'headers') {
             return $this->headers;
         } elseif ($property == 'get') {
-            if ($this->get === null) {
+            if ($this->get === null and isset($this->headers['QUERY_STRING'])) {
                 parse_str($this->headers['QUERY_STRING'], $this->get);
             }
 
