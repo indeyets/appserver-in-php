@@ -3,24 +3,14 @@
 require __DIR__.'/../SCGI/autoload.php';
 
 $client = new \MFS\SCGI\Client('tcp://127.0.0.1:9999');
+$req = new \MFS\SCGI\ClientRequest($client);
 
-$client->sendRequest(
-    array(
-        array('REQUEST_METHOD', 'GET'),
-        array('REQUEST_URI', '/')
-    )
-);
+$req->setURI('/');
+$req->setMethod('GET');
+var_dump($req->send());
 
-var_dump($client->getHeaders());
-var_dump($client->getBody());
+$req->setMethod('POST');
+$req->addPostParameter('abc', 'def');
+$req->addPostParameter('ghi', 'jkl');
 
-$client->sendRequest(
-    array(
-        array('REQUEST_METHOD', 'POST'),
-        array('REQUEST_URI', '/')
-    ),
-    'abc=def&ghi=jkl'
-);
-
-var_dump($client->getHeaders());
-var_dump($client->getBody());
+var_dump($req->send());

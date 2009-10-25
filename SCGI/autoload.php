@@ -14,6 +14,7 @@ function autoload($class_name)
         $files = array(
             'MFS\SCGI\Server'                             => $root.'Server.Class.php',
             'MFS\SCGI\Client'                             => $root.'Client.Class.php',
+            'MFS\SCGI\ClientRequest'                      => $root.'ClientRequest.Class.php',
             'MFS\AppServer\SCGI\Application'              => $root.'Application.Class.php',
             'MFS\AppServer\SCGI\Response'                 => $root.'Response.Class.php',
             'MFS\AppServer\SCGI\Exception'                => $root.'exceptions.php',
