@@ -1,6 +1,8 @@
 <?php
 namespace MFS\AppServer\SCGI;
+
 use MFS\AppServer\HTTP as HTTP;
+use MFS\SCGI\Server as Server;
 
 class Application
 {
@@ -28,7 +30,7 @@ class Application
             gc_enable();
         }
 
-        $this->protocol = new Protocol($socket_url);
+        $this->protocol = new Server($socket_url);
         $this->log('Initialized SCGI Application: '.get_class($this).' @ ['.$socket_url."]");
     }
 

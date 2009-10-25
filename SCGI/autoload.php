@@ -12,7 +12,8 @@ function autoload($class_name)
         $root = __DIR__.'/';
 
         $files = array(
-            'MFS\AppServer\SCGI\Protocol'                 => $root.'Protocol.Class.php',
+            'MFS\SCGI\Server'                             => $root.'Server.Class.php',
+            'MFS\SCGI\Client'                             => $root.'Client.Class.php',
             'MFS\AppServer\SCGI\Application'              => $root.'Application.Class.php',
             'MFS\AppServer\SCGI\Response'                 => $root.'Response.Class.php',
             'MFS\AppServer\SCGI\Exception'                => $root.'exceptions.php',

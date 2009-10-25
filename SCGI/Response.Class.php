@@ -1,6 +1,8 @@
 <?php
 namespace MFS\AppServer\SCGI;
 
+use MFS\SCGI\Server as Server;
+
 class Response implements \MFS\AppServer\HTTP\iResponse
 {
     private $scgi = null;
@@ -12,7 +14,7 @@ class Response implements \MFS\AppServer\HTTP\iResponse
     private $content_type = null;
     private $status = '200 Ok';
 
-    public function __construct(Protocol $scgi, \MFS\AppServer\HTTP\Request $request)
+    public function __construct(Server $scgi, \MFS\AppServer\HTTP\Request $request)
     {
         $this->scgi = $scgi;
         $this->request = $request;

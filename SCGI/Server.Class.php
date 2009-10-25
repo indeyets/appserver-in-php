@@ -1,7 +1,7 @@
 <?php
-namespace MFS\AppServer\SCGI;
+namespace MFS\SCGI;
 
-class Protocol
+class Server
 {
     private $socket = null;
     private $conn = null;
