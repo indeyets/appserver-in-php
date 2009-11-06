@@ -71,7 +71,7 @@ class ClientRequest
 
             $post_vars = array();
             foreach ($this->post_vars as $k => $v) {
-                $post_vars[] = $k.'='.$v;
+                $post_vars[] = urlencode($k).'='.urlencode($v);
             }
             $body .= implode('&', $post_vars);
         } else {
