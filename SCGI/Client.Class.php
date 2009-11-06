@@ -24,7 +24,32 @@ class Client
             throw new RuntimeException('Failed creating socket-client (URL: "'.$socket_url.'"): '.$errstr, $errno);
         }
 
+        // Setting required headers
         $headers[] = array('SCGI', '1');
+        $headers[] = array('GATEWAY_INTERFACE', 'CGI/1.1');
+
+        // Getting parts from REQUEST_URI
+        foreach ($headers as $pair) {
+            if ($pair[0] == 'REQUEST_URI') {
+                $uri = $pair[1];
+                break;
+            }
+        }
+
+        if (!isset($uri)) {
+            throw new LogicException("You can't send request without URI");
+        }
+
+        if (($pos = strpos($uri, '?')) !== false) {
+            $headers[] = array('QUERY_STRING', substr($uri, $pos + 1));
+            $uri = substr($uri, 0, $pos);
+        } else {
+            $headers[] = array('QUERY_STRING', '');
+        }
+
+        $headers[] = array('PATH_INFO', substr($uri, 1));
+        $headers[] = array('SCRIPT_NAME', '/');
+
         if (null === $body)
             $headers[] = array('CONTENT_LENGTH', '0');
         else

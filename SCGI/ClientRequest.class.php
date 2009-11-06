@@ -32,6 +32,9 @@ class ClientRequest
 
     public function setURI($uri)
     {
+        if (substr($uri, 0, 1) != '/')
+            throw new UnexpectedValueException('URI must start with "/"-character');
+
         $this->uri = $uri;
     }
 
