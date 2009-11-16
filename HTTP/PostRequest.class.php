@@ -15,7 +15,6 @@ class PostRequest extends Request implements iPostRequest
         } else {
             $result = array();
             parse_str($body, $result);
-            array_walk($result, function(&$item, &$key){$item = urldecode($item); $key = urldecode($key);});
             $this->post = $result;
         }
     }
@@ -61,6 +60,7 @@ class PostRequest extends Request implements iPostRequest
         if (!isset($boundary))
             throw new BadProtocolException("Didn't find boundary-declaration in multipart");
 
+        $post_strs = array();
         $pos = 0;
         while (substr($b, $pos + $boundary_len, 2) != '--') {
             // getting headers of part
@@ -155,15 +155,15 @@ class PostRequest extends Request implements iPostRequest
                     );
                 }
             } else {
-                $this->post[$disposition['name']] = $file_data;
+                $post_strs[] = urlencode($disposition['name']).'='.urlencode($file_data);
             }
             unset($file_data);
 
             $pos = $b_end + 2;
         }
+
+        parse_str(implode('&', $post_strs), $this->post);
     }
-
-
 
 
 

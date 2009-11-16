@@ -10,6 +10,9 @@
         <input type="text" name="var1" value="">
         <input type="text" name="var2" value="">
         <input type="file" name="some_name" value="">
+        <input type="hidden" name="var3[0]" value="0">
+        <input type="hidden" name="var3[1]" value="1">
+        <input type="hidden" name="var3[]" value="2">
         <input type="submit" name="some_name" value="">
     </form>
 
@@ -19,6 +22,9 @@
     <form method="POST">
         <input type="text" name="var&amp;qq1" value="a&amp;b">
         <input type="text" name="var2" value="c&amp;d">
+        <input type="hidden" name="var3[0]" value="0">
+        <input type="hidden" name="var3[1]" value="1">
+        <input type="hidden" name="var3[]" value="2">
         <input type="submit" name="some_name" value="">
     </form>
 
@@ -28,6 +34,9 @@
     <form method="GET">
         <input type="text" name="var&amp;qq1" value="a&amp;b">
         <input type="text" name="var2" value="c&amp;d">
+        <input type="hidden" name="var3[0]" value="0">
+        <input type="hidden" name="var3[1]" value="1">
+        <input type="hidden" name="var3[]" value="2">
         <input type="submit" name="some_name" value="">
     </form>
 
