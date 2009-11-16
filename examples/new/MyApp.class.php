@@ -15,18 +15,18 @@ class MyApp
         );
     }
 
-    public function __invoke(MFS\AppServer\HTTP\iRequest $in, MFS\AppServer\HTTP\iResponse $out)
+    public function __invoke(array $context)
     {
-        $out->addHeader('Status', '200 Ok');
-        $out->addHeader('Content-type', 'text/html; charset=utf-8');
+        $context['response']->addHeader('Status', '200 Ok');
+        $context['response']->addHeader('Content-type', 'text/html; charset=utf-8');
 
-        if (!isset($in->cookies['Hello']))
-            $out->setcookie('Hello', 'world!');
+        if (!isset($context['request']->cookies['Hello']))
+            $context['response']->setcookie('Hello', 'world!');
 
         // replacing {data} in the "template" by our dynamic string and sending it out
-        $out->write(str_replace(
+        $context['response']->write(str_replace(
             '{data}',
-            $this->prepareData($in),
+            $this->prepareData($context['request']),
             $this->tpl
         ));
     }

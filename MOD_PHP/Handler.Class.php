@@ -28,7 +28,7 @@ class Handler implements \MFS\AppServer\iHandler
             $this->log("-> parsed request");
             $response = new Response($request);
 
-            $app($request, $response);
+            $app(array('request' => $request, 'response' => $response));
 
             unset($request);
             unset($response);

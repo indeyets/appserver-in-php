@@ -51,7 +51,7 @@ class Handler implements \MFS\AppServer\iHandler
                 $response = new Response($this->protocol, $request);
 
                 $this->log("-> calling handler");
-                $app($request, $response);
+                $app(array('request' => $request, 'response' => $response));
 
                 // cleanup
                 unset($request);
