@@ -1,11 +1,16 @@
 <?php
 namespace MFS\AppServer\HTTP;
 
-interface iUnknownRequest {}
+interface iRequest
+{
+    public function __get($parameter);
+}
 
-interface iHeadRequest {}
-interface iGetRequest {}
-interface iPostRequest {}
+interface iUnknownRequest extends iRequest {}
+
+interface iHeadRequest extends iRequest {}
+interface iGetRequest extends iRequest {}
+interface iPostRequest extends iRequest {}
 
 interface iResponse
 {

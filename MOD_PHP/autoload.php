@@ -2,6 +2,7 @@
 
 namespace MFS\AppServer\MOD_PHP;
 
+require realpath(__DIR__.'/../AppServer').'/autoload.php';
 require realpath(__DIR__.'/../HTTP').'/autoload.php';
 
 function autoload($class_name)
@@ -12,6 +13,7 @@ function autoload($class_name)
         $root = __DIR__.'/';
 
         $files = array(
+            'MFS\AppServer\MOD_PHP\Handler'                => $root.'Handler.Class.php',
             'MFS\AppServer\MOD_PHP\Application'            => $root.'Application.Class.php',
             'MFS\AppServer\MOD_PHP\Response'               => $root.'Response.Class.php',
             'MFS\AppServer\MOD_PHP\Exception'              => $root.'exceptions.php',

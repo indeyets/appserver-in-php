@@ -10,6 +10,8 @@ class Application
 
     protected function __construct()
     {
+        trigger_error('Usage of MFS\AppServer\MOD_PHP\Application class is DEPRECATED. Switch to the new API please', E_USER_DEPRECATED);
+
         if (PHP_SAPI === 'cli')
             throw new LogicException("MOD_PHP Application should not be run using CLI SAPI");
 

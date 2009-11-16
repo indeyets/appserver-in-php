@@ -1,7 +1,7 @@
 <?php
 namespace MFS\AppServer\MOD_PHP;
 
-class Request
+class Request implements \MFS\AppServer\HTTP\iRequest
 {
     protected $headers = null;
     protected $cookies = null;

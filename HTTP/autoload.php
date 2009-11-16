@@ -19,6 +19,7 @@ function autoload($class_name)
             'MFS\AppServer\HTTP\UnexpectedValueException'   => $root.'exceptions.php',
             'MFS\AppServer\HTTP\BadProtocolException'       => $root.'exceptions.php',
 
+            'MFS\AppServer\HTTP\iRequest'                   => $root.'interfaces.php',
             'MFS\AppServer\HTTP\iGetRequest'                => $root.'interfaces.php',
             'MFS\AppServer\HTTP\iHeadRequest'               => $root.'interfaces.php',
             'MFS\AppServer\HTTP\iPostRequest'               => $root.'interfaces.php',
