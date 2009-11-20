@@ -2,7 +2,7 @@
 
 namespace MFS\AppServer\Middleware\PHP_Compat;
 
-class Cookies implements ArrayAccess
+class Cookies implements \ArrayAccess
 {
     private $headers = array();
     private $cookies = array();
@@ -25,11 +25,18 @@ class Cookies implements ArrayAccess
     public function setcookie($name, $value, $expire = 0, $path = null, $domain = null, $secure = false, $httponly = false)
     {
         $this->addHeader('Set-Cookie', self::cookie_headervalue($name, $value, $expire, $path, $domain, $secure, $httponly, false));
+        $this->cookies[$name] = $value;
     }
 
     public function setrawcookie($name, $value, $expire = 0, $path = null, $domain = null, $secure = false, $httponly = false)
     {
         $this->addHeader('Set-Cookie', self::cookie_headervalue($name, $value, $expire, $path, $domain, $secure, $httponly, true));
+        $this->cookies[$name] = $value;
+    }
+
+    public function __toArray()
+    {
+        return $this->cookies;
     }
 
 

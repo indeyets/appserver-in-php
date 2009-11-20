@@ -76,7 +76,7 @@ class Server
 
             // $this->body = ($this->headers['CONTENT_LENGTH'] > 0) ? stream_get_contents($this->conn, $this->headers['CONTENT_LENGTH']) : null;
 
-            unset($this->headers['SCGI'], $this->headers['CONTENT_LENGTH']);
+            unset($this->headers['SCGI']);
 
             return true;
         }

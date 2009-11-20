@@ -3,7 +3,7 @@ namespace MFS\AppServer\SCGI;
 
 use MFS\SCGI\Server as Server;
 
-class Response implements \MFS\AppServer\HTTP\iResponse
+class Response
 {
     private static $valid_statuses = null;
 
@@ -88,7 +88,7 @@ class Response implements \MFS\AppServer\HTTP\iResponse
 
     public function setStatus($status)
     {
-        if (!in_array($status, self::$valid_statuses))
+        if (!array_key_exists($status, self::$valid_statuses))
             throw new UnexpectedValueException('Unknown status: '.$status);
 
         $this->status = $status;
@@ -103,7 +103,7 @@ class Response implements \MFS\AppServer\HTTP\iResponse
         }
     }
 
-    private function sendHeaders()
+    public function sendHeaders()
     {
         $this->scgi->write('Status: '.$this->status.' '.self::$valid_statuses[$this->status]."\r\n");
         $this->scgi->write('Content-type: '.$this->content_type."\r\n");

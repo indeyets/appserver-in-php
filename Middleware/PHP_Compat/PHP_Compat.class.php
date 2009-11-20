@@ -36,25 +36,29 @@ class PHP_Compat
             $context['_POST'] = array();
             $context['_FILES'] = array();
 
-            $buffer = stream_get_contents($env['stdin']);
+            echo "getting buffer\n";
+            $buffer = stream_get_contents($context['stdin'], $context['env']['CONTENT_LENGTH']);
+            echo "got buffer\n";
 
             if (isset($this->options['forward_stream']) and $this->options['forward_stream'] === true) {
                 // user asks us to provide a valid stream to app
                 $stream_name = StringStreamKeeper::keep($buffer);
-                $_old_stdin = $env['stdin'];
-                $env['stdin'] = new StringStream($stream_name);
+                $_old_stdin = $context['stdin'];
+                $context['stdin'] = new StringStream($stream_name);
             }
 
             if (isset($context['env']['CONTENT_TYPE']) and strpos($context['env']['CONTENT_TYPE'], 'multipart/form-data') === 0) {
                 self::parseMultipart($context['env']['CONTENT_TYPE'], $buffer, $context['_POST'], $context['_FILES']);
             } else {
+                echo "parsing…\n";
                 parse_str($buffer, $context['_POST']);
             }
             unset($buffer); // free memory
         }
 
         // EXECUTE
-        $result = $this->app($context);
+        $app = $this->app;
+        $result = $app($context);
 
         // Append cookie-headers
         $result[1] = array_merge($result[1], $ck->_getHeaders());
@@ -63,7 +67,7 @@ class PHP_Compat
         if (isset($_old_stdin)) {
             // remove our "fake" stream
             StringStreamKeeper::cleanup();
-            $env['stdin'] = $_old_stdin;
+            $context['stdin'] = $_old_stdin;
         }
 
         if (isset($context['env']['_FILES'])) {
@@ -199,5 +203,23 @@ class PHP_Compat
         }
 
         parse_str(implode('&', $post_strs), $_POST);
+    }
+
+    // utility functions
+    protected static function IniString_to_Bytes($val)
+    {
+        $val = trim($val);
+        $last = strtolower($val{strlen($val)-1});
+        switch($last) {
+            // The 'G' modifier is available since PHP 5.1.0
+            case 'g':
+                $val *= 1024;
+            case 'm':
+                $val *= 1024;
+            case 'k':
+                $val *= 1024;
+        }
+
+        return $val;
     }
 }

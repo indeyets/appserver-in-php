@@ -17,21 +17,24 @@ class MyApp
 
     public function __invoke($context)
     {
-        $context['response']->addHeader('Status', '200 Ok');
-        $context['response']->addHeader('Content-type', 'text/html; charset=utf-8');
+        $headers = array('Conent-type', 'text/html; charset=utf-8');
 
-        if (!isset($context['request']->cookies['Hello']))
-            $context['response']->setcookie('Hello', 'world!');
+        if (!isset($context['_COOKIE']['Hello']))
+            $context['_COOKIE']->setcookie('Hello', 'world!');
 
         // replacing {data} in the "template" by our dynamic string and sending it out
-        $context['response']->write(str_replace(
-            '{data}',
-            $this->prepareData($context['request']),
-            $this->tpl
-        ));
+        return array(
+            200,
+            $headers,
+            str_replace(
+                '{data}',
+                $this->prepareData($context),
+                $this->tpl
+            )
+        );
     }
 
-    private function prepareData($req)
+    private function prepareData($context)
     {
         $c = ++$this->local_storage['counter'];
         $m = memory_get_usage();
@@ -47,15 +50,15 @@ class MyApp
         $buffer .= 'Memory usage: '.$m."\n";
         $buffer .= 'Peak Memory usage: '.$p."\n";
         $buffer .= 'Memory usage last growed at request#'.$this->local_storage['memory_peak_counter']."\n\n";
-        $buffer .= "HEADERS:\n".var_export($req->headers, true)."\n";
-        $buffer .= "COOKIES:\n".var_export($req->cookies, true)."\n";
-        $buffer .= "GET:\n".var_export($req->get, true)."\n";
+        $buffer .= "HEADERS:\n".var_export($context['env'], true)."\n";
+        $buffer .= "COOKIES:\n".var_export($context['_COOKIE']->__toArray(), true)."\n";
+        $buffer .= "GET:\n".var_export($context['_GET'], true)."\n";
 
-        if ($req instanceof MFS\AppServer\HTTP\iPostRequest) {
-            $buffer .= "POST:\n".var_export($req->post, true)."\n";
-            $buffer .= "FILES:\n".var_export($req->files, true)."\n";
-        } elseif ($req instanceof MFS\AppServer\HTTP\iUnknownRequest) {
-            $buffer .= "BODY:\n".var_export($req->body, true)."\n";
+        if ($context['env']['REQUEST_METHOD'] === 'POST') {
+            $buffer .= "POST:\n".var_export($context['_POST'], true)."\n";
+            $buffer .= "FILES:\n".var_export($context['_FILES'], true)."\n";
+        } elseif (!in_array($context['env']['REQUEST_METHOD'], array('GET', 'HEAD'))) {
+            $buffer .= "BODY:\n".var_export(stream_get_contents($context['stdin']), true)."\n";
         }
 
         $buffer .= '</pre>';
