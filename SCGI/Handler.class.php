@@ -51,7 +51,9 @@ class Handler implements \MFS\AppServer\iHandler
                 $context = array(
                     'env' => $this->protocol->getHeaders(),
                     'stdin' => $this->protocol->getStdin(),
-                    'stderr' => STDERR
+                    'logger' => function($message) {
+                        echo $message."\n";
+                    }
                 );
 
                 $this->log("-> calling handler");
@@ -70,7 +72,7 @@ class Handler implements \MFS\AppServer\iHandler
                 $this->protocol->write($result[2]); // body
 
                 // cleanup
-                unset($response);
+                unset($response, $result);
 
                 $this->protocol->doneWithRequest();
                 $this->log("-> done with request");

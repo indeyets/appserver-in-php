@@ -24,14 +24,30 @@ class Handler implements \MFS\AppServer\iHandler
 
         try {
             $this->log("got request");
-            $request = Request::factory();
-            $this->log("-> parsed request");
-            $response = new Response($request);
 
-            $app(array('request' => $request, 'response' => $response));
+            $context = array(
+                'env' => $_SERVER,
+                'stdin' => fopen("php://input", "r"),
+                'logger' => function($message) {
+                    trigger_error($message, E_USER_NOTICE);
+                },
+                '_GET' => $_GET,
+                '_POST' => $_POST,
+                '_FILES' => $_FILES,
+                '_COOKIE' => new Cookies(),
+            );
 
-            unset($request);
+            $result = $app($context);
+
+            $response = new Response();
+            $response->setStatus($result[0]);
+            for ($i = 0, $cnt = count($result[1]); $i < $cnt; $i++) {
+                $response->addHeader($result[1][$i], $result[1][++$i]);
+            }
             unset($response);
+
+            echo $result[2];
+            unset($result);
 
             $this->log("-> done with request");
         } catch (\Exception $e) {
