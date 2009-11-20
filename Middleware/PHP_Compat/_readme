@@ -1,0 +1,10 @@
+This middleware provides "traditional" php variables parsed from request:
+php_compat += array(
+  '_GET' => array(),
+  '_COOKIE' => ArrayAccess + ->setcookie(), ->setrawcookie(),
+  '_POST' => array(),
+  '_FILES' => array(),
+
+  + emulate stdin using smth like http://code.google.com/p/phpstringstream/source/browse/trunk/stringstream.php
+)
+

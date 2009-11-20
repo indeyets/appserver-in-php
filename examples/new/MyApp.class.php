@@ -15,7 +15,7 @@ class MyApp
         );
     }
 
-    public function __invoke(array $context)
+    public function __invoke($context)
     {
         $context['response']->addHeader('Status', '200 Ok');
         $context['response']->addHeader('Content-type', 'text/html; charset=utf-8');

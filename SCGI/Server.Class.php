@@ -7,7 +7,6 @@ class Server
     private $conn = null;
 
     private $headers = null;
-    private $body = null;
 
     public function __construct($socket_url)
     {
@@ -75,7 +74,7 @@ class Server
             if (!isset($this->headers['CONTENT_LENGTH']))
                 throw new BadProtocolException("CONTENT_LENGTH header not present");
 
-            $this->body = ($this->headers['CONTENT_LENGTH'] > 0) ? stream_get_contents($this->conn, $this->headers['CONTENT_LENGTH']) : null;
+            // $this->body = ($this->headers['CONTENT_LENGTH'] > 0) ? stream_get_contents($this->conn, $this->headers['CONTENT_LENGTH']) : null;
 
             unset($this->headers['SCGI'], $this->headers['CONTENT_LENGTH']);
 
@@ -87,7 +86,6 @@ class Server
     {
         if (null !== $this->conn) {
             $this->headers = null;
-            $this->body = null;
 
             fclose($this->conn);
             $this->conn = null;
@@ -99,9 +97,9 @@ class Server
         return $this->headers;
     }
 
-    public function getBody()
+    public function getStdin()
     {
-        return $this->body;
+        return $this->conn;
     }
 
     public function write($data)

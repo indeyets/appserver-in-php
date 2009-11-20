@@ -5,19 +5,79 @@ use MFS\SCGI\Server as Server;
 
 class Response implements \MFS\AppServer\HTTP\iResponse
 {
+    private static $valid_statuses = null;
+
     private $scgi = null;
-    private $request = null;
 
     private $headers = array();
     private $sent_headers = false;
 
     private $content_type = null;
-    private $status = '200 Ok';
+    private $status = 200;
 
-    public function __construct(Server $scgi, \MFS\AppServer\HTTP\Request $request)
+    public function __construct(Server $scgi)
     {
+        if (null === self::$valid_statuses) {
+            self::$valid_statuses = array(
+                100 => "Continue",
+                101 => "Switching Protocols",
+                102 => "Processing",
+                200 => "OK",
+                201 => "Created",
+                202 => "Accepted",
+                203 => "Non-Authoritative Information",
+                204 => "No Content",
+                205 => "Reset Content",
+                206 => "Partial Content",
+                207 => "Multi-Status",
+                300 => "Multiple Choices",
+                301 => "Moved Permanently",
+                302 => "Found",
+                303 => "See Other",
+                304 => "Not Modified",
+                305 => "Use Proxy",
+                306 => "Switch Proxy",
+                307 => "Temporary Redirect",
+                400 => "Bad Request",
+                401 => "Unauthorized",
+                402 => "Payment Required",
+                403 => "Forbidden",
+                404 => "Not Found",
+                405 => "Method Not Allowed",
+                406 => "Not Acceptable",
+                407 => "Proxy Authentication Required",
+                408 => "Request Timeout",
+                409 => "Conflict",
+                410 => "Gone",
+                411 => "Length Required",
+                412 => "Precondition Failed",
+                413 => "Request Entity Too Large",
+                414 => "Request-URI Too Long",
+                415 => "Unsupported Media Type",
+                416 => "Requested Range Not Satisfiable",
+                417 => "Expectation Failed",
+                418 => "I'm a teapot",
+                422 => "Unprocessable Entity",
+                423 => "Locked",
+                424 => "Failed Dependency",
+                425 => "Unordered Collection",
+                426 => "Upgrade Required",
+                449 => "Retry With",
+                450 => "Blocked by Windows Parental Controls",
+                500 => "Internal Server Error",
+                501 => "Not Implemented",
+                502 => "Bad Gateway",
+                503 => "Service Unavailable",
+                504 => "Gateway Timeout",
+                505 => "HTTP Version Not Supported",
+                506 => "Variant Also Negotiates",
+                507 => "Insufficient Storage",
+                509 => "Bandwidth Limit Exceeded",
+                510 => "Not Extended",
+            );
+        }
+
         $this->scgi = $scgi;
-        $this->request = $request;
 
         $this->content_type = ini_get('default_mimetype');
 
@@ -26,90 +86,28 @@ class Response implements \MFS\AppServer\HTTP\iResponse
         }
     }
 
+    public function setStatus($status)
+    {
+        if (!in_array($status, self::$valid_statuses))
+            throw new UnexpectedValueException('Unknown status: '.$status);
+
+        $this->status = $status;
+    }
+
     public function addHeader($name, $value)
     {
-        if ($this->sent_headers)
-            throw new RuntimeException("headers are already sent");
-
-        if ($name == 'Status') {
-            $this->status = $value;
-        } elseif ($name == 'Content-type') {
+        if ($name == 'Content-type') {
             $this->content_type = $value;
         } else {
             $this->headers[] = $name.': '.$value;
         }
     }
 
-    public function write($string)
-    {
-        if (!$this->sent_headers) {
-            $this->sendHeaders();
-        }
-
-        $this->scgi->write($string);
-    }
-
-    // compatible with PHP's setcookie() function
-    public function setcookie($name, $value, $expire = 0, $path = null, $domain = null, $secure = false, $httponly = false)
-    {
-        $this->addHeader('Set-Cookie', self::cookie_headervalue($name, $value, $expire, $path, $domain, $secure, $httponly, false));
-    }
-
-    public function setrawcookie($name, $value, $expire = 0, $path = null, $domain = null, $secure = false, $httponly = false)
-    {
-        $this->addHeader('Set-Cookie', self::cookie_headervalue($name, $value, $expire, $path, $domain, $secure, $httponly, true));
-    }
-
-    // This one almost directly copies php_setcookie() function from php-core
-    private static function cookie_headervalue($name, $value, $expire, $path, $domain, $secure, $httponly, $raw)
-    {
-        if (false !== strpbrk($name, "=,; \t\r\n\013\014")) {
-            throw new UnexpectedValueException("Cookie names can not contain any of the following: '=,; \\t\\r\\n\\013\\014'");
-        }
-
-        if (true === $raw && false !== strpbrk($value, ",; \t\r\n\013\014")) {
-            throw new UnexpectedValueException("Cookie values can not contain any of the following: ',; \\t\\r\\n\\013\\014'");
-        }
-
-        $string = $name.'=';
-
-        if ('' == $value) {
-            // deleting
-            $string .= 'deleted; expires='.date("D, d-M-Y H:i:s T", time() - 31536001);
-        } else {
-            if (true === $raw) {
-                $string .= $value;
-            } else {
-                $string .= urlencode($value);
-            }
-
-            if ($expire > 0) {
-                $string .= '; expires='.date("D, d-M-Y H:i:s T", $expire);
-            }
-        }
-
-        if (null !== $path)
-            $string .= '; path='.$path;
-
-        if (null !== $domain)
-            $string .= '; domain='.$domain;
-
-        if (true === $secure)
-            $string .= '; secure';
-
-        if (true === $httponly)
-            $string .= '; httponly';
-
-        return $string;
-    }
-
     private function sendHeaders()
     {
-        $this->scgi->write('Status: '.$this->status."\r\n");
+        $this->scgi->write('Status: '.$this->status.' '.self::$valid_statuses[$this->status]."\r\n");
         $this->scgi->write('Content-type: '.$this->content_type."\r\n");
         $this->scgi->write(implode("\r\n", $this->headers));
         $this->scgi->write("\r\n\r\n");
-
-        $this->sent_headers = true;
     }
 }

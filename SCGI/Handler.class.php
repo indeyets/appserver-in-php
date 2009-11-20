@@ -47,14 +47,29 @@ class Handler implements \MFS\AppServer\iHandler
         try {
             while ($this->protocol->readRequest()) {
                 $this->log("got request");
-                $request = HTTP\Request::factory($this->protocol->getHeaders(), $this->protocol->getBody());
-                $response = new Response($this->protocol, $request);
+
+                $context = array(
+                    'env' => $this->protocol->getHeaders(),
+                    'stdin' => $this->protocol->getStdin(),
+                    'stderr' => STDERR
+                );
 
                 $this->log("-> calling handler");
-                $app(array('request' => $request, 'response' => $response));
+                $result = $app($context);
+
+                if (!is_array($result) or count($result) != 3)
+                    throw new BadProtocolException("App did not return proper result");
+
+                $response = new Response($this->protocol);
+                $response->setStatus($result[0]);
+                for ($i = 0, $cnt = count($result[1]); $i < $cnt; $i++) {
+                    $response->addHeader($result[1][$i], $result[1][++$i]);
+                }
+
+                $response->sendHeaders();
+                $this->protocol->write($result[2]); // body
 
                 // cleanup
-                unset($request);
                 unset($response);
 
                 $this->protocol->doneWithRequest();
