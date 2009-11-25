@@ -4,6 +4,8 @@ namespace MFS\AppServer\Middleware\Session;
 
 class _Engine
 {
+    const MAGIC = 'MFS_SESSION';
+
     private $cookies = array();
     private $headers = array();
 
@@ -82,7 +84,7 @@ class _Engine
             $this->validateSessionFile();
 
             $this->lock();
-            $this->vars = unserialize(file_get_contents($this->getSessionFilename()));
+            $this->vars = self::unserialize(file_get_contents($this->getSessionFilename()));
         } else {
             $this->generateId();
             $this->createCookie();
@@ -98,7 +100,7 @@ class _Engine
         if (false === $this->is_started)
             throw new LogicException('Session is not started');
 
-        file_put_contents($this->getSessionFilename(), serialize($this->vars));
+        file_put_contents($this->getSessionFilename(), self::serialize($this->vars));
         $this->unlock();
 
         $this->vars = array();
@@ -122,6 +124,30 @@ class _Engine
 
 
 
+
+    private static function serialize(array $data)
+    {
+        $container = array(
+            'magic' => self::MAGIC,
+            'data' => $data
+        );
+
+        return \serialize($container);
+    }
+
+    private static function unserialize($string)
+    {
+        $result = @\unserialize($string);
+
+        if (!is_array($result)
+            or !array_key_exists('magic', $result) or !array_key_exists('data', $result)
+            or $result['magic'] !== self::MAGIC or !is_array($result['data'])
+        ) {
+            throw new UnexpectedValueException('not a valid session');
+        }
+
+        return $result['data'];
+    }
 
     private function generateId()
     {
