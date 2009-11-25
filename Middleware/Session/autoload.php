@@ -13,6 +13,9 @@ function autoload($class_name)
             'MFS\AppServer\Middleware\Session\Session'                  => $root.'PHP_Compat.class.php',
             'MFS\AppServer\Middleware\Session\_Engine'                  => $root.'_Engine.class.php',
 
+            'MFS\AppServer\Middleware\Session\Storage'                  => $root.'interfaces.php',
+            'MFS\AppServer\Middleware\Session\FileStorage'              => $root.'storage/FileStorage.class.php',
+
             'MFS\AppServer\Middleware\Session\RuntimeException'         => $root.'exceptions.php',
             'MFS\AppServer\Middleware\Session\LogicException'           => $root.'exceptions.php',
             'MFS\AppServer\Middleware\Session\UnexpectedValueException' => $root.'exceptions.php',

@@ -68,8 +68,8 @@ class _Engine
         $this->options = array_merge(
             array(
                 'cookie_name' => ini_get('session.name'),
-                'save_path' => ini_get('session.save_path'),
                 'hash_algorithm' => 'sha1',
+                'storage' => __NAMESPACE__.'\\FileStorage',
                 'cookie_lifetime' => ini_get('session.cookie_lifetime'),
                 'cookie_path' => ini_get('session.cookie_path'),
                 'cookie_domain' => ini_get('session.cookie_domain'),
@@ -79,18 +79,24 @@ class _Engine
             $options
         );
 
+        $class = $this->options['storage'];
+
+        if (!in_array(__NAMESPACE__.'\\Storage', class_implements($class))) {
+            throw new UnexpectedValueException($storage.' class does not implement Storage interface');
+        }
+
+        $this->storage = new $class($this->options);
+
         if ($this->cookieIsSet()) {
             $this->fetchIdFromCookie();
-            $this->validateSessionFile();
 
-            $this->lock();
-            $this->readData();
+            $this->storage->open($this->id);
         } else {
-            $this->generateId();
+            $this->createSessionWithNewId();
             $this->createCookie();
-
-            $this->lock();
         }
+
+        $this->vars = &$this->storage->vars;
 
         $this->is_started = true;
     }
@@ -100,8 +106,8 @@ class _Engine
         if (false === $this->is_started)
             throw new LogicException('Session is not started');
 
-        $this->flushData();
-        $this->unlock();
+        $this->storage->save($this->vars);
+        $this->storage = null;
 
         $this->vars = array();
         $this->is_started = false;
@@ -112,8 +118,8 @@ class _Engine
         if (false === $this->is_started)
             throw new LogicException('Session is not started');
 
-        $this->unlock();
-        unlink($this->getSessionFilename());
+        $this->storage->destroy();
+        $this->storage = null;
 
         $this->dropCookie();
         $this->id = null;
@@ -124,93 +130,26 @@ class _Engine
 
 
 
-
-    private static function serialize(array $data)
+    private function createSessionWithNewId()
     {
-        $container = array(
-            'magic' => self::MAGIC,
-            'data' => $data
-        );
+        $callback = array($this->options['storage'], 'idIsFree');
 
-        return \serialize($container);
-    }
-
-    private static function unserialize($string)
-    {
-        $result = @\unserialize($string);
-
-        if (!is_array($result)
-            or !array_key_exists('magic', $result) or !array_key_exists('data', $result)
-            or $result['magic'] !== self::MAGIC or !is_array($result['data'])
-        ) {
-            throw new UnexpectedValueException('not a valid session');
-        }
-
-        return $result['data'];
-    }
-
-    private function generateId()
-    {
         while (true) {
-            $this->id = hash($this->options['hash_algorithm'], mt_rand());
+            $id = hash($this->options['hash_algorithm'], mt_rand());
 
-            if (!file_exists($this->getSessionFilename()))
+            try {
+                $this->storage->create($id);
                 break; // cool, we're first here
+            } catch (IdIsTakenException $e) {
+            }
         }
+
+        $this->id = $id;
     }
 
     private function fetchIdFromCookie()
     {
         $this->id = $this->getIdFromCookie();
-    }
-
-    private function getSessionFilename()
-    {
-        return $this->options['save_path'].'/'.$this->id.'.session';
-    }
-
-    private function validateSessionFile()
-    {
-        $dir = $this->options['save_path'];
-
-        if (empty($dir) or !is_dir($dir))
-            throw new RuntimeException('"'.$dir.'" is not a valid directory');
-
-        if (!is_writable($dir))
-            throw new RuntimeException('Noe enough rights to write to "'.$dir.'"');
-
-        $file = $dir.'/'.$this->id.'.session';
-
-        if (file_exists($file) and !is_writable($file))
-            throw new RuntimeException('Noe enough rights to write to "'.$file.'"');
-    }
-
-    private function lock()
-    {
-        $this->_fp = @fopen($this->getSessionFilename(), 'r+');
-        if (false === $this->_fp) {
-            $this->_fp = null;
-            throw new RuntimeException('Could not open "'.$this->getSessionFilename().'" file for read&write');
-        }
-
-        flock($this->_fp, LOCK_EX);
-        return true;
-    }
-
-    private function unlock()
-    {
-        fclose($this->_fp);
-        $this->_fp = null;
-    }
-
-    private function readData()
-    {
-        $this->vars = self::unserialize(file_get_contents($this->getSessionFilename()));
-    }
-
-    private function flushData()
-    {
-        file_put_contents($this->getSessionFilename(), self::serialize($this->vars));
     }
 
 
