@@ -80,11 +80,11 @@ class _Engine
         );
 
         if ($this->cookieIsSet()) {
-            $this->id = $this->getIdFromCookie();
+            $this->fetchIdFromCookie();
             $this->validateSessionFile();
 
             $this->lock();
-            $this->vars = self::unserialize(file_get_contents($this->getSessionFilename()));
+            $this->readData();
         } else {
             $this->generateId();
             $this->createCookie();
@@ -100,7 +100,7 @@ class _Engine
         if (false === $this->is_started)
             throw new LogicException('Session is not started');
 
-        file_put_contents($this->getSessionFilename(), self::serialize($this->vars));
+        $this->flushData();
         $this->unlock();
 
         $this->vars = array();
@@ -159,6 +159,11 @@ class _Engine
         }
     }
 
+    private function fetchIdFromCookie()
+    {
+        $this->id = $this->getIdFromCookie();
+    }
+
     private function getSessionFilename()
     {
         return $this->options['save_path'].'/'.$this->id.'.session';
@@ -196,6 +201,16 @@ class _Engine
     {
         fclose($this->_fp);
         $this->_fp = null;
+    }
+
+    private function readData()
+    {
+        $this->vars = self::unserialize(file_get_contents($this->getSessionFilename()));
+    }
+
+    private function flushData()
+    {
+        file_put_contents($this->getSessionFilename(), self::serialize($this->vars));
     }
 
 
