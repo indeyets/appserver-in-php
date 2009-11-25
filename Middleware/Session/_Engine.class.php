@@ -4,8 +4,6 @@ namespace MFS\AppServer\Middleware\Session;
 
 class _Engine
 {
-    const MAGIC = 'MFS_SESSION';
-
     private $cookies = array();
     private $headers = array();
 

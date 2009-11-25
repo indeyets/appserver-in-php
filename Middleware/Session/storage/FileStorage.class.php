@@ -4,6 +4,8 @@ namespace MFS\AppServer\Middleware\Session;
 
 class FileStorage implements Storage
 {
+    const MAGIC = 'MFS_SESSION';
+
     private $options;
     private $name = null;
 
@@ -104,7 +106,13 @@ class FileStorage implements Storage
 
     private function lock()
     {
-        $this->_fp = @fopen($this->getSessionFilename(), 'r+');
+        $file = $this->getSessionFilename();
+
+        if (file_exists($file))
+            $this->_fp = @fopen($file, 'r+');
+        else
+            $this->_fp = @fopen($file, 'w');
+
         if (false === $this->_fp) {
             $this->_fp = null;
             throw new RuntimeException('Could not open "'.$this->getSessionFilename().'" file for read&write');
