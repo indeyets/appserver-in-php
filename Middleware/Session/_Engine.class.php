@@ -90,13 +90,11 @@ class _Engine
         if ($this->cookieIsSet()) {
             $this->fetchIdFromCookie();
 
-            $this->storage->open($this->id);
+            $this->vars = $this->storage->open($this->id);
         } else {
             $this->createSessionWithNewId();
             $this->createCookie();
         }
-
-        $this->vars = &$this->storage->vars;
 
         $this->is_started = true;
     }

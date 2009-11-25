@@ -8,7 +8,7 @@ class FileStorage implements Storage
     private $name = null;
 
     private $_fp = null;
-    public $vars = array();
+    private $vars = array();
 
     public function __construct(array $options)
     {
@@ -28,6 +28,8 @@ class FileStorage implements Storage
 
         $this->lock();
         $this->readData();
+
+        return $this->vars;
     }
 
     public function create($name)
@@ -44,11 +46,13 @@ class FileStorage implements Storage
         $this->lock();
     }
 
-    public function save()
+    public function save(array $vars)
     {
         if (null === $this->name) {
             throw new LogicException('session is not opened');
         }
+
+        $this->vars = $vars;
 
         $this->flushData();
         $this->unlock();
