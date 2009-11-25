@@ -19,7 +19,13 @@ class Session
         if (isset($context['mfs.session']))
             throw new LogicException('"mfs.session" key is already occupied in context');
 
-        $context['mfs.session'] = new _Engine($context);
+        $ck = $context['mfs.session'] = new _Engine($context);
+
         $result = $this->app($context);
+
+        // Append cookie-headers
+        $result[1] = array_merge($result[1], $ck->_getHeaders());
+
+        return $result;
     }
 }

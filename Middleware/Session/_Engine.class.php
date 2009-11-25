@@ -4,8 +4,9 @@ namespace MFS\AppServer\Middleware\Session;
 
 class _Engine
 {
-    private $in;
-    private $out;
+    private $cookies = array();
+    private $headers = array();
+
     private $options;
 
     private $is_started = false;
@@ -18,8 +19,8 @@ class _Engine
 
     public function __construct($context)
     {
-        $this->in = $context['request'];
-        $this->out = $context['response'];
+        if (isset($context['env']['HTTP_COOKIE']))
+            $this->parseCookies($context['env']['HTTP_COOKIE']);
     }
 
     public function __get($varname)
@@ -173,43 +174,97 @@ class _Engine
 
 
     // cookie stuff
+    private function parseCookies($cookiestr)
+    {
+        $pairs = explode('; ', $cookiestr);
+
+        $this->cookies = array();
+
+        foreach ($pairs as $pair) {
+            list($name, $value) = explode('=', $pair);
+            $this->cookies[$name] = urldecode($value);
+        }
+    }
+
     private function cookieIsSet()
     {
         $name = $this->options['cookie_name'];
-        return isset($this->in->cookies[$name]);
+        return isset($this->cookies[$name]);
     }
 
     private function getIdFromCookie()
     {
         $name = $this->options['cookie_name'];
-        return $this->in->cookies[$name];
+        return $this->cookies[$name];
     }
 
     private function createCookie()
     {
-        $name = $this->options['cookie_name'];
-
-        $this->in->cookies[$name] = $this->id;
-
         $lifetime = $this->options['cookie_lifetime'] === 0 ? 0 : $this->options['cookie_lifetime'] + time();
-        $this->out->setcookie(
-            $name, $this->id,
-            $lifetime,
-            $this->options['cookie_path'], $this->options['cookie_domain'],
-            $this->options['cookie_secure'], $this->options['cookie_httponly']
-        );
+
+        $this->setcookie($this->id, $lifetime);
     }
 
     private function dropCookie()
     {
+        $this->setcookie('', time() - 3600);
+    }
+
+
+
+    // low-level stuff
+    private function setcookie($value, $expire)
+    {
         $name = $this->options['cookie_name'];
 
-        $this->out->setcookie(
-            $name, '',
-            time() - 3600,
+        $this->headers[] = 'Set-Cookie';
+        $this->headers[] = self::cookie_headervalue(
+            $name, $value,
+            $expire,
             $this->options['cookie_path'], $this->options['cookie_domain'],
             $this->options['cookie_secure'], $this->options['cookie_httponly']
         );
-        $this->in->cookies[$name] = '';
+
+        $this->cookies[$name] = $value;
+    }
+
+    private static function cookie_headervalue($name, $value, $expire, $path, $domain, $secure, $httponly)
+    {
+        if (false !== strpbrk($name, "=,; \t\r\n\013\014")) {
+            throw new UnexpectedValueException("Cookie names can not contain any of the following: '=,; \\t\\r\\n\\013\\014'");
+        }
+
+        $string = $name.'=';
+
+        if ('' == $value) {
+            // deleting
+            $string .= 'deleted; expires='.date("D, d-M-Y H:i:s T", time() - 31536001);
+        } else {
+            $string .= urlencode($value);
+
+            if ($expire > 0) {
+                $string .= '; expires='.date("D, d-M-Y H:i:s T", $expire);
+            }
+        }
+
+        if (null !== $path)
+            $string .= '; path='.$path;
+
+        if (null !== $domain)
+            $string .= '; domain='.$domain;
+
+        if (true === $secure)
+            $string .= '; secure';
+
+        if (true === $httponly)
+            $string .= '; httponly';
+
+        return $string;
+    }
+
+
+    public function _getHeaders()
+    {
+        return $this->headers;
     }
 }
