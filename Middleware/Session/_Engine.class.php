@@ -15,7 +15,7 @@ class _Engine
     private $id = null;
     private $vars = array();
 
-    private $_fp = null;
+    private $storage = null;
 
     public function __construct($context)
     {
@@ -42,12 +42,20 @@ class _Engine
         $this->vars[$varname] = $value;
     }
 
-    public function __isset($varame)
+    public function __isset($varname)
     {
         if (false === $this->is_started)
             throw new LogicException('Session is not started');
 
         return array_key_exists($varname, $this->vars);
+    }
+
+    public function __unset($varname)
+    {
+        if (false === $this->is_started)
+            throw new LogicException('Session is not started');
+
+        unset($this->vars[$varname]);
     }
 
     public function getId()
