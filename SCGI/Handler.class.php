@@ -2,7 +2,6 @@
 
 namespace MFS\AppServer\SCGI;
 
-use MFS\AppServer\HTTP as HTTP;
 use MFS\SCGI\Server as Server;
 
 class Handler implements \MFS\AppServer\iHandler
