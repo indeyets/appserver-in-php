@@ -11,7 +11,7 @@ class PHP_Compat
         if (!is_callable($app))
             throw new InvalidArgumentException('not a valid app');
 
-        $this->app = $app;
+        $this->app = \MFS\AppServer\callable($app);
         $this->options = $options;
     }
 
