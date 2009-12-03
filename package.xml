@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.4.1" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
+    <name>AppServer</name>
+    <channel>pear.indeyets.pp.ru</channel>
+    <summary>A set of components for building extremely fast universal libraries</summary>
+    <description>
+        Web server interface for PHP, inspired by Ruby’s Rack and Python’s WSGI. It provides a common API for connecting PHP frameworks and applications to webservers.
+    </description>
+    <lead>
+        <name>Alexey Zakhlestin</name>
+        <user>indeyets</user>
+        <email>indeyets@php.net</email>
+        <active>yes</active>
+    </lead>
+
+    <date>2009-12-04</date>
+    <version>
+        <release>0.1.0</release>
+        <api>0.1.0</api>
+    </version>
+    <stability>
+        <release>beta</release>
+        <api>stable</api>
+    </stability>
+    <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
+    <notes>
+        -
+    </notes>
+
+    <contents>
+        <dir name="/" baseinstalldir="AppServer">
+            <file role="php" name="autoload.php" />
+            <file role="php" name="interfaces.php" />
+            <file role="doc" name="LICENSE" />
+
+            <dir name="SCGI">
+                <file role="php" name="autoload.php" />
+                <file role="php" name="Client.Class.php" />
+                <file role="php" name="ClientRequest.class.php" />
+                <file role="php" name="exceptions.php" />
+                <file role="php" name="Handler.class.php" />
+                <file role="php" name="Response.Class.php" />
+                <file role="php" name="Server.Class.php" />
+            </dir>
+
+            <dir name="MOD_PHP">
+                <file role="php" name="autoload.php" />
+                <file role="php" name="exceptions.php" />
+                <file role="php" name="Cookies.class.php" />
+                <file role="php" name="Handler.Class.php" />
+                <file role="php" name="Response.Class.php" />
+            </dir>
+
+            <dir name="Middleware">
+                <dir name="PHP_Compat">
+                    <file role="php" name="autoload.php" />
+                    <file role="php" name="exceptions.php" />
+                    <file role="php" name="Cookies.class.php" />
+                    <file role="php" name="PHP_Compat.class.php" />
+                    <file role="doc" name="_readme" install-as="PHP_Compat Middleware.readme" />
+                </dir>
+
+                <dir name="Session">
+                    <file role="php" name="autoload.php" />
+                    <file role="php" name="exceptions.php" />
+                    <file role="php" name="interfaces.php" />
+                    <file role="php" name="Session.class.php" />
+                    <file role="php" name="_Engine.class.php" />
+
+                    <dir name="storage">
+                        <file role="php" name="FileStorage.class.php" />
+                    </dir>
+
+                    <dir name="tests">
+                        <file role="test" name="_EngineTest.php" />
+                        <file role="test" name="FileStorageTest.php" />
+                    </dir>
+                </dir>
+            </dir>
+        </dir>
+    </contents>
+
+    <dependencies>
+        <required>
+            <php>
+                <min>5.3.0</min>
+            </php>
+            <pearinstaller>
+                <min>1.4.1</min>
+            </pearinstaller>
+        </required>
+    </dependencies>
+
+    <phprelease>
+        <filelist>
+        </filelist>
+    </phprelease>
+
+    <changelog>
+    </changelog>
+</package>
