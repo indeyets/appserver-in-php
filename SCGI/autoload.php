@@ -2,8 +2,6 @@
 
 namespace MFS\AppServer\SCGI;
 
-require realpath(__DIR__.'/../AppServer').'/autoload.php';
-
 function autoload($class_name)
 {
     static $files = null;
