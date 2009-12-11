@@ -1,0 +1,6 @@
+<?php
+new URLMap(array(
+    '/' => function(){ return array(404, array('Content-type', 'text/plain'), 'Page not found'); },
+    '/hello' => function(){ return array(200, array('Content-type', 'text/plain'), 'Hello, world!'); },
+    '/hello/jimi' => function(){ return array(200, array('Content-type', 'text/plain'), 'Hello, Jimi!'); },
+));

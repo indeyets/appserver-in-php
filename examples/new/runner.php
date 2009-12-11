@@ -5,6 +5,13 @@ $app = new MyApp();
 
 require realpath(__DIR__.'/../..').'/autoload.php';
 
+use \MFS\AppServer\Middleware\URLMap\URLMap as urlmap;
+
+$app = new urlmap(array(
+    '/hello' => function(){ return array(200, array('Content-type', 'text/plain'), 'Hello, world!'); },
+    '/' => $app
+));
+
 if (PHP_SAPI === 'cli') {
     $app = new \MFS\AppServer\Middleware\PHP_Compat\PHP_Compat($app);
     $handler = new \MFS\AppServer\SCGI\Handler('tcp://127.0.0.1:9999');

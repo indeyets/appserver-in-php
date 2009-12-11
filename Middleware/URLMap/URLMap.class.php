@@ -13,7 +13,7 @@ class URLMap
             if (!is_callable($app))
                 throw new InvalidArgumentException('invalid app supplied for "'.$location.'" path');
 
-            $i = new stdClass();
+            $i = new \stdClass();
             $i->app = \MFS\AppServer\callable($app);
 
             if (false !== mb_ereg('\Ahttps?://(.*?)(/.*)', $location, $parts)) {

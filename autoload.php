@@ -47,3 +47,4 @@ require __DIR__.'/SCGI/autoload.php';
 require __DIR__.'/MOD_PHP/autoload.php';
 require __DIR__.'/Middleware/PHP_Compat/autoload.php';
 require __DIR__.'/Middleware/Session/autoload.php';
+require __DIR__.'/Middleware/URLMap/autoload.php';
