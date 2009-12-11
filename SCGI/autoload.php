@@ -11,13 +11,13 @@ function autoload($class_name)
 
         $files = array(
             // low-level stuff
-            'MFS\SCGI\Server'                             => $root.'Server.Class.php',
-            'MFS\SCGI\Client'                             => $root.'Client.Class.php',
-            'MFS\SCGI\ClientRequest'                      => $root.'ClientRequest.Class.php',
+            'MFS\SCGI\Server'                             => $root.'Server.class.php',
+            'MFS\SCGI\Client'                             => $root.'Client.class.php',
+            'MFS\SCGI\ClientRequest'                      => $root.'ClientRequest.class.php',
 
             // high-level stuff
-            'MFS\AppServer\SCGI\Handler'                  => $root.'Handler.Class.php',
-            'MFS\AppServer\SCGI\Response'                 => $root.'Response.Class.php',
+            'MFS\AppServer\SCGI\Handler'                  => $root.'Handler.class.php',
+            'MFS\AppServer\SCGI\Response'                 => $root.'Response.class.php',
 
             'MFS\AppServer\SCGI\Exception'                => $root.'exceptions.php',
             'MFS\AppServer\SCGI\LogicException'           => $root.'exceptions.php',

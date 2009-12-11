@@ -10,9 +10,9 @@ function autoload($class_name)
         $root = __DIR__.'/';
 
         $files = array(
-            'MFS\AppServer\MOD_PHP\Handler'                => $root.'Handler.Class.php',
-            'MFS\AppServer\MOD_PHP\Response'               => $root.'Response.Class.php',
-            'MFS\AppServer\MOD_PHP\Cookies'                => $root.'Cookies.Class.php',
+            'MFS\AppServer\MOD_PHP\Handler'                => $root.'Handler.class.php',
+            'MFS\AppServer\MOD_PHP\Response'               => $root.'Response.class.php',
+            'MFS\AppServer\MOD_PHP\Cookies'                => $root.'Cookies.class.php',
 
             'MFS\AppServer\MOD_PHP\Exception'              => $root.'exceptions.php',
             'MFS\AppServer\MOD_PHP\LogicException'         => $root.'exceptions.php',
