@@ -35,20 +35,20 @@
 
             <dir name="SCGI">
                 <file role="php" name="autoload.php" />
-                <file role="php" name="Client.Class.php" />
+                <file role="php" name="Client.class.php" />
                 <file role="php" name="ClientRequest.class.php" />
                 <file role="php" name="exceptions.php" />
                 <file role="php" name="Handler.class.php" />
-                <file role="php" name="Response.Class.php" />
-                <file role="php" name="Server.Class.php" />
+                <file role="php" name="Response.class.php" />
+                <file role="php" name="Server.class.php" />
             </dir>
 
             <dir name="MOD_PHP">
                 <file role="php" name="autoload.php" />
                 <file role="php" name="exceptions.php" />
                 <file role="php" name="Cookies.class.php" />
-                <file role="php" name="Handler.Class.php" />
-                <file role="php" name="Response.Class.php" />
+                <file role="php" name="Handler.class.php" />
+                <file role="php" name="Response.class.php" />
             </dir>
 
             <dir name="Middleware">
