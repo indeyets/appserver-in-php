@@ -6,10 +6,11 @@ use MFS\SCGI\Server as Server;
 
 class Handler implements \MFS\AppServer\iHandler
 {
-    private $socket = null;
+    private $protocol = null;
+    private $transport = null;
     private $has_gc = true;
 
-    public function __construct($socket_url = 'tcp://127.0.0.1:9999')
+    public function __construct()
     {
         if (PHP_SAPI !== 'cli')
             throw new LogicException("SCGI Application should be run using CLI SAPI");
@@ -24,9 +25,17 @@ class Handler implements \MFS\AppServer\iHandler
         } elseif (false === gc_enabled()) {
             gc_enable();
         }
-
-        $this->protocol = new Server($socket_url);
         $this->log('Initialized SCGI Handler @ ['.$socket_url."]");
+    }
+    
+    public function setProtocol($protocol)
+    {
+        $this->protocol = $protocol;
+    }
+    
+    public function setTransport($transport)
+    {
+        $this->transport = $transport;
     }
 
     public function __destruct()
@@ -36,59 +45,63 @@ class Handler implements \MFS\AppServer\iHandler
     }
 
     public function serve($app)
-    {
+    {        
         if (!is_callable($app))
             throw new InvalidArgumentException('not a valid app');
 
         $app = \MFS\AppServer\callable($app);
+        $this->app = $app;
 
-        $this->log('Serving '.(is_object($app) ? get_class($app) : $app).' app…');
+        $this->log('Serving '.(is_object($this->app) ? get_class($this->app) : $this->app).' app…');
         $this->log("Entering runloop…");
 
         try {
-            while ($this->protocol->readRequest()) {
-                $this->log("got request");
-
-                $context = array(
-                    'env' => $this->protocol->getHeaders(),
-                    'stdin' => $this->protocol->getStdin(),
-                    'logger' => function($message) {
-                        echo $message."\n";
-                    }
-                );
-
-                $this->log("-> calling handler");
-                $result = $app($context);
-
-                if (!is_array($result) or count($result) != 3)
-                    throw new BadProtocolException("App did not return proper result");
-
-                $response = new Response($this->protocol);
-                $response->setStatus($result[0]);
-                for ($i = 0, $cnt = count($result[1]); $i < $cnt; $i++) {
-                    $response->addHeader($result[1][$i], $result[1][++$i]);
-                }
-
-                $response->sendHeaders();
-                $this->protocol->write($result[2]); // body
-
-                // cleanup
-                unset($response, $result);
-
-                $this->protocol->doneWithRequest();
-                $this->log("-> done with request");
-
-                if (true === $this->has_gc) {
-                    gc_collect_cycles();
-                }
-            }
+            $this->transport->loop(\MFS\AppServer\callable(array($this, 'onRequest')));
         } catch (\Exception $e) {
             $this->protocol->doneWithRequest();
             $this->log('[Exception] '.get_class($e).': '.$e->getMessage());
         }
 
-
         $this->log("Left runloop…");
+    }
+    
+    public function onRequest() {
+        $this->log("got request");
+
+        $context = array(
+            'env' => $this->protocol->getHeaders(),
+            'stdin' => $this->protocol->getStdin(),
+            'logger' => function($message) {
+                echo $message."\n";
+            }
+        );
+
+        $this->log("-> calling handler");
+        
+        $app = $this->app;
+        $result = $app($context);
+
+        if (!is_array($result) or count($result) != 3)
+            throw new BadProtocolException("App did not return proper result");
+
+        $response = new Response($this->protocol);
+        $response->setStatus($result[0]);
+        for ($i = 0, $cnt = count($result[1]); $i < $cnt; $i++) {
+            $response->addHeader($result[1][$i], $result[1][++$i]);
+        }
+
+        $response->sendHeaders();
+        $this->protocol->write($result[2]); // body
+
+        // cleanup
+        unset($response, $result);
+
+        $this->protocol->doneWithRequest();
+        $this->log("-> done with request");
+
+        if (true === $this->has_gc) {
+            gc_collect_cycles();
+        }
     }
 
     public function log($message)

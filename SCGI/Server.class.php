@@ -8,15 +8,10 @@ class Server
 
     private $headers = null;
 
-    public function __construct($socket_url)
+    public function __construct()
     {
         $errno = 0;
-        $errstr = "";
-        $this->socket = stream_socket_server($socket_url, $errno, $errstr);
-
-        if (false === $this->socket) {
-            throw new RuntimeException('Failed creating socket-server (URL: "'.$socket_url.'"): '.$errstr, $errno);
-        }
+        $errstr = "";        
     }
 
     public function __destruct()
