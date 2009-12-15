@@ -25,7 +25,7 @@ class Handler implements \MFS\AppServer\iHandler
         } elseif (false === gc_enabled()) {
             gc_enable();
         }
-        $this->log('Initialized SCGI Handler @ ['.$socket_url."]");
+        $this->log('Initialized SCGI Handler');
     }
     
     public function setProtocol($protocol)
@@ -51,8 +51,10 @@ class Handler implements \MFS\AppServer\iHandler
 
         $app = \MFS\AppServer\callable($app);
         $this->app = $app;
-
+        
         $this->log('Serving '.(is_object($this->app) ? get_class($this->app) : $this->app).' app…');
+        $this->log('Protocol '.get_class($this->protocol).' protocol…');
+        $this->log('Transport '.get_class($this->transport).' transport…');        
         $this->log("Entering runloop…");
 
         try {
@@ -65,8 +67,11 @@ class Handler implements \MFS\AppServer\iHandler
         $this->log("Left runloop…");
     }
     
-    public function onRequest() {
+    public function onRequest($stream)
+    {
         $this->log("got request");
+
+        $this->protocol->readRequest($stream);
 
         $context = array(
             'env' => $this->protocol->getHeaders(),
