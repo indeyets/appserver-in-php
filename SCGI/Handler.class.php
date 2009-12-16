@@ -27,12 +27,12 @@ class Handler implements \MFS\AppServer\iHandler
         }
         $this->log('Initialized SCGI Handler');
     }
-    
+
     public function setProtocol($protocol)
     {
         $this->protocol = $protocol;
     }
-    
+
     public function setTransport($transport)
     {
         $this->transport = $transport;
@@ -45,16 +45,16 @@ class Handler implements \MFS\AppServer\iHandler
     }
 
     public function serve($app)
-    {        
+    {
         if (!is_callable($app))
             throw new InvalidArgumentException('not a valid app');
 
         $app = \MFS\AppServer\callable($app);
         $this->app = $app;
-        
+
         $this->log('Serving '.(is_object($this->app) ? get_class($this->app) : $this->app).' app…');
         $this->log('Protocol '.get_class($this->protocol).' protocol…');
-        $this->log('Transport '.get_class($this->transport).' transport…');        
+        $this->log('Transport '.get_class($this->transport).' transport…');
         $this->log("Entering runloop…");
 
         try {
@@ -66,7 +66,7 @@ class Handler implements \MFS\AppServer\iHandler
 
         $this->log("Left runloop…");
     }
-    
+
     public function onRequest($stream)
     {
         $this->log("got request");
@@ -82,7 +82,7 @@ class Handler implements \MFS\AppServer\iHandler
         );
 
         $this->log("-> calling handler");
-        
+
         $app = $this->app;
         $result = $app($context);
 

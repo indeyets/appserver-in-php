@@ -9,7 +9,7 @@ class Server
 
     public function __destruct()
     {
-        if ($this->stream) { 
+        if ($this->stream) {
             fclose($this->stream);
         }
         // $this->log("DeInitialized SCGI Application: ".get_class($this));
@@ -18,7 +18,7 @@ class Server
     public function readRequest($stream)
     {
         $this->stream = $stream;
-        
+
         $len = stream_get_line($this->stream, 20, ':');
 
         if (false === $len) {
@@ -36,7 +36,7 @@ class Server
             throw new BadProtocolException('invalid protocol (expected length, got '.var_export($len, true).')');
         }
 
-        $_headers_str = stream_get_contents($this->stream, $len);        
+        $_headers_str = stream_get_contents($this->stream, $len);
 
         $_headers = explode("\0", $_headers_str); // getting headers
         $divider = stream_get_contents($this->stream, 1); // ","
