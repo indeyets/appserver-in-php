@@ -9,7 +9,9 @@ class Server
 
     public function __destruct()
     {
-        fclose($this->stream);
+        if ($this->stream) { 
+            fclose($this->stream);
+        }
         // $this->log("DeInitialized SCGI Application: ".get_class($this));
     }
 

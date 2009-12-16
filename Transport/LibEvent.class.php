@@ -9,9 +9,6 @@ class LibEvent
     protected $sockets            = array();  
     protected $socket_events      = array(); 
       
-    public $buffer_len = 512;
-    public $timeout = 5;       
-    
     protected $request_callback;
      
     public function __construct($addrs)
@@ -36,11 +33,16 @@ class LibEvent
         event_base_loop($this->event_base);             
     }
     
+    public function unloop()
+    {
+       event_base_loopexit($this->event_base);       
+    }
+    
     static function log($object, $object_id, $message)
     { 
         echo "$object #{$object_id} -> $message\n"; 
     } 
-          
+              
     protected function addAddr($addr)
     { 
         $socket_num = $this->addSocket($addr);                     
