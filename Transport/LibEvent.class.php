@@ -22,8 +22,7 @@ class LibEvent {
       
     protected $connections_count  = 0;  
     protected $connections        = array();  
-    protected $connection_events  = array();     
-    protected $connection_states  = array(); 
+    protected $connection_events  = array();      
 
     public $buffer_len = 512;
     public $timeout = 5;       
@@ -54,7 +53,7 @@ class LibEvent {
     
     static function log($object, $object_id, $message)
     { 
-         echo "$object #{$object_id} -> $message\n"; 
+        echo "$object #{$object_id} -> $message\n"; 
     } 
           
     protected function addAddr($addr)
@@ -83,7 +82,7 @@ class LibEvent {
             
     function onEventAccept($socket, $event, $args)
     {          
-        $socket_num = $args[0];         
+        $socket_num = $args [0];         
         $conn = $this->acceptSocket($socket_num);         
         $callback = $this->request_callback; 
         $callback($conn); 
@@ -111,18 +110,14 @@ class LibEvent {
     {
         $num = $this->connections_count++;        
         $this->connections[$num] = $connection;
-        $this->connections_states[$num] = self::STATE_READ;
         self::log('Connection', $num, 'created');        
         return $num;
     }
         
     protected function closeConnection($conn_num)
-    {            
-        $this->freeBuffer($conn_num);      
+    {                  
         fclose($this->connections[$conn_num]);
-        self::log('Connection', $conn_num, 'closed');  
-         
-        unset($this->connections[$conn_num]); 
-        unset($this->connections_states[$conn_num]); 
+        self::log('Connection', $conn_num, 'closed');           
+        unset($this->connections[$conn_num]);  
     }    
 } 
