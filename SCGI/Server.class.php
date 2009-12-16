@@ -1,5 +1,5 @@
 <?php
-namespace MFS\SCGI;
+namespace MFS\AppServer\SCGI;
 
 class Server
 {
@@ -22,7 +22,7 @@ class Server
         $len = stream_get_line($this->stream, 20, ':');
 
         if (false === $len) {
-            throw new \LogicException('error reading data');
+            throw new LogicException('error reading data');
         }
 
         if ('' === $len) {

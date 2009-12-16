@@ -1,5 +1,5 @@
 <?php
-namespace MFS\SCGI;
+namespace MFS\AppServer\SCGI;
 
 class ClientRequest
 {
@@ -57,7 +57,7 @@ class ClientRequest
     public function send()
     {
         if (!isset($this->method) or !isset($this->uri))
-            throw new \LogicException("You can't send request without method or URI");
+            throw new LogicException("You can't send request without method or URI");
 
         $headers = array(
             array('REQUEST_METHOD', $this->method),

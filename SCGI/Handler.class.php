@@ -10,7 +10,7 @@ class Handler extends \MFS\AppServer\DaemonicHandler
 
         $transport_class = 'MFS\\AppServer\\Transport\\'.$transport_name;
         $this->setTransport(new $transport_class($socket_url, array($this, 'onRequest')));
-        $this->setProtocol(new \MFS\SCGI\Server());
+        $this->setProtocol(new Server());
     }
 
     protected function writeResponse($response_data)
