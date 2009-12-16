@@ -59,6 +59,10 @@ class PHP_Compat
         // EXECUTE
         $app = $this->app;
         $result = $app($context);
+        
+        if (!is_array($result)) {
+            return $result; 
+        }
 
         // Append cookie-headers
         $result[1] = array_merge($result[1], $ck->_getHeaders());

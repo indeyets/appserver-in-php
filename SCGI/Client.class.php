@@ -21,7 +21,7 @@ class Client
         $this->socket = stream_socket_client($this->url, $errno, $errstr);
 
         if (false === $this->socket) {
-            throw new RuntimeException('Failed creating socket-client (URL: "'.$socket_url.'"): '.$errstr, $errno);
+            throw new \RuntimeException('Failed creating socket-client (URL: "'.$socket_url.'"): '.$errstr, $errno);
         }
 
         // Setting required headers
