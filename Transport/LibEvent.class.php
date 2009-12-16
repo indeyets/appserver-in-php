@@ -1,35 +1,20 @@
 <?php 
 namespace MFS\AppServer\Transport;
 
-define ( 'EVBUFFER_WRITE', 0x02 ); 
-define ( 'EVBUFFER_EOF', 0x10 ); 
-define ( 'EVBUFFER_ERROR', 0x20 ); 
-define ( 'EVBUFFER_TIMEOUT', 0x40 ); 
-
-class LibEvent {
-
-    const EV_BUFFER_READ = 0x01;
-    
-    const STATE_READ     = 0x01;
-    const STATE_WRITE    = 0x02;
-    const STATE_COMPLITE = 0x04;
-     
+class LibEvent
+{
     protected $event_base; 
      
     protected $sockets_count      = 0; 
     protected $sockets            = array();  
     protected $socket_events      = array(); 
       
-    protected $connections_count  = 0;  
-    protected $connections        = array();  
-    protected $connection_events  = array();      
-
     public $buffer_len = 512;
     public $timeout = 5;       
     
     protected $request_callback;
      
-    function __construct($addrs)
+    public function __construct($addrs)
     {    	
     	if(!is_array($addrs))
 			$addrs = array($addrs);
@@ -37,7 +22,7 @@ class LibEvent {
 		$this->addrs = $addrs;					  
     } 
     
-    function loop($request_callback)
+    public function loop($request_callback)
     {        
     	$this->request_callback = $request_callback;
 
@@ -80,9 +65,9 @@ class LibEvent {
         self::log('Socket', $socket_num, 'event added');       
     } 
             
-    function onEventAccept($socket, $event, $args)
+    public function onEventAccept($socket, $event, $args)
     {          
-        $socket_num = $args [0];         
+        $socket_num = $args[0];         
         $conn = $this->acceptSocket($socket_num);         
         $callback = $this->request_callback; 
         $callback($conn); 
@@ -104,20 +89,5 @@ class LibEvent {
         stream_set_blocking($socket, 0);
         self::log('Socket', $socket_num, 'accepted');
         return $connection;
-    }
-    
-    protected function addConnection($connection)
-    {
-        $num = $this->connections_count++;        
-        $this->connections[$num] = $connection;
-        self::log('Connection', $num, 'created');        
-        return $num;
-    }
-        
-    protected function closeConnection($conn_num)
-    {                  
-        fclose($this->connections[$conn_num]);
-        self::log('Connection', $conn_num, 'closed');           
-        unset($this->connections[$conn_num]);  
-    }    
+    }        
 } 
