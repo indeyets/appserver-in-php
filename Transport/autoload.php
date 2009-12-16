@@ -8,7 +8,9 @@ function autoload($class_name)
 
     if (null === $files) {
         $files = array(
+            __NAMESPACE__.'\BaseTransport'			      => __DIR__.'/BaseTransport.class.php',
             __NAMESPACE__.'\LibEvent'					  => __DIR__.'/LibEvent.class.php',
+            __NAMESPACE__.'\Socket'					      => __DIR__.'/Socket.class.php',
         );
     }
 

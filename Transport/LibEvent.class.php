@@ -1,7 +1,7 @@
-<?php 
+<?php
 namespace MFS\AppServer\Transport;
 
-class LibEvent
+class LibEvent extends BaseTransport
 {
     protected $event_base; 
      
@@ -9,19 +9,10 @@ class LibEvent
     protected $sockets            = array();  
     protected $socket_events      = array(); 
       
-    protected $request_callback;
-     
-    public function __construct($addrs)
-    {    	
-    	if(!is_array($addrs))
-			$addrs = array($addrs);
-		
-		$this->addrs = $addrs;					  
-    } 
-    
-    public function loop($request_callback)
+    protected $callback;
+         
+    public function loop()
     {        
-    	$this->request_callback = $request_callback;
 
     	if (!$this->event_base = event_base_new())
         	throw new Exception("Can't create event base");
@@ -37,12 +28,7 @@ class LibEvent
     {
        event_base_loopexit($this->event_base);       
     }
-    
-    static function log($object, $object_id, $message)
-    { 
-        echo "$object #{$object_id} -> $message\n"; 
-    } 
-              
+                  
     protected function addAddr($addr)
     { 
         $socket_num = $this->addSocket($addr);                     
@@ -71,7 +57,8 @@ class LibEvent
     {          
         $socket_num = $args[0];         
         $conn = $this->acceptSocket($socket_num);         
-        $callback = $this->request_callback; 
+        $callback = $this->callback;
+        self::log('Socket', $socket_num, 'callback'); 
         $callback($conn); 
     }
          
@@ -80,7 +67,7 @@ class LibEvent
         $socket = stream_socket_server($addr, $errno, $errstr, STREAM_SERVER_BIND | STREAM_SERVER_LISTEN);
         $socket_num = $this->sockets_count++;        
         $this->sockets[$socket_num] = $socket;
-        self::log('Socket', $socket_num, 'created');
+        self::log('Socket', $socket_num, 'created on '.$addr);
         return $socket_num;
     }
     
