@@ -17,6 +17,7 @@ class DamnSmallServer
 }
 $handler = new MFS\AppServer\SCGI\Handler();
 $handler->setProtocol(new MFS\SCGI\Server());
-$handler->setTransport(new MFS\AppServer\Transport\LibEvent('tcp://127.0.0.1:9999'));
+$handler->setTransport(new MFS\AppServer\Transport\LibEvent('tcp://127.0.0.1:9999', array($handler, 'onRequest')));
+
 $app = new MFS\AppServer\Middleware\PHP_Compat\PHP_Compat(new DamnSmallServer);
 $handler->serve($app);

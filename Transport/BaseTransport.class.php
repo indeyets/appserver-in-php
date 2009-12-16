@@ -8,11 +8,14 @@ abstract class BaseTransport
 
     public function __construct($addrs, $callback)
     {
+        if (!is_callable($callback))
+            throw new InvalidArgumentException('not a valid callback');
+
         if (!is_array($addrs))
             $addrs = array($addrs);
 
         $this->addrs = $addrs;
-        $this->callback = $callback;
+        $this->callback = \MFS\AppServer\callable($callback);
     }
 
     static function log($object, $object_id, $message)

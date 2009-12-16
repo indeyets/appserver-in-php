@@ -21,7 +21,7 @@ class Socket extends BaseTransport
             foreach ($this->sockets as $socket_num => $socket) {
                 $conn = stream_socket_accept($socket, -1);
                 self::log('Socket', $socket_num, 'accepted');
-                stream_set_blocking($socket, 0);
+                // stream_set_blocking($socket, 0);
                 $callback = $this->callback;
                 self::log('Socket', $socket_num, 'callback begin');
                 $callback($conn);

@@ -11,6 +11,7 @@ function autoload($class_name)
 
         $files = array(
             'MFS\AppServer\iHandler' => $root.'interfaces.php',
+            'MFS\AppServer\DaemonicHandler' => $root.'DaemonicHandler.class.php',
         );
     }
 

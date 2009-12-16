@@ -14,6 +14,8 @@ function autoload($class_name)
         );
     }
 
+    echo "Looking for ".$class_name."\n";
+
     if (isset($files[$class_name]))
         require $files[$class_name];
 }
