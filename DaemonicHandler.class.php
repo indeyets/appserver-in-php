@@ -2,7 +2,7 @@
 
 namespace MFS\AppServer;
 
-class DaemonicHandler implements iHandler
+abstract class DaemonicHandler implements iHandler
 {
     protected $protocol = null;
     private $transport = null;
@@ -99,10 +99,7 @@ class DaemonicHandler implements iHandler
         }
     }
 
-    protected function writeResponse($response_data)
-    {
-        throw new \LogicException('writeResponse() method has to be overridden');
-    }
+    abstract protected function writeResponse($response_data);
 
     public function log($message)
     {
