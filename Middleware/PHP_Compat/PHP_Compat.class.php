@@ -37,7 +37,7 @@ class PHP_Compat
             $context['_FILES'] = array();
 
             echo "getting buffer\n";
-            $buffer = stream_get_contents($context['stdin'], $context['env']['HTTP_CONTENT_LENGTH']);
+            $buffer = stream_get_contents($context['stdin'], $context['env']['CONTENT_LENGTH']);
             echo "got buffer\n";
 
             if (isset($this->options['forward_stream']) and $this->options['forward_stream'] === true) {

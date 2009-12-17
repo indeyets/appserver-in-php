@@ -89,6 +89,13 @@ class Handler extends \MFS\AppServer\DaemonicHandler implements \MFS\AppServer\i
             $this->headers['CONTENT_TYPE'] = $this->headers['HTTP_CONTENT_TYPE'];
             unset($this->headers['HTTP_CONTENT_TYPE']);
         }
+
+        if (isset($this->headers['HTTP_CONTENT_LENGTH'])) {
+            $this->headers['CONTENT_LENGTH'] = $this->headers['HTTP_CONTENT_LENGTH'];
+            unset($this->headers['HTTP_CONTENT_LENGTH']);
+        } else {
+            $this->headers['CONTENT_LENGTH'] = 0;
+        }
     }
 
     public function doneWithRequest()

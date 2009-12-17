@@ -60,7 +60,6 @@ class Server implements \MFS\AppServer\iProtocol
             throw new BadProtocolException("CONTENT_LENGTH header not present");
 
         unset($this->headers['SCGI']);
-        unset($this->headers['CONTENT_LENGTH']);
     }
 
     public function doneWithRequest()
