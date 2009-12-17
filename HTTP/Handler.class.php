@@ -51,6 +51,8 @@ class Handler extends \MFS\AppServer\DaemonicHandler implements \MFS\AppServer\i
         }
         unset($_headers, $first);
 
+        // TODO: implement support for multiline headers (see http-spec for details)
+
         $this->headers['SERVER_SOFTWARE'] = 'appserver-in-php';
         $this->headers['GATEWAY_INTERFACE'] = 'CGI/1.1';
         $this->headers['REQUEST_METHOD'] = $http_method;
