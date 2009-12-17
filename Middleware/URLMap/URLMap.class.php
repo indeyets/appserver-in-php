@@ -56,7 +56,8 @@ class URLMap
             if (strpos($path, $i->location) !== 0)
                 continue;
 
-            if (strlen($i->location) != strlen($path) and $path[strlen($i->location)] != '/')
+            // we handle "/" case in a special way here (other urls in map are supposed to be without trailing slashes)
+            if ($i->location != '/' and strlen($i->location) != strlen($path) and $path[strlen($i->location)] != '/')
                 continue;
 
             $ctx['env']['SCRIPT_NAME'] = $script_name.$i->location;
