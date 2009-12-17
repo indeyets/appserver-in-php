@@ -68,7 +68,9 @@ abstract class DaemonicHandler implements iHandler
     {
         $this->log("got request");
 
-        $this->protocol->readRequest($stream);
+        if (false === $this->protocol->readRequest($stream)) {
+            return;
+        }
 
         $context = array(
             'env' => $this->protocol->getHeaders(),

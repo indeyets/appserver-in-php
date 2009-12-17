@@ -1,10 +1,9 @@
 <?php
 namespace MFS\AppServer\SCGI;
 
-class Server
+class Server implements \MFS\AppServer\iProtocol
 {
     private $stream = null;
-
     private $headers = null;
 
     public function __destruct()
@@ -29,7 +28,7 @@ class Server
             // could be bug in PHP or Lighttpd. sometimes, app just gets empty request
             // retrying
             $this->doneWithRequest();
-            return;
+            return false;
         }
 
         if (!is_numeric($len)) {
@@ -60,9 +59,8 @@ class Server
         if (!isset($this->headers['CONTENT_LENGTH']))
             throw new BadProtocolException("CONTENT_LENGTH header not present");
 
-        // $this->body = ($this->headers['CONTENT_LENGTH'] > 0) ? stream_get_contents($this->conn, $this->headers['CONTENT_LENGTH']) : null;
-
         unset($this->headers['SCGI']);
+        unset($this->headers['CONTENT_LENGTH']);
     }
 
     public function doneWithRequest()

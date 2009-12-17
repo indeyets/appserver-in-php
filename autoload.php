@@ -10,7 +10,8 @@ function autoload($class_name)
         $root = __DIR__.'/';
 
         $files = array(
-            'MFS\AppServer\iHandler' => $root.'interfaces.php',
+            'MFS\AppServer\iHandler'        => $root.'interfaces.php',
+            'MFS\AppServer\iProtocol'       => $root.'interfaces.php',
             'MFS\AppServer\DaemonicHandler' => $root.'DaemonicHandler.class.php',
         );
     }
@@ -44,9 +45,13 @@ function callable($callback)
     };
 }
 
-require __DIR__.'/SCGI/autoload.php';
+// enabling components
 require __DIR__.'/Transport/autoload.php';
+
+require __DIR__.'/SCGI/autoload.php';
+require __DIR__.'/HTTP/autoload.php';
 require __DIR__.'/MOD_PHP/autoload.php';
+
 require __DIR__.'/Middleware/PHP_Compat/autoload.php';
 require __DIR__.'/Middleware/Session/autoload.php';
 require __DIR__.'/Middleware/URLMap/autoload.php';
