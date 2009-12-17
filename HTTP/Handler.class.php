@@ -40,7 +40,6 @@ class Handler extends \MFS\AppServer\DaemonicHandler implements \MFS\AppServer\i
         list($http_method, $url, $http_version) = sscanf(array_shift($_headers), "%s %s %s");
 
         $this->headers = array();
-        $first = null;
         foreach ($_headers as $element) {
             $divider = strpos($element, ': ');
 
