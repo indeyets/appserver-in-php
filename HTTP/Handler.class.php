@@ -52,9 +52,6 @@ class Handler extends \MFS\AppServer\DaemonicHandler implements \MFS\AppServer\i
         }
         unset($_headers, $first);
 
-        var_dump($http_method, $url, $http_version);
-        print_r($this->headers);
-
         $this->headers['SERVER_SOFTWARE'] = 'appserver-in-php';
         $this->headers['GATEWAY_INTERFACE'] = 'CGI/1.1';
         $this->headers['REQUEST_METHOD'] = $http_method;
