@@ -42,9 +42,9 @@ class URLMap
     {
         $path = self::squeeze($ctx['env']['PATH_INFO'], '/');
         $script_name = $ctx['env']['SCRIPT_NAME'];
-        $host        = $ctx['env']['HTTP_HOST'];
-        $server_name = $ctx['env']['SERVER_NAME'];
-        $server_port = $ctx['env']['SERVER_PORT'];
+        $host        = isset($ctx['env']['HTTP_HOST']) ? $ctx['env']['HTTP_HOST'] : null;
+        $server_name = isset($ctx['env']['SERVER_NAME']) ? $ctx['env']['SERVER_NAME'] : null;
+        $server_port = isset($ctx['env']['SERVER_PORT']) ? $ctx['env']['SERVER_PORT'] : null;
 
         foreach ($this->mapping as $i) {
             if ($i->host != $host and
@@ -60,7 +60,7 @@ class URLMap
                 continue;
 
             $ctx['env']['SCRIPT_NAME'] = $script_name.$i->location;
-            $ctx['env']['PATH_INFO'] = substr($path, strlen($i->location));
+            $ctx['env']['PATH_INFO'] = strlen($i->location) < strlen($path) ? substr($path, strlen($i->location)) : '';
 
             $app = $i->app; // php doesn't allow to call properties as methods
             return $app($ctx);
