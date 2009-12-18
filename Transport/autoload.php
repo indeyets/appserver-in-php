@@ -10,6 +10,7 @@ function autoload($class_name)
         $files = array(
             __NAMESPACE__.'\BaseTransport'      => __DIR__.'/BaseTransport.class.php',
             __NAMESPACE__.'\LibEvent'           => __DIR__.'/LibEvent.class.php',
+            __NAMESPACE__.'\LibEventStream' => __DIR__.'/LibEventStream.class.php',
             __NAMESPACE__.'\LibEventUnbuffered' => __DIR__.'/LibEventUnbuffered.class.php',
             __NAMESPACE__.'\Socket'             => __DIR__.'/Socket.class.php',
         );
