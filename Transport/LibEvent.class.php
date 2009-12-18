@@ -2,11 +2,28 @@
 
 class MFS_AppServer_Transport_LibEvent extends MFS_AppServer_Transport_BaseTransport
 {
+    const EV_BUFFER_READ          = 0x01;
+    const EV_BUFFER_WRITE         = 0x02;
+    const EV_BUFFER_EOF           = 0x10;
+    const EV_BUFFER_ERROR         = 0x20;
+    const EV_BUFFER_TIMEOUT       = 0x40;
+
+    const STATE_READ              = 0x01;
+    const STATE_WRITE             = 0x02;
+    const STATE_COMPLITE          = 0x04;
+
     protected $event_base;
 
     protected $sockets_count      = 0;
     protected $sockets            = array();
     protected $socket_events      = array();
+
+    protected $connections_count  = 0;
+    protected $connections        = array();
+    protected $connection_events  = array();
+    //protected $connection_buffers = array();
+
+    public $timeout = 5;
 
     protected $callback;
 
@@ -56,10 +73,51 @@ class MFS_AppServer_Transport_LibEvent extends MFS_AppServer_Transport_BaseTrans
     public function onEventAccept($socket, $event, $args)
     {
         $socket_num = $args[0];
-        $conn = $this->acceptSocket($socket_num);
 
-        self::log('Socket', $socket_num, 'callback');
-        call_user_func($this->callback, $conn);
+        $conn = $this->acceptSocket($socket_num);
+        $conn_num = $this->addConnection($conn);
+        $this->addConnectionBuffer($conn_num);
+    }
+
+    public function onEventRead($socket, $args)
+    {
+        $conn_num = $args[0];
+
+        $buffer = $this->connection_buffers[$conn_num];
+        LibEventStream::setTransport($this);
+
+        $stream = fopen('libevent-buffer://'.$conn_num, 'w+');
+
+        self::log('Connection', $conn_num, 'request callback');
+        call_user_func($this->callback, $stream);
+    }
+
+    public function onEventWrite($socket, $args)
+    {
+        $conn_num = $args[0];
+        self::log('Connection', $conn_num, 'write');
+        $this->closeConnection($conn_num);
+    }
+
+    public function onEventError($socket, $error_mask, $args)
+    {
+        $conn_num = $args[0];
+
+        if ($error_mask & self::EV_BUFFER_EOF)
+            $msg = "EOF";
+        if ($error_mask & self::EV_BUFFER_ERROR)
+            $msg = "unknown error";
+        if ($error_mask & self::EV_BUFFER_TIMEOUT)
+            $msg = "timeout";
+
+        if ($error_mask & self::EV_BUFFER_READ)
+            $state = 'READ';
+        elseif ($error_mask & self::EV_BUFFER_WRITE)
+            $state = 'WRITE';
+
+        self::log('Connection', $conn_num, $msg.' on '.$state);
+
+        $this->closeConnection($conn_num);
     }
 
     protected function addSocket($addr)
@@ -80,5 +138,57 @@ class MFS_AppServer_Transport_LibEvent extends MFS_AppServer_Transport_BaseTrans
 
         self::log('Socket', $socket_num, 'accepted');
         return $connection;
+    }
+
+    protected function addConnection($connection)
+    {
+        $num = $this->connections_count++;
+        $this->connections[$num] = $connection;
+        self::log('Connection', $num, 'created');
+        return $num;
+    }
+
+    protected function addConnectionBuffer($conn_num)
+    {
+        $buffer = event_buffer_new($this->connections[$conn_num],
+                                   array($this, 'onEventRead'),
+                                   array($this, 'onEventWrite'),
+                                   array($this, 'onEventError'),
+                                   array ($conn_num));
+        event_buffer_base_set($buffer, $this->event_base);
+        event_buffer_timeout_set($buffer, $this->timeout, $this->timeout);
+        event_buffer_enable($buffer, EV_READ | EV_WRITE | EV_PERSIST);
+
+        self::log('Connection', $conn_num, 'buffer added');
+        $this->connection_buffers[$conn_num] = $buffer;
+    }
+
+    function closeConnection($conn_num)
+    {
+        $this->freeBuffer($conn_num);
+        fclose($this->connections[$conn_num]);
+        self::log('Connection', $conn_num, 'closed');
+
+        unset($this->connections[$conn_num]);
+    }
+
+    function readFromBuffer($conn_id, $count) {
+        $readed = event_buffer_read($this->connection_buffers[$conn_id], $count);
+        libEvent::log('Buffer', $conn_id, 'readed '.strlen($readed).' chars');
+        return $readed;
+    }
+
+    function writeToBuffer($conn_id, $data) {
+        $result = event_buffer_write($this->connection_buffers[$conn_id], $data);
+        libEvent::log('Buffer', $conn_id, 'writed '.strlen($data).' chars');
+        return $result;
+    }
+
+    protected function freeBuffer($conn_num)
+    {
+        event_buffer_disable($this->connection_buffers[$conn_num], EV_READ | EV_WRITE);
+        event_buffer_free($this->connection_buffers[$conn_num]);
+        unset($this->connection_buffers[$conn_num]);
+        self::log('Connection', $conn_num, 'buffer is free. Fly, bird, fly!');
     }
 }
