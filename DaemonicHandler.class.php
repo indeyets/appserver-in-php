@@ -4,7 +4,7 @@ abstract class MFS_AppServer_DaemonicHandler implements MFS_AppServer_iHandler
 {
     protected $protocol = null;
     private $transport = null;
-    private $has_gc = true;
+    private $has_gc = false;
 
     public function __construct()
     {
@@ -14,13 +14,25 @@ abstract class MFS_AppServer_DaemonicHandler implements MFS_AppServer_iHandler
         if (version_compare("5.2.0", PHP_VERSION, '>'))
             throw new LogicException("Daemonic Application requires PHP 5.2.0+");
 
-        // Checking for GarbageCollection patch
-        if (false === function_exists('gc_enabled')) {
-            $this->has_gc = false;
-            $this->log("WARNING: This version of PHP is compiled without GC-support. Memory-leaks are possible!");
-        } elseif (false === gc_enabled()) {
-            gc_enable();
+        if (version_compare("5.3.0", PHP_VERSION, '<=')) {
+            // Advertising PHP-5.3
+            $this->log("============================================================================");
+            $this->log("WARNING: You use PHP-5.3, but this version of AppServer is a backport to 5.2");
+            $this->log("         Use regular AppServer instead");
+            $this->log("============================================================================");
+
+            if (false === gc_enabled()) {
+                gc_enable();
+            }
+            $this->has_gc = true;
         }
+
+        // Ranting about Garbage Collection
+        $this->log("============================================================================");
+        $this->log("WARNING: PHP-5.2 does not have Garbage Collector. Memory-leaks are possible!");
+        $this->log("         upgrade to PHP-5.3 if possible");
+        $this->log("============================================================================");
+
         $this->log('Initialized Daemonic Handler');
     }
 
