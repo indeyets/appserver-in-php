@@ -25,13 +25,13 @@ abstract class MFS_AppServer_DaemonicHandler implements MFS_AppServer_iHandler
                 gc_enable();
             }
             $this->has_gc = true;
+        } else {
+            // Ranting about Garbage Collection
+            $this->log("============================================================================");
+            $this->log("WARNING: PHP-5.2 does not have Garbage Collector. Memory-leaks are possible!");
+            $this->log("         upgrade to PHP-5.3 if possible");
+            $this->log("============================================================================");
         }
-
-        // Ranting about Garbage Collection
-        $this->log("============================================================================");
-        $this->log("WARNING: PHP-5.2 does not have Garbage Collector. Memory-leaks are possible!");
-        $this->log("         upgrade to PHP-5.3 if possible");
-        $this->log("============================================================================");
 
         $this->log('Initialized Daemonic Handler');
     }
