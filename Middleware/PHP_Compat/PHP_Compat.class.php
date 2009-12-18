@@ -5,6 +5,7 @@ namespace MFS\AppServer\Middleware\PHP_Compat;
 class PHP_Compat
 {
     private $app;
+    private $options;
 
     public function __construct($app, array $options = array())
     {
@@ -44,7 +45,7 @@ class PHP_Compat
                 // user asks us to provide a valid stream to app
                 $stream_name = StringStreamKeeper::keep($buffer);
                 $_old_stdin = $context['stdin'];
-                $context['stdin'] = new StringStream($stream_name);
+                $context['stdin'] = fopen($stream_name, 'r');
             }
 
             if (isset($context['env']['CONTENT_TYPE']) and strpos($context['env']['CONTENT_TYPE'], 'multipart/form-data') === 0) {
@@ -69,6 +70,7 @@ class PHP_Compat
         // Cleanup
         if (isset($_old_stdin)) {
             // remove our "fake" stream
+            fclose($context['stdin']);
             StringStreamKeeper::cleanup();
             $context['stdin'] = $_old_stdin;
         }
