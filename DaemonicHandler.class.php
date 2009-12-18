@@ -6,21 +6,17 @@ abstract class DaemonicHandler implements iHandler
 {
     protected $protocol = null;
     private $transport = null;
-    private $has_gc = true;
 
     public function __construct()
     {
         if (PHP_SAPI !== 'cli')
             throw new LogicException("Daemonic Application should be run using CLI SAPI");
 
-        if (version_compare("5.3.0-dev", PHP_VERSION, '>'))
+        if (version_compare("5.3.0", PHP_VERSION, '>='))
             throw new LogicException("Daemonic Application requires PHP 5.3.0+");
 
         // Checking for GarbageCollection patch
-        if (false === function_exists('gc_enabled')) {
-            $this->has_gc = false;
-            $this->log("WARNING: This version of PHP is compiled without GC-support. Memory-leaks are possible!");
-        } elseif (false === gc_enabled()) {
+        if (false === gc_enabled()) {
             gc_enable();
         }
         $this->log('Initialized Daemonic Handler');
@@ -95,9 +91,7 @@ abstract class DaemonicHandler implements iHandler
         $this->protocol->doneWithRequest();
         $this->log("-> done with request");
 
-        if (true === $this->has_gc) {
-            gc_collect_cycles();
-        }
+        gc_collect_cycles();
     }
 
     abstract protected function writeResponse($response_data);
