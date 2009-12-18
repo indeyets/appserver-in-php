@@ -10,6 +10,8 @@ function MFS_AppServer_Middleware_PHP_Compat_autoload($class_name)
         $files = array(
             'MFS_AppServer_Middleware_PHP_Compat'                          => $root.'PHP_Compat.class.php',
             'MFS_AppServer_Middleware_PHP_Compat_Cookies'                  => $root.'Cookies.class.php',
+            'MFS_AppServer_Middleware_PHP_Compat_StringStreamKeeper'       => $root.'StringStream.class.php',
+            'MFS_AppServer_Middleware_PHP_Compat_StringStream'             => $root.'StringStream.class.php',
 
             'MFS_AppServer_Middleware_PHP_Compat_BadProtocolException'     => $root.'exceptions.php',
         );

@@ -3,6 +3,7 @@
 class MFS_AppServer_Middleware_PHP_Compat
 {
     private $app;
+    private $options;
 
     public function __construct($app, array $options = array())
     {
@@ -40,9 +41,9 @@ class MFS_AppServer_Middleware_PHP_Compat
 
             if (isset($this->options['forward_stream']) and $this->options['forward_stream'] === true) {
                 // user asks us to provide a valid stream to app
-                $stream_name = StringStreamKeeper::keep($buffer);
+                $stream_name = MFS_AppServer_Middleware_PHP_Compat_StringStreamKeeper::keep($buffer);
                 $_old_stdin = $context['stdin'];
-                $context['stdin'] = new StringStream($stream_name);
+                $context['stdin'] = fopen($stream_name, 'r');
             }
 
             if (isset($context['env']['CONTENT_TYPE']) and strpos($context['env']['CONTENT_TYPE'], 'multipart/form-data') === 0) {
@@ -67,7 +68,8 @@ class MFS_AppServer_Middleware_PHP_Compat
         // Cleanup
         if (isset($_old_stdin)) {
             // remove our "fake" stream
-            StringStreamKeeper::cleanup();
+            fclose($context['stdin']);
+            MFS_AppServer_Middleware_PHP_Compat_StringStreamKeeper::cleanup();
             $context['stdin'] = $_old_stdin;
         }
 
