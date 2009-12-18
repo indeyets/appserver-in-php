@@ -1,7 +1,6 @@
 <?php
-namespace MFS\AppServer\MOD_PHP;
 
-class Response
+class MFS_AppServer_MOD_PHP_Response
 {
     private static $valid_statuses = null;
 

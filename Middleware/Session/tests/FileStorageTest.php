@@ -3,18 +3,16 @@
 require_once "PHPUnit/Framework/TestCase.php";
 error_reporting(E_ALL | E_STRICT);
 
-require '../autoload.php';
-
-use \MFS\AppServer\Middleware\Session\FileStorage;
+require '../../../autoload.php';
 
 class FileStorageTest extends PHPUnit_Framework_TestCase
 {
     public function test1()
     {
-        $dir = __DIR__.'/sessions';
+        $dir = dirname(__FILE__).'/sessions';
         mkdir($dir);
 
-        $fs = new FileStorage(array('save_path'  => $dir));
+        $fs = new MFS_AppServer_Middleware_Session_FileStorage(array('save_path'  => $dir));
         $fs->create('test');
 
         $file = $dir.'/test.session';
@@ -32,7 +30,7 @@ class FileStorageTest extends PHPUnit_Framework_TestCase
 
         $data = unserialize(file_get_contents($file));
 
-        $this->assertEquals(FileStorage::MAGIC, $data['magic']);
+        $this->assertEquals(MFS_AppServer_Middleware_Session_FileStorage::MAGIC, $data['magic']);
         $this->assertEquals('bar', $data['data']['foo']);
 
         $data = $fs->open('test');

@@ -1,22 +1,16 @@
 <?php
 
-namespace MFS\AppServer\MOD_PHP;
-
-function autoload($class_name)
+function MFS_AppServer_MOD_PHP_autoload($class_name)
 {
     static $files = null;
 
     if (null === $files) {
-        $root = __DIR__.'/';
+        $root = dirname(__FILE__).'/';
 
         $files = array(
-            'MFS\AppServer\MOD_PHP\Handler'                => $root.'Handler.class.php',
-            'MFS\AppServer\MOD_PHP\Response'               => $root.'Response.class.php',
-            'MFS\AppServer\MOD_PHP\Cookies'                => $root.'Cookies.class.php',
-
-            'MFS\AppServer\MOD_PHP\Exception'              => $root.'exceptions.php',
-            'MFS\AppServer\MOD_PHP\LogicException'         => $root.'exceptions.php',
-            'MFS\AppServer\MOD_PHP\RuntimeException'       => $root.'exceptions.php',
+            'MFS_AppServer_MOD_PHP_Handler'                => $root.'Handler.class.php',
+            'MFS_AppServer_MOD_PHP_Response'               => $root.'Response.class.php',
+            'MFS_AppServer_MOD_PHP_Cookies'                => $root.'Cookies.class.php',
         );
     }
 
@@ -24,4 +18,4 @@ function autoload($class_name)
         require $files[$class_name];
 }
 
-spl_autoload_register('MFS\AppServer\MOD_PHP\autoload');
+spl_autoload_register('MFS_AppServer_MOD_PHP_autoload');

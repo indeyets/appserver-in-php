@@ -1,16 +1,14 @@
 <?php
 
-namespace MFS\AppServer\Transport;
-
-function autoload($class_name)
+function MFS_AppServer_Transport_autoload($class_name)
 {
     static $files = null;
 
     if (null === $files) {
         $files = array(
-            __NAMESPACE__.'\BaseTransport'  => __DIR__.'/BaseTransport.class.php',
-            __NAMESPACE__.'\LibEvent'       => __DIR__.'/LibEvent.class.php',
-            __NAMESPACE__.'\Socket'         => __DIR__.'/Socket.class.php',
+            'MFS_AppServer_Transport_BaseTransport' => dirname(__FILE__).'/BaseTransport.class.php',
+            'MFS_AppServer_Transport_LibEvent'      => dirname(__FILE__).'/LibEvent.class.php',
+            'MFS_AppServer_Transport_Socket'        => dirname(__FILE__).'/Socket.class.php',
         );
     }
 
@@ -18,4 +16,4 @@ function autoload($class_name)
         require $files[$class_name];
 }
 
-spl_autoload_register('MFS\AppServer\Transport\autoload');
+spl_autoload_register('MFS_AppServer_Transport_autoload');

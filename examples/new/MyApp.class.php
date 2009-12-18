@@ -7,7 +7,7 @@ class MyApp
 
     public function __construct()
     {
-        $this->tpl = file_get_contents(__DIR__.'/template.html'); // caching template in local-memory
+        $this->tpl = file_get_contents(dirname(__FILE__).'/template.html'); // caching template in local-memory
         $this->local_storage = array(
             'counter' => 0,
             'prev_memory_peak' => 0,

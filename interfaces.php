@@ -1,13 +1,11 @@
 <?php
 
-namespace MFS\AppServer;
-
-interface iHandler
+interface MFS_AppServer_iHandler
 {
     public function serve($app);
 }
 
-interface iProtocol
+interface MFS_AppServer_iProtocol
 {
     public function readRequest($stream);
     public function doneWithRequest();

@@ -1,8 +1,6 @@
 <?php
 
-namespace MFS\AppServer\Middleware\URLMap;
-
-class URLMap
+class MFS_AppServer_Middleware_URLMap
 {
     private $app;
 
@@ -13,7 +11,7 @@ class URLMap
             if (!is_callable($app))
                 throw new InvalidArgumentException('invalid app supplied for "'.$location.'" path');
 
-            $i = new \stdClass();
+            $i = new stdClass();
             $i->app = $app;
 
             if (false !== mb_ereg('\Ahttps?://(.*?)(/.*)', $location, $parts)) {
@@ -30,12 +28,7 @@ class URLMap
             $this->mapping[] = $i;
         }
 
-        usort($this->mapping, function($a, $b){
-            if (0 != $h = strlen($b->host) - strlen($a->host))
-                return $h;
-
-            return strlen($b->location) - strlen($a->location);
-        });
+        usort($this->mapping, array($this, 'usorter'));
     }
 
     public function __invoke($ctx)
@@ -73,5 +66,13 @@ class URLMap
     private static function squeeze($where, $what)
     {
         return mb_ereg_replace($what.'+', $what, $where);
+    }
+
+    public function usorter($a, $b)
+    {
+        if (0 != $h = strlen($b->host) - strlen($a->host))
+            return $h;
+
+        return strlen($b->location) - strlen($a->location);
     }
 }

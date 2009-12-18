@@ -1,8 +1,6 @@
 <?php
 
-namespace MFS\AppServer;
-
-abstract class DaemonicHandler implements iHandler
+abstract class MFS_AppServer_DaemonicHandler implements MFS_AppServer_iHandler
 {
     protected $protocol = null;
     private $transport = null;
@@ -13,8 +11,8 @@ abstract class DaemonicHandler implements iHandler
         if (PHP_SAPI !== 'cli')
             throw new LogicException("Daemonic Application should be run using CLI SAPI");
 
-        if (version_compare("5.3.0-dev", PHP_VERSION, '>'))
-            throw new LogicException("Daemonic Application requires PHP 5.3.0+");
+        if (version_compare("5.2.0", PHP_VERSION, '>'))
+            throw new LogicException("Daemonic Application requires PHP 5.2.0+");
 
         // Checking for GarbageCollection patch
         if (false === function_exists('gc_enabled')) {
@@ -56,7 +54,7 @@ abstract class DaemonicHandler implements iHandler
 
         try {
             $this->transport->loop();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->protocol->doneWithRequest();
             $this->log('[Exception] '.get_class($e).': '.$e->getMessage());
         }
@@ -75,9 +73,7 @@ abstract class DaemonicHandler implements iHandler
         $context = array(
             'env' => $this->protocol->getHeaders(),
             'stdin' => $this->protocol->getStdin(),
-            'logger' => function($message) {
-                echo $message."\n";
-            }
+            'logger' => array($this, 'log'),
         );
 
         $this->log("-> calling handler");

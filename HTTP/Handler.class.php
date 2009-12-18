@@ -1,14 +1,12 @@
 <?php
 
-namespace MFS\AppServer\HTTP;
-
-class Handler extends \MFS\AppServer\DaemonicHandler implements \MFS\AppServer\iProtocol
+class MFS_AppServer_HTTP_Handler extends MFS_AppServer_DaemonicHandler implements MFS_AppServer_iProtocol
 {
     public function __construct($socket_url = 'tcp://127.0.0.1:8080', $transport_name = 'Socket')
     {
         parent::__construct();
 
-        $transport_class = 'MFS\\AppServer\\Transport\\'.$transport_name;
+        $transport_class = 'MFS_AppServer_Transport_'.$transport_name;
         $this->setTransport(new $transport_class($socket_url, array($this, 'onRequest')));
         $this->setProtocol($this);
     }

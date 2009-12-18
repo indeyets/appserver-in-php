@@ -1,7 +1,6 @@
 <?php
-namespace MFS\AppServer\SCGI;
 
-class Client
+class MFS_AppServer_SCGI_Client
 {
     private $url = null;
     private $socket = null;

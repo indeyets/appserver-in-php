@@ -1,8 +1,6 @@
 <?php
 
-namespace MFS\AppServer\Middleware\Session;
-
-class Session
+class MFS_AppServer_Middleware_Session
 {
     private $app;
 
@@ -19,7 +17,7 @@ class Session
         if (isset($context['mfs.session']))
             throw new LogicException('"mfs.session" key is already occupied in context');
 
-        $ck = $context['mfs.session'] = new _Engine($context);
+        $ck = $context['mfs.session'] = new MFS_AppServer_Middleware_Session__Engine($context);
 
         $result = call_user_func($this->app, $context);
 

@@ -1,7 +1,6 @@
 <?php
-namespace MFS\AppServer\SCGI;
 
-class ClientRequest
+class MFS_AppServer_SCGI_ClientRequest
 {
     private $client;
 
@@ -80,7 +79,7 @@ class ClientRequest
 
         $this->client->sendRequest($headers, $body);
 
-        $retval = new \stdClass();
+        $retval = new stdClass();
         $retval->headers = $this->client->getHeaders();
         $retval->body = $this->client->getBody();
 

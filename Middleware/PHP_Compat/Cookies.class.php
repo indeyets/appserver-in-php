@@ -1,8 +1,6 @@
 <?php
 
-namespace MFS\AppServer\Middleware\PHP_Compat;
-
-class Cookies implements \ArrayAccess
+class MFS_AppServer_Middleware_PHP_Compat_Cookies implements ArrayAccess
 {
     private $headers = array();
     private $cookies = array();

@@ -1,7 +1,6 @@
 <?php
-namespace MFS\AppServer\SCGI;
 
-class Server implements \MFS\AppServer\iProtocol
+class MFS_AppServer_SCGI_Server implements MFS_AppServer_iProtocol
 {
     private $stream = null;
     private $headers = null;
@@ -32,7 +31,7 @@ class Server implements \MFS\AppServer\iProtocol
         }
 
         if (!is_numeric($len)) {
-            throw new BadProtocolException('invalid protocol (expected length, got '.var_export($len, true).')');
+            throw new MFS_AppServer_SCGI_BadProtocolException('invalid protocol (expected length, got '.var_export($len, true).')');
         }
 
         $_headers_str = stream_get_contents($this->stream, $len);
@@ -54,10 +53,10 @@ class Server implements \MFS\AppServer\iProtocol
         unset($_headers, $first);
 
         if (!isset($this->headers['SCGI']) or $this->headers['SCGI'] != '1')
-            throw new BadProtocolException("Request is not SCGI/1 Compliant (".var_dump($this->headers, true).")");
+            throw new MFS_AppServer_SCGI_BadProtocolException("Request is not SCGI/1 Compliant (".var_dump($this->headers, true).")");
 
         if (!isset($this->headers['CONTENT_LENGTH']))
-            throw new BadProtocolException("CONTENT_LENGTH header not present");
+            throw new MFS_AppServer_SCGI_BadProtocolException("CONTENT_LENGTH header not present");
 
         unset($this->headers['SCGI']);
     }

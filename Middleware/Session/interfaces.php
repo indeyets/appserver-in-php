@@ -1,8 +1,6 @@
 <?php
 
-namespace MFS\AppServer\Middleware\Session;
-
-interface Storage
+interface MFS_AppServer_Middleware_Session_Storage
 {
     public function __construct(array $options);
     public function open($name); // should return array of vars

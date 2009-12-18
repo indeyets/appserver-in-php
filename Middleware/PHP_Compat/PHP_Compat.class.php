@@ -1,8 +1,6 @@
 <?php
 
-namespace MFS\AppServer\Middleware\PHP_Compat;
-
-class PHP_Compat
+class MFS_AppServer_Middleware_PHP_Compat
 {
     private $app;
 
@@ -25,9 +23,9 @@ class PHP_Compat
 
         // _COOKIE vars
         if (isset($context['env']['HTTP_COOKIE']))
-            $ck = new Cookies($context['env']['HTTP_COOKIE']);
+            $ck = new MFS_AppServer_Middleware_PHP_Compat_Cookies($context['env']['HTTP_COOKIE']);
         else
-            $ck = new Cookies(null);
+            $ck = new MFS_AppServer_Middleware_PHP_Compat_Cookies(null);
 
         $context['_COOKIE'] = $ck;
 
@@ -101,7 +99,7 @@ class PHP_Compat
         }
 
         if (!isset($boundary))
-            throw new BadProtocolException("Didn't find boundary-declaration in multipart");
+            throw new MFS_AppServer_Middleware_PHP_Compat_BadProtocolException("Didn't find boundary-declaration in multipart");
 
         $post_strs = array();
         $pos = 0;
@@ -111,7 +109,7 @@ class PHP_Compat
             $h_end = strpos($b, "\r\n\r\n", $h_start);
 
             if (false === $h_end) {
-                throw new BadProtocolException("Didn't find end of headers-zone");
+                throw new MFS_AppServer_Middleware_PHP_Compat_BadProtocolException("Didn't find end of headers-zone");
             }
 
             $headers = array();
@@ -121,7 +119,7 @@ class PHP_Compat
             }
 
             if (!isset($headers['Content-Disposition']))
-                throw new BadProtocolException("Didn't find Content-disposition in one of the parts of multipart: ".var_export(array_keys($headers), true));
+                throw new MFS_AppServer_Middleware_PHP_Compat_BadProtocolException("Didn't find Content-disposition in one of the parts of multipart: ".var_export(array_keys($headers), true));
 
             // parsing dispositin-header of part
             $disposition = array();
@@ -138,7 +136,7 @@ class PHP_Compat
             $b_end = strpos($b, "\r\n".$boundary, $b_start);
 
             if (false === $b_end) {
-                throw new BadProtocolException("Didn't find end of body :-/");
+                throw new MFS_AppServer_Middleware_PHP_Compat_BadProtocolException("Didn't find end of body :-/");
             }
 
             $file_data = substr($b, $b_start, $b_end - $b_start);

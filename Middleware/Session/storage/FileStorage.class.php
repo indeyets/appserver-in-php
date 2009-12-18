@@ -1,8 +1,6 @@
 <?php
 
-namespace MFS\AppServer\Middleware\Session;
-
-class FileStorage implements Storage
+class MFS_AppServer_Middleware_Session_FileStorage implements MFS_AppServer_Middleware_Session_Storage
 {
     const MAGIC = 'MFS_SESSION';
 
@@ -41,7 +39,7 @@ class FileStorage implements Storage
         }
 
         if (!self::idIsFree($name))
-            throw new IdIsTakenException('session-name is already taken');
+            throw new MFS_AppServer_Middleware_Session_IdIsTakenException('session-name is already taken');
 
         $this->name = $name;
 
@@ -146,12 +144,12 @@ class FileStorage implements Storage
             'data' => $data
         );
 
-        return \serialize($container);
+        return serialize($container);
     }
 
     private static function unserialize($string)
     {
-        $result = @\unserialize($string);
+        $result = @unserialize($string);
 
         if (!is_array($result)
             or !array_key_exists('magic', $result) or !array_key_exists('data', $result)

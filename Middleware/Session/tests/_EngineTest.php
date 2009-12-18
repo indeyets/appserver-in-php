@@ -3,12 +3,9 @@
 require_once "PHPUnit/Framework/TestCase.php";
 error_reporting(E_ALL | E_STRICT);
 
-require '../autoload.php';
+require '../../../autoload.php';
 
-use \MFS\AppServer\Middleware\Session\_Engine;
-use \MFS\AppServer\Middleware\Session\Storage;
-
-class DumbStorage implements Storage
+class DumbStorage implements MFS_AppServer_Middleware_Session_Storage
 {
     private static $data = array();
 
@@ -58,7 +55,7 @@ class _EngineDump extends PHPUnit_Framework_TestCase
     {
         $context = array('env' => array());
 
-        $sess = new _Engine($context);
+        $sess = new MFS_AppServer_Middleware_Session__Engine($context);
         $sess->start(array(
             'storage'       => 'DumbStorage',
             'cookie_name'   => 'session',

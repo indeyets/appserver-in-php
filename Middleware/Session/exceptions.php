@@ -1,11 +1,3 @@
 <?php
 
-namespace MFS\AppServer\Middleware\Session;
-
-class RuntimeException extends \RuntimeException {}
-class LogicException extends \LogicException {}
-
-class UnexpectedValueException extends \UnexpectedValueException {}
-class OutOfBoundsException extends \OutOfBoundsException {}
-
-class IdIsTakenException extends RuntimeException {}
+class MFS_AppServer_Middleware_Session_IdIsTakenException extends RuntimeException {}

@@ -1,9 +1,9 @@
 <?php
 
-require __DIR__.'/../../autoload.php';
+require dirname(__FILE__).'/../../autoload.php';
 
-$client = new \MFS\AppServer\SCGI\Client('tcp://127.0.0.1:9999');
-$req = new \MFS\AppServer\SCGI\ClientRequest($client);
+$client = new MFS_AppServer_SCGI_Client('tcp://127.0.0.1:9999');
+$req = new MFS_AppServer_SCGI_ClientRequest($client);
 
 $req->setURI('/?foo=42');
 $req->setMethod('POST');

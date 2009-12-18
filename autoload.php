@@ -1,18 +1,16 @@
 <?php
 
-namespace MFS\AppServer;
-
-function autoload($class_name)
+function MFS_AppServer_autoload($class_name)
 {
     static $files = null;
 
     if (null === $files) {
-        $root = __DIR__.'/';
+        $root = dirname(__FILE__).'/';
 
         $files = array(
-            'MFS\AppServer\iHandler'        => $root.'interfaces.php',
-            'MFS\AppServer\iProtocol'       => $root.'interfaces.php',
-            'MFS\AppServer\DaemonicHandler' => $root.'DaemonicHandler.class.php',
+            'MFS_AppServer_iHandler'                              => $root.'interfaces.php',
+            'MFS_AppServer_iProtocol'                             => $root.'interfaces.php',
+            'MFS_AppServer_DaemonicHandler'                       => $root.'DaemonicHandler.class.php',
         );
     }
 
@@ -20,16 +18,16 @@ function autoload($class_name)
         require $files[$class_name];
 }
 
-spl_autoload_register('MFS\AppServer\autoload');
+spl_autoload_register('MFS_AppServer_autoload');
 
 
 // enabling components
-require __DIR__.'/Transport/autoload.php';
+require dirname(__FILE__).'/Transport/autoload.php';
 
-require __DIR__.'/SCGI/autoload.php';
-require __DIR__.'/HTTP/autoload.php';
-require __DIR__.'/MOD_PHP/autoload.php';
+require dirname(__FILE__).'/SCGI/autoload.php';
+require dirname(__FILE__).'/HTTP/autoload.php';
+require dirname(__FILE__).'/MOD_PHP/autoload.php';
 
-require __DIR__.'/Middleware/PHP_Compat/autoload.php';
-require __DIR__.'/Middleware/Session/autoload.php';
-require __DIR__.'/Middleware/URLMap/autoload.php';
+require dirname(__FILE__).'/Middleware/PHP_Compat/autoload.php';
+require dirname(__FILE__).'/Middleware/Session/autoload.php';
+require dirname(__FILE__).'/Middleware/URLMap/autoload.php';

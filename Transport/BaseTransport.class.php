@@ -1,7 +1,6 @@
 <?php
-namespace MFS\AppServer\Transport;
 
-abstract class BaseTransport
+abstract class MFS_AppServer_Transport_BaseTransport
 {
     protected $addrs;
     protected $callback;

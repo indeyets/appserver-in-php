@@ -1,6 +1,6 @@
 <?php
 
-require realpath(__DIR__.'/../..').'/autoload.php';
+require dirname(__FILE__).'/../../autoload.php';
 
 class DamnSmallServer
 {
@@ -15,9 +15,9 @@ class DamnSmallServer
         return array(200, array(), $body);
     }
 }
-$handler = new MFS\AppServer\SCGI\Handler();
-$handler->setProtocol(new MFS\SCGI\Server());
-$handler->setTransport(new MFS\AppServer\Transport\LibEvent('tcp://127.0.0.1:9999', array($handler, 'onRequest')));
+$handler = new MFS_AppServer_SCGI_Handler();
+$handler->setProtocol(new MFS_AppServer_SCGI_Server());
+$handler->setTransport(new MFS_AppServer_Transport_LibEvent('tcp://127.0.0.1:9999', array($handler, 'onRequest')));
 
-$app = new MFS\AppServer\Middleware\PHP_Compat\PHP_Compat(new DamnSmallServer);
+$app = new MFS_AppServer_Middleware_PHP_Compat_PHP_Compat(new DamnSmallServer);
 $handler->serve($app);

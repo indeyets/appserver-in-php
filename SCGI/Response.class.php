@@ -1,7 +1,6 @@
 <?php
-namespace MFS\AppServer\SCGI;
 
-class Response
+class MFS_AppServer_SCGI_Response
 {
     private static $valid_statuses = null;
 

@@ -1,8 +1,6 @@
 <?php
 
-namespace MFS\AppServer\Middleware\Session;
-
-class _Engine
+class MFS_AppServer_Middleware_Session__Engine
 {
     private $cookies = array();
     private $headers = array();
@@ -75,7 +73,7 @@ class _Engine
             array(
                 'cookie_name' => ini_get('session.name'),
                 'hash_algorithm' => 'sha1',
-                'storage' => __NAMESPACE__.'\\FileStorage',
+                'storage' => 'MFS_AppServer_Middleware_Session_FileStorage',
                 'cookie_lifetime' => ini_get('session.cookie_lifetime'),
                 'cookie_path' => ini_get('session.cookie_path'),
                 'cookie_domain' => ini_get('session.cookie_domain'),
@@ -87,7 +85,7 @@ class _Engine
 
         $class = $this->options['storage'];
 
-        if (!in_array(__NAMESPACE__.'\\Storage', class_implements($class))) {
+        if (!in_array('MFS_AppServer_Middleware_Session_Storage', class_implements($class))) {
             throw new UnexpectedValueException($storage.' class does not implement Storage interface');
         }
 
@@ -144,7 +142,7 @@ class _Engine
             try {
                 $this->storage->create($id);
                 break; // cool, we're first here
-            } catch (IdIsTakenException $e) {
+            } catch (MFS_AppServer_Middleware_Session_IdIsTakenException $e) {
             }
         }
 

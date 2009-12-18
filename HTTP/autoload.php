@@ -1,17 +1,15 @@
 <?php
 
-namespace MFS\AppServer\HTTP;
-
-function autoload($class_name)
+function MFS_AppServer_HTTP_autoload($class_name)
 {
     static $files = null;
 
     if (null === $files) {
-        $root = __DIR__.'/';
+        $root = dirname(__FILE__).'/';
 
         $files = array(
             // high-level stuff
-            'MFS\AppServer\HTTP\Handler' => $root.'Handler.class.php',
+            'MFS_AppServer_HTTP_Handler' => $root.'Handler.class.php',
         );
     }
 
@@ -19,4 +17,4 @@ function autoload($class_name)
         require $files[$class_name];
 }
 
-spl_autoload_register('MFS\AppServer\HTTP\autoload');
+spl_autoload_register('MFS_AppServer_HTTP_autoload');

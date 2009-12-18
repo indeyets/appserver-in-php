@@ -1,8 +1,3 @@
 <?php
 
-namespace MFS\AppServer\Middleware\PHP_Compat;
-
-class UnexpectedValueException extends \UnexpectedValueException {}
-class InvalidArgumentException extends \InvalidArgumentException {}
-
-class BadProtocolException extends LogicException {}
+class MFS_AppServer_Middleware_PHP_Compat_BadProtocolException extends LogicException {}

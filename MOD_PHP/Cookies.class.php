@@ -1,8 +1,6 @@
 <?php
 
-namespace MFS\AppServer\MOD_PHP;
-
-class Cookies implements \ArrayAccess
+class MFS_AppServer_MOD_PHP_Cookies implements ArrayAccess
 {
     private $cookies = array();
 

@@ -1,7 +1,6 @@
 <?php
-namespace MFS\AppServer\MOD_PHP;
 
-class Handler implements \MFS\AppServer\iHandler
+class MFS_AppServer_MOD_PHP_Handler implements MFS_AppServer_iHandler
 {
     private $socket = null;
     private $has_gc = true;
@@ -34,12 +33,12 @@ class Handler implements \MFS\AppServer\iHandler
                 '_GET' => $_GET,
                 '_POST' => $_POST,
                 '_FILES' => $_FILES,
-                '_COOKIE' => new Cookies(),
+                '_COOKIE' => new MFS_AppServer_MOD_PHP_Cookies(),
             );
 
             $result = call_user_func($app, $context);
 
-            $response = new Response();
+            $response = new MFS_AppServer_MOD_PHP_Response();
             $response->setStatus($result[0]);
             for ($i = 0, $cnt = count($result[1]); $i < $cnt; $i++) {
                 $response->addHeader($result[1][$i], $result[1][++$i]);
@@ -50,7 +49,7 @@ class Handler implements \MFS\AppServer\iHandler
             unset($result);
 
             $this->log("-> done with request");
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->log('[Exception] '.get_class($e).': '.$e->getMessage());
         }
     }

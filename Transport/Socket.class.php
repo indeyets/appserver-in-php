@@ -1,7 +1,6 @@
 <?php
-namespace MFS\AppServer\Transport;
 
-class Socket extends BaseTransport
+class MFS_AppServer_Transport_Socket extends MFS_AppServer_Transport_BaseTransport
 {
     protected $sockets = array();
     protected $sockets_count = 0;
