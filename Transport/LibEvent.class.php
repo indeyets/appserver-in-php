@@ -58,10 +58,9 @@ class LibEvent extends BaseTransport
     {
         $socket_num = $args[0];
         $conn = $this->acceptSocket($socket_num);
-        $callback = $this->callback;
 
         self::log('Socket', $socket_num, 'callback');
-        $callback($conn);
+        call_user_func($this->callback, $conn);
     }
 
     protected function addSocket($addr)

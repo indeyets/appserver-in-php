@@ -47,7 +47,7 @@ abstract class DaemonicHandler implements iHandler
         if (!is_callable($app))
             throw new InvalidArgumentException('not a valid app');
 
-        $this->app = \MFS\AppServer\callable($app);
+        $this->app = $app;
 
         $this->log('Serving '.(is_object($this->app) ? get_class($this->app) : $this->app).' app…');
         $this->log('Protocol '.get_class($this->protocol).' protocol…');
@@ -55,7 +55,7 @@ abstract class DaemonicHandler implements iHandler
         $this->log("Entering runloop…");
 
         try {
-            $this->transport->loop(\MFS\AppServer\callable(array($this, 'onRequest')));
+            $this->transport->loop();
         } catch (\Exception $e) {
             $this->protocol->doneWithRequest();
             $this->log('[Exception] '.get_class($e).': '.$e->getMessage());
@@ -82,8 +82,7 @@ abstract class DaemonicHandler implements iHandler
 
         $this->log("-> calling handler");
 
-        $app = $this->app;
-        $result = $app($context);
+        $result = call_user_func($this->app, $context);
 
         if (!is_array($result) or count($result) != 3)
             throw new BadProtocolException("App did not return proper result");

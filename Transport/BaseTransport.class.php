@@ -15,7 +15,7 @@ abstract class BaseTransport
             $addrs = array($addrs);
 
         $this->addrs = $addrs;
-        $this->callback = \MFS\AppServer\callable($callback);
+        $this->callback = $callback;
     }
 
     static function log($object, $object_id, $message)

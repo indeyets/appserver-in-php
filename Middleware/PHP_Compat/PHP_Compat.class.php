@@ -11,7 +11,7 @@ class PHP_Compat
         if (!is_callable($app))
             throw new InvalidArgumentException('not a valid app');
 
-        $this->app = \MFS\AppServer\callable($app);
+        $this->app = $app;
         $this->options = $options;
     }
 
@@ -57,11 +57,10 @@ class PHP_Compat
         }
 
         // EXECUTE
-        $app = $this->app;
-        $result = $app($context);
-        
+        $result = call_user_func($this->app, $context);
+
         if (!is_array($result)) {
-            return $result; 
+            return $result;
         }
 
         // Append cookie-headers

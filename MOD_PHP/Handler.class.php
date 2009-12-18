@@ -20,8 +20,6 @@ class Handler implements \MFS\AppServer\iHandler
         if (!is_callable($app))
             throw new InvalidArgumentException('not a valid app');
 
-        $app = \MFS\AppServer\callable($app);
-
         $this->log('Serving '.(is_object($app) ? get_class($app) : $app).' app…');
 
         try {
@@ -39,7 +37,7 @@ class Handler implements \MFS\AppServer\iHandler
                 '_COOKIE' => new Cookies(),
             );
 
-            $result = $app($context);
+            $result = call_user_func($app, $context);
 
             $response = new Response();
             $response->setStatus($result[0]);

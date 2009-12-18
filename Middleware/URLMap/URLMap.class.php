@@ -14,7 +14,7 @@ class URLMap
                 throw new InvalidArgumentException('invalid app supplied for "'.$location.'" path');
 
             $i = new \stdClass();
-            $i->app = \MFS\AppServer\callable($app);
+            $i->app = $app;
 
             if (false !== mb_ereg('\Ahttps?://(.*?)(/.*)', $location, $parts)) {
                 $i->host = $parts[1];
@@ -63,8 +63,7 @@ class URLMap
             $ctx['env']['SCRIPT_NAME'] = $script_name.$i->location;
             $ctx['env']['PATH_INFO'] = strlen($i->location) < strlen($path) ? substr($path, strlen($i->location)) : '';
 
-            $app = $i->app; // php doesn't allow to call properties as methods
-            return $app($ctx);
+            return call_user_func($i->app, $ctx);
         }
 
         return array(404, array("Content-Type", "text/plain"), "Not Found: ".$path);

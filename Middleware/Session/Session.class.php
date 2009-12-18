@@ -11,7 +11,7 @@ class Session
         if (!is_callable($app))
             throw new InvalidArgumentException('not a valid app');
 
-        $this->app = \MFS\AppServer\callable($app);
+        $this->app = $app;
     }
 
     public function __invoke($context)
@@ -21,7 +21,7 @@ class Session
 
         $ck = $context['mfs.session'] = new _Engine($context);
 
-        $result = $this->app($context);
+        $result = call_user_func($this->app, $context);
 
         // Append cookie-headers
         $result[1] = array_merge($result[1], $ck->_getHeaders());
