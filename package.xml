@@ -48,8 +48,15 @@
     <contents>
         <dir name="/" baseinstalldir="AppServer">
             <file role="php" name="autoload.php" />
+            <file role="php" name="DaemonicHandler.class.php" />
             <file role="php" name="interfaces.php" />
+            <file role="doc" name="AUTHORS" />
             <file role="doc" name="LICENSE" />
+
+            <dir name="HTTP">
+                <file role="php" name="autoload.php" />
+                <file role="php" name="Handler.class.php" />
+            </dir>
 
             <dir name="SCGI">
                 <file role="php" name="autoload.php" />
@@ -74,6 +81,7 @@
                     <file role="php" name="exceptions.php" />
                     <file role="php" name="Cookies.class.php" />
                     <file role="php" name="PHP_Compat.class.php" />
+                    <file role="php" name="StringStream.class.php" />
                     <file role="doc" name="_readme" install-as="PHP_Compat Middleware.readme" />
                 </dir>
 
@@ -93,6 +101,19 @@
                         <file role="test" name="FileStorageTest.php" />
                     </dir>
                 </dir>
+
+                <dir name="URLMap">
+                    <file role="php" name="autoload.php" />
+                    <file role="php" name="URLMap.class.php" />
+                    <file role="doc" name="_notes" install-as="URLMap Middleware.readme" />
+                </dir>
+            </dir>
+
+            <dir name="Transport">
+                <file role="php" name="autoload.php" />
+                <file role="php" name="BaseTransport.class.php" />
+                <file role="php" name="LibEvent.class.php" />
+                <file role="php" name="Socket.class.php" />
             </dir>
         </dir>
     </contents>
