@@ -1,21 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <package packagerversion="1.4.1" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
-    <name>AppServer</name>
+    <name>AppServer_backport52</name>
     <channel>pear.indeyets.pp.ru</channel>
     <summary>A set of components for building extremely fast universal web-apps</summary>
     <description>
         Web server interface for PHP, inspired by Ruby’s Rack and Python’s WSGI. It provides a common API for connecting PHP frameworks and applications to webservers.
     </description>
+
     <lead>
         <name>Alexey Zakhlestin</name>
         <user>indeyets</user>
         <email>indeyets@php.net</email>
         <active>yes</active>
     </lead>
+    <contributor>
+        <name>Stanislav Korchagin</name>
+        <user></user>
+        <email>korchasa@gmail.com</email>
+        <active>yes</active>
+    </contributor>
 
-    <date>2009-12-04</date>
+    <date>2009-12-18</date>
     <version>
-        <release>0.1.0</release>
+        <release>0.1.1</release>
         <api>0.1.0</api>
     </version>
     <stability>
@@ -24,7 +31,12 @@
     </stability>
     <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
     <notes>
-        -
+        - added URLMap middleware
+        - defined "Transport" infrastructure for socket-oriented protocols
+        - added streamed-sockets transport
+        - added libevent transport
+        - add direct HTTP-protocol handler (appserver can work without server now)
+        - various cleanup
     </notes>
 
     <contents>
@@ -96,5 +108,20 @@
     </phprelease>
 
     <changelog>
+        <release>
+            <date>2009-12-04</date>
+            <version>
+                <release>0.1.0</release>
+                <api>0.1.0</api>
+            </version>
+            <stability>
+                <release>beta</release>
+                <api>stable</api>
+            </stability>
+            <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
+            <notes>
+                -
+            </notes>
+        </release>
     </changelog>
 </package>
