@@ -20,4 +20,4 @@ You can get latest release using PEAR:
 Or, if you need version backported to php 5.2:
 
     pear channel-discover pear.indeyets.pp.ru
-    pear install indeyets/AppServer-backport52-beta
+    pear install indeyets/AppServer_backport52-beta
