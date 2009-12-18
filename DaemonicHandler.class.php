@@ -12,7 +12,7 @@ abstract class DaemonicHandler implements iHandler
         if (PHP_SAPI !== 'cli')
             throw new LogicException("Daemonic Application should be run using CLI SAPI");
 
-        if (version_compare("5.3.0", PHP_VERSION, '>='))
+        if (version_compare("5.3.0", PHP_VERSION, '>'))
             throw new LogicException("Daemonic Application requires PHP 5.3.0+");
 
         // Checking for GarbageCollection patch
