@@ -38,7 +38,7 @@ class MFS_AppServer_Transport_LibEvent extends MFS_AppServer_Transport_BaseTrans
     public function loop()
     {
         if (!$this->event_base = event_base_new())
-            throw new Exception("Can't create event base");
+            throw new RuntimeException("Can't create event base");
 
         foreach ($this->addrs as $addr) {
             $this->addAddr($addr);
@@ -64,14 +64,14 @@ class MFS_AppServer_Transport_LibEvent extends MFS_AppServer_Transport_BaseTrans
 
         $event = event_new();
         if (!event_set($event, $socket, EV_READ | EV_PERSIST, array($this, 'onEventAccept'), array($socket_num))) {
-            throw new Exception("Can't set event");
+            throw new RuntimeException("Can't set event");
         }
 
         if (false === event_base_set ($event, $this->event_base))
-            throw new Exception("Can't set [{$socket_num}] event base.");
+            throw new RuntimeException("Can't set [{$socket_num}] event base.");
 
         if (false === event_add ($event)) {
-            throw new Exception("Can't add event");
+            throw new RuntimeException("Can't add event");
         }
 
         $this->socket_events[$socket_num] = $event;
