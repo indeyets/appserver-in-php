@@ -9,7 +9,7 @@ function MFS_AppServer_HTTP_autoload($class_name)
 
         $files = array(
             // high-level stuff
-            'MFS_AppServer_HTTP_Handler' => $root.'Handler.class.php',
+            'MFS_AppServer_HTTP_Server' => $root.'Server.class.php',
         );
     }
 

@@ -1,12 +1,12 @@
 <?php
 
-abstract class MFS_AppServer_DaemonicHandler implements MFS_AppServer_iHandler
+class MFS_AppServer_DaemonicHandler implements MFS_AppServer_iHandler
 {
     protected $protocol = null;
     private $transport = null;
     private $has_gc = false;
 
-    public function __construct()
+    public function __construct($socket_url = 'tcp://127.0.0.1:9999', $protocol_name = 'HTTP', $transport_name = 'Socket')
     {
         if (PHP_SAPI !== 'cli')
             throw new LogicException("Daemonic Application should be run using CLI SAPI");
@@ -33,6 +33,11 @@ abstract class MFS_AppServer_DaemonicHandler implements MFS_AppServer_iHandler
             $this->log("============================================================================");
         }
 
+        $transport_class = 'MFS\\AppServer\\Transport\\'.$transport_name;
+        $this->setTransport(new $transport_class($socket_url, array($this, 'onRequest')));
+        $protocol_class = 'MFS\\AppServer\\'.$protocol_name.'\\Server';
+        $this->setProtocol(new $protocol_class);
+
         $this->log('Initialized Daemonic Handler');
     }
 
@@ -49,7 +54,7 @@ abstract class MFS_AppServer_DaemonicHandler implements MFS_AppServer_iHandler
     public function __destruct()
     {
         unset($this->protocol);
-        $this->log("DeInitialized Daemonic Application: ".get_class($this));
+        $this->log("DeInitialized Application: ".get_class($this));
     }
 
     public function serve($app)
@@ -95,7 +100,7 @@ abstract class MFS_AppServer_DaemonicHandler implements MFS_AppServer_iHandler
         if (!is_array($result) or count($result) != 3)
             throw new BadProtocolException("App did not return proper result");
 
-        $this->writeResponse($result);
+        $this->protocol->writeResponse($result);
 
         // cleanup
         unset($result);
@@ -107,8 +112,6 @@ abstract class MFS_AppServer_DaemonicHandler implements MFS_AppServer_iHandler
             gc_collect_cycles();
         }
     }
-
-    abstract protected function writeResponse($response_data);
 
     public function log($message)
     {
