@@ -11,7 +11,7 @@ function autoload($class_name)
 
         $files = array(
             // high-level stuff
-            'MFS\AppServer\HTTP\Handler' => $root.'Handler.class.php',
+            'MFS\AppServer\HTTP\Server' => $root.'Server.class.php',
         );
     }
 

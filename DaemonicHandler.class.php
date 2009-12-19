@@ -2,12 +2,12 @@
 
 namespace MFS\AppServer;
 
-abstract class DaemonicHandler implements iHandler
+class DaemonicHandler implements iHandler
 {
     protected $protocol = null;
     private $transport = null;
 
-    public function __construct()
+    public function __construct($socket_url = 'tcp://127.0.0.1:9999', $protocol_name = 'HTTP', $transport_name = 'Socket')
     {
         if (PHP_SAPI !== 'cli')
             throw new LogicException("Daemonic Application should be run using CLI SAPI");
@@ -19,6 +19,12 @@ abstract class DaemonicHandler implements iHandler
         if (false === gc_enabled()) {
             gc_enable();
         }
+
+        $transport_class = 'MFS\\AppServer\\Transport\\'.$transport_name;
+        $this->setTransport(new $transport_class($socket_url, array($this, 'onRequest')));
+        $protocol_class = 'MFS\\AppServer\\'.$protocol_name.'\\Server';
+        $this->setProtocol(new $protocol_class);
+
         $this->log('Initialized Daemonic Handler');
     }
 
@@ -35,7 +41,7 @@ abstract class DaemonicHandler implements iHandler
     public function __destruct()
     {
         unset($this->protocol);
-        $this->log("DeInitialized Daemonic Application: ".get_class($this));
+        $this->log("DeInitialized Application: ".get_class($this));
     }
 
     public function serve($app)
@@ -83,7 +89,7 @@ abstract class DaemonicHandler implements iHandler
         if (!is_array($result) or count($result) != 3)
             throw new BadProtocolException("App did not return proper result");
 
-        $this->writeResponse($result);
+        $this->protocol->writeResponse($result);
 
         // cleanup
         unset($result);
@@ -93,8 +99,6 @@ abstract class DaemonicHandler implements iHandler
 
         gc_collect_cycles();
     }
-
-    abstract protected function writeResponse($response_data);
 
     public function log($message)
     {

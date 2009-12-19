@@ -72,6 +72,18 @@ class Server implements \MFS\AppServer\iProtocol
         }
     }
 
+    public function writeResponse($response_data)
+    {
+        $response = new Response($this);
+        $response->setStatus($response_data[0]);
+        for ($i = 0, $cnt = count($response_data[1]); $i < $cnt; $i++) {
+            $response->addHeader($response_data[1][$i], $response_data[1][++$i]);
+        }
+
+        $response->sendHeaders();
+        $this->write($response_data[2]); // body
+    }
+
     public function getHeaders()
     {
         return $this->headers;

@@ -11,9 +11,9 @@ function autoload($class_name)
 
         $files = array(
             // low-level stuff
-            'MFS\AppServer\SCGI\Server'                             => $root.'Server.class.php',
-            'MFS\AppServer\SCGI\Client'                             => $root.'Client.class.php',
-            'MFS\AppServer\SCGI\ClientRequest'                      => $root.'ClientRequest.class.php',
+            'MFS\AppServer\SCGI\Server'                   => $root.'Server.class.php',
+            'MFS\AppServer\SCGI\Client'                   => $root.'Client.class.php',
+            'MFS\AppServer\SCGI\ClientRequest'            => $root.'ClientRequest.class.php',
 
             // high-level stuff
             'MFS\AppServer\SCGI\Handler'                  => $root.'Handler.class.php',
