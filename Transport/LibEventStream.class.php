@@ -41,7 +41,7 @@ class LibEventStream
     function stream_write($data)
     {
         if(!self::getTransport()->writeToBuffer($this->conn_id, $data))
-            throw new \Exception('Error on write to buffer');
+            throw new RuntimeException('Error on write to buffer');
     }
 
     function stream_tell()

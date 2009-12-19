@@ -9,6 +9,9 @@ function autoload($class_name)
     if (null === $files) {
         $files = array(
             __NAMESPACE__.'\iTransport'         => __DIR__.'/interfaces.php',
+            __NAMESPACE__.'\LogicException'     => __DIR__.'/exceptions.php',
+            __NAMESPACE__.'\RuntimeException'   => __DIR__.'/exceptions.php',
+
             __NAMESPACE__.'\BaseTransport'      => __DIR__.'/BaseTransport.class.php',
             __NAMESPACE__.'\LibEvent'           => __DIR__.'/LibEvent.class.php',
             __NAMESPACE__.'\LibEventStream'     => __DIR__.'/LibEventStream.class.php',
