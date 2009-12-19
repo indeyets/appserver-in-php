@@ -27,7 +27,6 @@ class LibEventStream
     {
         $url = parse_url($path);
         $this->conn_id = $url["host"];
-        libEvent::log('Buffer', $this->conn_id, 'opened');
         return true;
     }
 
