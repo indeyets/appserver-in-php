@@ -6,6 +6,7 @@ function MFS_AppServer_Transport_autoload($class_name)
 
     if (null === $files) {
         $files = array(
+            'MFS_AppServer_Transport_iTransport'         => dirname(__FILE__).'/interfaces.php',
             'MFS_AppServer_Transport_BaseTransport'      => dirname(__FILE__).'/BaseTransport.class.php',
             'MFS_AppServer_Transport_LibEvent'           => dirname(__FILE__).'/LibEvent.class.php',
             'MFS_AppServer_Transport_LibEventStream'     => dirname(__FILE__).'/LibEventStream.class.php',
