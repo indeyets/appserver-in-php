@@ -68,10 +68,10 @@ class LibEvent extends BaseTransport
             throw new RuntimeException("Can't set event");
         }
 
-        if (false === event_base_set ($event, $this->event_base))
+        if (false === event_base_set($event, $this->event_base))
             throw new RuntimeException("Can't set [{$socket_num}] event base.");
 
-        if (false === event_add ($event)) {
+        if (false === event_add($event)) {
             throw new RuntimeException("Can't add event");
         }
 
@@ -170,7 +170,7 @@ class LibEvent extends BaseTransport
                                    array($this, 'onEventRead'),
                                    array($this, 'onEventWrite'),
                                    array($this, 'onEventError'),
-                                   array ($conn_num));
+                                   array($conn_num));
         event_buffer_base_set($buffer, $this->event_base);
         event_buffer_timeout_set($buffer, $this->timeout, $this->timeout);
         event_buffer_enable($buffer, EV_READ | EV_WRITE | EV_PERSIST);
