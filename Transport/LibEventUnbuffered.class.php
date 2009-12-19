@@ -42,10 +42,10 @@ class MFS_AppServer_Transport_LibEventUnbuffered extends MFS_AppServer_Transport
             throw new RuntimeException("Can't set event");
         }
 
-        if (false === event_base_set ($event, $this->event_base))
+        if (false === event_base_set($event, $this->event_base))
             throw new RuntimeException("Can't set [{$socket_num}] event base.");
 
-        if (false === event_add ($event)) {
+        if (false === event_add($event)) {
             throw new RuntimeException("Can't add event");
         }
 
