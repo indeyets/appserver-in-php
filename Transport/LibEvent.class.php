@@ -99,7 +99,7 @@ class MFS_AppServer_Transport_LibEvent extends MFS_AppServer_Transport_BaseTrans
         $buffer = $this->connection_buffers[$conn_num];
         LibEventStream::setTransport($this);
         $stream = fopen('libevent-buffer://'.$conn_num, 'w+');
-        libEvent::log('Connection', $this->conn_id, 'buffer opened');
+        libEvent::log('Connection', $conn_num, 'buffer opened');
 
         self::log('Connection', $conn_num, 'request callback');
         call_user_func($this->callback, $stream);
