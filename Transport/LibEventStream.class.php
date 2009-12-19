@@ -1,8 +1,6 @@
 <?php
 
-namespace MFS\AppServer\Transport;
-
-class LibEventStream
+class MFS_AppServer_Transport_LibEventStream
 {
     static $transport;
 
@@ -41,7 +39,7 @@ class LibEventStream
     function stream_write($data)
     {
         if(!self::getTransport()->writeToBuffer($this->conn_id, $data))
-            throw new \Exception('Error on write to buffer');
+            throw new Exception('Error on write to buffer');
     }
 
     function stream_tell()
@@ -58,6 +56,4 @@ class LibEventStream
     }
 }
 
-stream_wrapper_register("libevent-buffer", __NAMESPACE__."\LibEventStream");
-
-?>
+stream_wrapper_register("libevent-buffer", "MFS_AppServer_Transport_LibEventStream");
