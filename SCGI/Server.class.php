@@ -1,6 +1,8 @@
 <?php
 namespace MFS\AppServer\SCGI;
 
+// FIXME: split protocol-part from appserver interface
+//        writeResponse, for example, is appserver-specific
 class Server implements \MFS\AppServer\iProtocol
 {
     private $stream = null;
