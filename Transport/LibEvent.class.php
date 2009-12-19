@@ -27,6 +27,14 @@ class MFS_AppServer_Transport_LibEvent extends MFS_AppServer_Transport_BaseTrans
 
     protected $callback;
 
+    public function __construct($addrs, $callback)
+    {
+        if (!extension_loaded('libevent'))
+            throw new LogicException('LibEvent transport requires pecl/libevent extension');
+
+        parent::__construct($addrs, $callback);
+    }
+
     public function loop()
     {
         if (!$this->event_base = event_base_new())
