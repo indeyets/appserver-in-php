@@ -7,7 +7,7 @@ class DaemonicHandler implements iHandler
     protected $protocol = null;
     private $transport = null;
 
-    public function __construct($socket_url = 'tcp://127.0.0.1:9999', $protocol_name = 'HTTP', $transport_name = 'Socket')
+    public function __construct($socket_url, $protocol_name, $transport_name = 'Socket')
     {
         if (PHP_SAPI !== 'cli')
             throw new LogicException("Daemonic Application should be run using CLI SAPI");
