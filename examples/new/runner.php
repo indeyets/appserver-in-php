@@ -25,9 +25,9 @@ function sample_hello_handler()
 // choosing appropriate handler
 if (PHP_SAPI === 'cli') {
     if (isset($argv[1]) and $argv[1] === 'http') {
-        $handler = new MFS_AppServer_HTTP_Handler('tcp://127.0.0.1:8080');
+        $handler = new MFS_AppServer_DaemonicHandler('tcp://127.0.0.1:8080', 'HTTP');
     } else {
-        $handler = new MFS_AppServer_SCGI_Handler('tcp://127.0.0.1:9999');
+        $handler = new MFS_AppServer_DaemonicHandler('tcp://127.0.0.1:9999', 'SCGI');
     }
 } else {
     ini_set('display_errors', 'Off');
