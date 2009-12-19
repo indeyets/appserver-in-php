@@ -6,9 +6,10 @@ function MFS_AppServer_Transport_autoload($class_name)
 
     if (null === $files) {
         $files = array(
-            'MFS_AppServer_Transport_BaseTransport' => dirname(__FILE__).'/BaseTransport.class.php',
-            'MFS_AppServer_Transport_LibEvent'      => dirname(__FILE__).'/LibEvent.class.php',
-            'MFS_AppServer_Transport_Socket'        => dirname(__FILE__).'/Socket.class.php',
+            'MFS_AppServer_Transport_BaseTransport'      => dirname(__FILE__).'/BaseTransport.class.php',
+            'MFS_AppServer_Transport_LibEvent'           => dirname(__FILE__).'/LibEvent.class.php',
+            'MFS_AppServer_Transport_LibEventUnbuffered' => dirname(__FILE__).'/LibEventUnbuffered.class.php',
+            'MFS_AppServer_Transport_Socket'             => dirname(__FILE__).'/Socket.class.php',
         );
     }
 
