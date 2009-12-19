@@ -59,5 +59,3 @@ class LibEventStream
 }
 
 stream_wrapper_register("libevent-buffer", __NAMESPACE__."\LibEventStream");
-
-?>

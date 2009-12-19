@@ -181,13 +181,15 @@ class LibEvent extends BaseTransport
         unset($this->connection_statuses[$conn_num]);
     }
 
-    function readFromBuffer($conn_id, $count) {
+    function readFromBuffer($conn_id, $count)
+    {
         $readed = event_buffer_read($this->connection_buffers[$conn_id], $count);
         libEvent::log('Connection', $conn_id, 'readed '.strlen($readed).' chars from buffer');
         return $readed;
     }
 
-    function writeToBuffer($conn_id, $data) {
+    function writeToBuffer($conn_id, $data)
+    {
         $result = event_buffer_write($this->connection_buffers[$conn_id], $data);
         libEvent::log('Connection', $conn_id, 'writed '.strlen($data).' chars to buffer');
         return $result;
