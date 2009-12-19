@@ -100,7 +100,7 @@ class LibEvent extends BaseTransport
         $buffer = $this->connection_buffers[$conn_num];
         LibEventStream::setTransport($this);
         $stream = fopen('libevent-buffer://'.$conn_num, 'w+');
-        libEvent::log('Connection', $conn_num, 'buffer opened');
+        self::log('Connection', $conn_num, 'buffer opened');
 
         self::log('Connection', $conn_num, 'request callback');
         call_user_func($this->callback, $stream);
@@ -192,14 +192,14 @@ class LibEvent extends BaseTransport
     function readFromBuffer($conn_id, $count)
     {
         $readed = event_buffer_read($this->connection_buffers[$conn_id], $count);
-        libEvent::log('Connection', $conn_id, 'read '.strlen($readed).' chars from buffer');
+        self::log('Connection', $conn_id, 'read '.strlen($readed).' chars from buffer');
         return $readed;
     }
 
     function writeToBuffer($conn_id, $data)
     {
         $result = event_buffer_write($this->connection_buffers[$conn_id], $data);
-        libEvent::log('Connection', $conn_id, 'wrote '.strlen($data).' chars to buffer');
+        self::log('Connection', $conn_id, 'wrote '.strlen($data).' chars to buffer');
         return $result;
     }
 
