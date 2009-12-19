@@ -191,14 +191,14 @@ class MFS_AppServer_Transport_LibEvent extends MFS_AppServer_Transport_BaseTrans
     function readFromBuffer($conn_id, $count)
     {
         $readed = event_buffer_read($this->connection_buffers[$conn_id], $count);
-        libEvent::log('Connection', $conn_id, 'readed '.strlen($readed).' chars from buffer');
+        libEvent::log('Connection', $conn_id, 'read '.strlen($readed).' chars from buffer');
         return $readed;
     }
 
     function writeToBuffer($conn_id, $data)
     {
         $result = event_buffer_write($this->connection_buffers[$conn_id], $data);
-        libEvent::log('Connection', $conn_id, 'writed '.strlen($data).' chars to buffer');
+        libEvent::log('Connection', $conn_id, 'wrote '.strlen($data).' chars to buffer');
         return $result;
     }
 
