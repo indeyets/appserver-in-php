@@ -12,7 +12,7 @@ class MFS_AppServer_SCGI_Response
     private $content_type = null;
     private $status = 200;
 
-    public function __construct(Server $scgi)
+    public function __construct(MFS_AppServer_SCGI_Server $scgi)
     {
         if (null === self::$valid_statuses) {
             self::$valid_statuses = array(

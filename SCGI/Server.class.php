@@ -73,7 +73,7 @@ class MFS_AppServer_SCGI_Server implements MFS_AppServer_iProtocol
 
     public function writeResponse($response_data)
     {
-        $response = new Response($this);
+        $response = new MFS_AppServer_SCGI_Response($this);
         $response->setStatus($response_data[0]);
         for ($i = 0, $cnt = count($response_data[1]); $i < $cnt; $i++) {
             $response->addHeader($response_data[1][$i], $response_data[1][++$i]);

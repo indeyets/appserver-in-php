@@ -33,9 +33,9 @@ class MFS_AppServer_DaemonicHandler implements MFS_AppServer_iHandler
             $this->log("============================================================================");
         }
 
-        $transport_class = 'MFS\\AppServer\\Transport\\'.$transport_name;
+        $transport_class = 'MFS_AppServer_Transport_'.$transport_name;
         $this->setTransport(new $transport_class($socket_url, array($this, 'onRequest')));
-        $protocol_class = 'MFS\\AppServer\\'.$protocol_name.'\\Server';
+        $protocol_class = 'MFS_AppServer_'.$protocol_name.'_Server';
         $this->setProtocol(new $protocol_class);
 
         $this->log('Initialized Daemonic Handler');
