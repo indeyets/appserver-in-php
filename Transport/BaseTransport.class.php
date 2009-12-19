@@ -1,7 +1,7 @@
 <?php
 namespace MFS\AppServer\Transport;
 
-abstract class BaseTransport
+abstract class BaseTransport implements iTransport
 {
     protected $addrs;
     protected $callback;
@@ -22,7 +22,4 @@ abstract class BaseTransport
     {
         echo "$object #{$object_id} -> $message\n";
     }
-
-    abstract public function loop();
-    abstract public function unloop();
 }
