@@ -20,9 +20,9 @@ $app = new \MFS\AppServer\Middleware\URLMap\URLMap(array(
 // choosing appropriate handler
 if (PHP_SAPI === 'cli') {
     if (isset($argv[1]) and $argv[1] === 'http') {
-        $handler = new \MFS\AppServer\HTTP\Handler('tcp://127.0.0.1:8080');
+        $handler = new \MFS\AppServer\DaemonicHandler('tcp://127.0.0.1:8080', 'HTTP');
     } else {
-        $handler = new \MFS\AppServer\SCGI\Handler('tcp://127.0.0.1:9999');
+        $handler = new \MFS\AppServer\DaemonicHandler('tcp://127.0.0.1:9999', 'SCGI');
     }
 } else {
     ini_set('display_errors', 'Off');
