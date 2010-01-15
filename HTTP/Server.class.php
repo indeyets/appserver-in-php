@@ -26,37 +26,48 @@ class Server implements \MFS\AppServer\iProtocol
         $this->stream = $stream;
 
         $_headers_str = stream_get_line($this->stream, 0, "\r\n\r\n");
-        $_headers = explode("\r\n", $_headers_str); // getting headers
 
-        list($http_method, $url, $http_version) = sscanf(array_shift($_headers), "%s %s %s");
+        if (extension_loaded('httpparser')) {
+            $parser = new \HttpParser();
+            $parser->execute($_headers_str, 0);
+            $this->headers = $parser->getEnvironment();
+            unset($parser);
+        } else {
+            // native parsing
+            // TODO: implement support for multiline headers (see http-spec for details)
 
-        $this->headers = array();
-        foreach ($_headers as $element) {
-            $divider = strpos($element, ': ');
+            $_headers = explode("\r\n", $_headers_str); // getting headers
 
-            $name = 'HTTP_'.str_replace('-', '_', strtoupper(substr($element, 0, $divider)));
-            $value = substr($element, $divider + 2);
+            list($http_method, $url, $http_version) = sscanf(array_shift($_headers), "%s %s %s");
 
-            $this->headers[$name] = $value;
+            $this->headers = array();
+            foreach ($_headers as $element) {
+                $divider = strpos($element, ': ');
 
+                $name = 'HTTP_'.str_replace('-', '_', strtoupper(substr($element, 0, $divider)));
+                $value = substr($element, $divider + 2);
+
+                $this->headers[$name] = $value;
+
+            }
+            unset($_headers, $first);
+
+            $this->headers['HTTP_VERSION'] = $http_version;
+            $this->headers['REQUEST_METHOD'] = $http_method;
+            $this->headers['REQUEST_URI'] = $url;
+
+            if (false === $pos = strpos($url, '?')) {
+                $this->headers['PATH_INFO'] = $url;
+                $this->headers['QUERY_STRING'] = '';
+            } else {
+                $this->headers['PATH_INFO'] = substr($url, 0, $pos);
+                $this->headers['QUERY_STRING'] = strval(substr($url, $pos + 1));
+            }
         }
-        unset($_headers, $first);
-
-        // TODO: implement support for multiline headers (see http-spec for details)
 
         $this->headers['SERVER_SOFTWARE'] = 'appserver-in-php';
         $this->headers['GATEWAY_INTERFACE'] = 'CGI/1.1';
-        $this->headers['REQUEST_METHOD'] = $http_method;
-        $this->headers['REQUEST_URI'] = $url;
         $this->headers['SCRIPT_NAME'] = '';
-
-        if (false === $pos = strpos($url, '?')) {
-            $this->headers['PATH_INFO'] = $url;
-            $this->headers['QUERY_STRING'] = '';
-        } else {
-            $this->headers['PATH_INFO'] = substr($url, 0, $pos);
-            $this->headers['QUERY_STRING'] = strval(substr($url, $pos + 1));
-        }
 
         if (isset($this->headers['HTTP_HOST'])) {
             if (false === $pos = strpos($this->headers['HTTP_HOST'], ':')) {
@@ -85,6 +96,8 @@ class Server implements \MFS\AppServer\iProtocol
         } else {
             $this->headers['CONTENT_LENGTH'] = 0;
         }
+
+        ksort($this->headers);
     }
 
     public function doneWithRequest()
