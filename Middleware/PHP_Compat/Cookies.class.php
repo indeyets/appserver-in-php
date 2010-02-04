@@ -46,7 +46,7 @@ class MFS_AppServer_Middleware_PHP_Compat_Cookies implements ArrayAccess
     public function offsetGet($offset)
     {
         if (!$this->offsetExists($offset))
-            throw new OutOfBoundException();
+            throw new OutOfBoundsException();
 
         return $this->cookies[$offset];
     }
