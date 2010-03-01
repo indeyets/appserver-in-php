@@ -41,7 +41,7 @@ class Socket extends BaseTransport
         $errstr = '';
         $socket = stream_socket_server($addr, $errno, $errstr);
         if (false == $socket) {
-            throw new Exception("Can't create socket(".$errno."): ".$errstr);
+            throw new RuntimeException("Can't create socket(".$errno."): ".$errstr);
         }
         $socket_num = $this->sockets_count++;
         $this->sockets[$socket_num] = $socket;
