@@ -121,6 +121,13 @@
                     <file role="php" name="FileServe.class.php" />
                 </dir>
             </dir>
+
+            <dir name="Runner">
+                <file role="script" baseinstalldir="/" name="bin/aip" />
+                <file role="php" name="autoload.php" />
+                <file role="php" name="RunnerApp.class.php" />
+                <file role="php" name="Runner.class.php" />
+            </dir>
         </dir>
     </contents>
 
@@ -141,6 +148,7 @@
 
     <phprelease>
         <filelist>
+            <install as="aip" name="Runner/bin/aip" />
         </filelist>
     </phprelease>
 
