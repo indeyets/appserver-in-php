@@ -1,0 +1,9 @@
+---
+servers:
+  -
+    protocol: HTTP
+    socket: 'tcp://127.0.0.1:8080'
+    app: 
+      class: MyApp
+      file: MyApp.class.php
+      middlewares: [PHP_Compat]

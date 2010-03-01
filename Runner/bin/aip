@@ -1,0 +1,6 @@
+#!/usr/bin/env php -d html_errors=off
+<?php
+require 'AppServer/Runner/autoload.php';
+
+$runner = MFS_AppServer_Runner_RunnerApp::get_instance();
+$runner->run();
