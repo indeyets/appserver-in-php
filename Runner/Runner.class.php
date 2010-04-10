@@ -13,7 +13,9 @@ class Runner
 
     public function addServer($app_class, array $middlewares, $protocol, $socket, $min_instances = 1, $max_instances = 1)
     {
-        $this->servers[] = array($app_class, $middlewares, $protocol, $socket);
+        for ($i = 0; $i < $min_instances; $i++) {
+            $this->servers[] = array($app_class, $middlewares, $protocol, $socket);
+        }
     }
 
     public function go()

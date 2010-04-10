@@ -41,7 +41,7 @@ class RunnerApp extends \pakeApp
         $runner = new Runner();
         foreach ($config['servers'] as $server) {
             require_once dirname($config_file).'/'.$server['app']['file'];
-            $runner->addServer($server['app']['class'], $server['app']['middlewares'], $server['protocol'], $server['socket']);
+            $runner->addServer($server['app']['class'], $server['app']['middlewares'], $server['protocol'], $server['socket'], 5);
         }
 
         $runner->go();
