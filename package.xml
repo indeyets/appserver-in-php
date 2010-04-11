@@ -49,7 +49,7 @@
 
             <dir name="HTTP">
                 <file role="php" name="autoload.php" />
-                <file role="php" name="Handler.class.php" />
+                <file role="php" name="Server.class.php" />
             </dir>
 
             <dir name="SCGI">
@@ -57,7 +57,6 @@
                 <file role="php" name="Client.class.php" />
                 <file role="php" name="ClientRequest.class.php" />
                 <file role="php" name="exceptions.php" />
-                <file role="php" name="Handler.class.php" />
                 <file role="php" name="Response.class.php" />
                 <file role="php" name="Server.class.php" />
             </dir>
@@ -107,8 +106,12 @@
 
             <dir name="Transport">
                 <file role="php" name="autoload.php" />
+                <file role="php" name="exceptions.php" />
+                <file role="php" name="interfaces.php" />
                 <file role="php" name="BaseTransport.class.php" />
                 <file role="php" name="LibEvent.class.php" />
+                <file role="php" name="LibEventStream.class.php" />
+                <file role="php" name="LibEventUnbuffered.class.php" />
                 <file role="php" name="Socket.class.php" />
             </dir>
         </dir>
