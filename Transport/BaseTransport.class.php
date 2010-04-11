@@ -2,23 +2,22 @@
 
 abstract class MFS_AppServer_Transport_BaseTransport implements MFS_AppServer_Transport_iTransport
 {
-    protected $addrs;
+    protected $addr;
     protected $callback;
 
-    public function __construct($addrs, $callback)
+    public function __construct($addr, $callback)
     {
         if (!is_callable($callback))
             throw new InvalidArgumentException('not a valid callback');
 
-        if (!is_array($addrs))
-            $addrs = array($addrs);
-
-        $this->addrs = $addrs;
+        $this->addr = $addr;
         $this->callback = $callback;
+
+        $this->addSocket($this->addr);
     }
 
-    static function log($object, $object_id, $message)
+    static function log($object, $message)
     {
-        echo "$object #{$object_id} -> $message\n";
+        echo $object.' -> '.$message."\n";
     }
 }

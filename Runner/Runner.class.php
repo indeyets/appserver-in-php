@@ -11,9 +11,7 @@ class MFS_AppServer_Runner
 
     public function addServer($app_class, array $middlewares, $protocol, $socket, $min_instances = 1, $max_instances = 1)
     {
-        for ($i = 0; $i < $min_instances; $i++) {
-            $this->servers[] = array($app_class, $middlewares, $protocol, $socket);
-        }
+        $this->servers[] = array($app_class, $middlewares, $protocol, $socket, $min_instances, $max_instances);
     }
 
     public function go()
@@ -21,20 +19,31 @@ class MFS_AppServer_Runner
         $is_parent = true;
 
         foreach ($this->servers as $server) {
-            $pid = pcntl_fork();
+            $app = new $server[0];
 
-            if ($pid == -1) {
-                die('could not fork');
-            } elseif ($pid === 0) {
-                // we are the child
-                $is_parent = false;
-                try {
-                    $this->startHandler($server);
-                } catch (Exception $e) {
+            foreach (array_reverse($server[1]) as $mw_name) {
+                $mw_class = 'MFS_AppServer_Middleware_'.$mw_name;
+                $app = new $mw_class($app);
+            }
+
+            $handler = new MFS_AppServer_DaemonicHandler($server[3], $server[2]);
+
+            for ($i = 0; $i < $server[4]; $i++) {
+                $pid = pcntl_fork();
+
+                if ($pid == -1) {
+                    die('could not fork');
+                } elseif ($pid === 0) {
+                    // we are the child
+                    $is_parent = false;
+                    try {
+                        $handler->serve($app);
+                    } catch (Exception $e) {
+                    }
+                    die();
+                } else {
+                    // parent-process, just continue
                 }
-                die();
-            } else {
-                // parent-process, just continue
             }
         }
 
@@ -42,18 +51,5 @@ class MFS_AppServer_Runner
             // should be called one time for each child?
             pcntl_wait($status); //Protect against Zombie children
         }
-    }
-
-    private function startHandler(array $server)
-    {
-        $app = new $server[0];
-
-        foreach (array_reverse($server[1]) as $mw_name) {
-            $mw_class = 'MFS_AppServer_Middleware_'.$mw_name;
-            $app = new $mw_class($app);
-        }
-
-        $handler = new MFS_AppServer_DaemonicHandler($server[3], $server[2]);
-        $handler->serve($app);
     }
 }
