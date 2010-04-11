@@ -111,7 +111,6 @@
 
             <dir name="Transport">
                 <file role="php" name="autoload.php" />
-                <file role="php" name="exceptions.php" />
                 <file role="php" name="interfaces.php" />
                 <file role="php" name="BaseTransport.class.php" />
                 <file role="php" name="LibEvent.class.php" />

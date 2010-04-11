@@ -8,7 +8,7 @@ function MFS_AppServer_Apps_FileServe_autoload($class_name)
         $root = dirname(__FILE__).'/';
 
         $files = array(
-            'MFS_AppServer_Apps_FileServe_FileServe'               => $root.'FileServe.class.php',
+            'MFS_AppServer_Apps_FileServe'               => $root.'FileServe.class.php',
         );
     }
 

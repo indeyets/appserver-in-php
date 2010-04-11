@@ -1,6 +1,6 @@
 <?php
 
-class MFS_AppServer_Apps_FileServe_FileServe
+class MFS_AppServer_Apps_FileServe
 {
     private $path;
 
