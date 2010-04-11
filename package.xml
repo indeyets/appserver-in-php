@@ -119,6 +119,13 @@
                 <file role="php" name="LibEventUnbuffered.class.php" />
                 <file role="php" name="Socket.class.php" />
             </dir>
+
+            <dir name="Apps">
+                <dir name="FileServe">
+                    <file role="php" name="autoload.php" />
+                    <file role="php" name="FileServe.class.php" />
+                </dir>
+            </dir>
         </dir>
     </contents>
 
