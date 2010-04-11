@@ -26,7 +26,7 @@ class MFS_AppServer_Runner
                 $app = new $mw_class($app);
             }
 
-            $handler = new MFS_AppServer_DaemonicHandler($server[3], $server[2]);
+            $handler = new MFS_AppServer_DaemonicHandler($server[3], $server[2], 'Socket');
 
             for ($i = 0; $i < $server[4]; $i++) {
                 $pid = pcntl_fork();
