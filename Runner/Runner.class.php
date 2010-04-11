@@ -28,7 +28,7 @@ class Runner
                 $app = new $mw_class($app);
             }
 
-            $handler = new \MFS\AppServer\DaemonicHandler($server[3], $server[2]);
+            $handler = new \MFS\AppServer\DaemonicHandler($server[3], $server[2], 'Socket');
 
             for ($i = 0; $i < $server[4]; $i++) {
                 $pid = pcntl_fork();
