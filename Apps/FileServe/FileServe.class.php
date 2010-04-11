@@ -9,7 +9,7 @@ class FileServe
     public function __construct($path)
     {
         if (!is_dir($path))
-            throw new \Exception();
+            throw new \Exception('"'.$path.'" is not a directory');
 
         $this->path = $path;
     }
