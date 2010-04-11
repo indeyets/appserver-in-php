@@ -137,6 +137,10 @@
             <pearinstaller>
                 <min>1.4.1</min>
             </pearinstaller>
+            <package>
+                <name>pake</name>
+                <channel>pear.indeyets.pp.ru</channel>
+            </package>
         </required>
     </dependencies>
 
