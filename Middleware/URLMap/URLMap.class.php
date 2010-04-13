@@ -2,11 +2,10 @@
 
 class MFS_AppServer_Middleware_URLMap
 {
-    private $app;
+    private $mapping = array();
 
     public function __construct(array $map)
     {
-        $this->mapping = array();
         foreach ($map as $location => $app) {
             if (!is_callable($app))
                 throw new InvalidArgumentException('invalid app supplied for "'.$location.'" path');
@@ -60,6 +59,7 @@ class MFS_AppServer_Middleware_URLMap
         }
 
         return array(404, array("Content-Type", "text/plain"), "Not Found: ".$path);
+
     }
 
     // helpers
