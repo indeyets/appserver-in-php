@@ -15,9 +15,9 @@ with PHP 5.2.
 You can get latest release using PEAR:
 
     pear channel-discover pear.indeyets.pp.ru
-    pear install indeyets/AppServer-beta
+    pear install indeyets/AppServer
 
 Or, if you need version backported to php 5.2:
 
     pear channel-discover pear.indeyets.pp.ru
-    pear install indeyets/AppServer_backport52-beta
+    pear install indeyets/AppServer_backport52
