@@ -20,23 +20,21 @@
         <active>yes</active>
     </contributor>
 
-    <date>2009-12-18</date>
+    <date>2010-04-13</date>
     <version>
-        <release>0.1.1</release>
-        <api>0.1.0</api>
+        <release>0.2.0</release>
+        <api>0.2.0</api>
     </version>
     <stability>
-        <release>beta</release>
+        <release>stable</release>
         <api>stable</api>
     </stability>
     <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
     <notes>
-        - added URLMap middleware
-        - defined "Transport" infrastructure for socket-oriented protocols
-        - added streamed-sockets transport
-        - added libevent transport
-        - add direct HTTP-protocol handler (appserver can work without server now)
-        - various cleanup
+        - major internals overhaul
+        - HTTP protocol can optionally use "httpparser" php extension http://github.com/dhotson/httpparser-php
+        - simple file-serving app "FileServe" is bundled now
+        - added "aip" command-line tool, which works as a pre-forking server (not windows-compatible yet)
     </notes>
 
     <contents>
@@ -137,14 +135,37 @@
                 <min>5.3.0</min>
             </php>
             <pearinstaller>
-                <min>1.4.1</min>
+                <min>1.9.0</min>
             </pearinstaller>
+            <extension>
+                <name>mbstring</name>
+            </extension>
+            <extension>
+                <name>spl</name>
+            </extension>
             <package>
                 <name>pake</name>
                 <channel>pear.indeyets.pp.ru</channel>
             </package>
         </required>
+
+        <optional>
+            <extension>
+              <name>pcntl</name>
+            </extension>
+        </optional>
     </dependencies>
+
+    <phprelease>
+        <installconditions>
+            <os>
+                <name>windows</name>
+            </os>
+        </installconditions>
+        <filelist>
+            <!-- AiP is not windows-compatible -->
+        </filelist>
+    </phprelease>
 
     <phprelease>
         <filelist>
@@ -153,6 +174,26 @@
     </phprelease>
 
     <changelog>
+        <release>
+            <date>2009-12-18</date>
+            <version>
+                <release>0.1.1</release>
+                <api>0.1.0</api>
+            </version>
+            <stability>
+                <release>beta</release>
+                <api>stable</api>
+            </stability>
+            <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
+            <notes>
+                - added URLMap middleware
+                - defined "Transport" infrastructure for socket-oriented protocols
+                - added streamed-sockets transport
+                - added libevent transport
+                - add direct HTTP-protocol handler (appserver can work without server now)
+                - various cleanup
+            </notes>
+        </release>
         <release>
             <date>2009-12-04</date>
             <version>
