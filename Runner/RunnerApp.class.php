@@ -38,7 +38,7 @@ class MFS_AppServer_Runner_RunnerApp extends pakeApp
 
         $config = pakeYaml::loadFile($config_file);
 
-        $runner = new Runner();
+        $runner = new MFS_AppServer_Runner();
         foreach ($config['servers'] as $server) {
             if (!class_exists($server['app']['class'])) {
                 require dirname($config_file).'/'.$server['app']['file'];
