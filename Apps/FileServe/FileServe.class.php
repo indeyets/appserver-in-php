@@ -4,12 +4,17 @@ class MFS_AppServer_Apps_FileServe
 {
     private $path;
 
-    public function __construct($path)
+    private $cache = array();
+    private $cache_size = 0;
+    private $actual_cache_size = 0;
+
+    public function __construct($path, $cache_size = 0)
     {
         if (!is_dir($path))
             throw new Exception('"'.$path.'" is not a directory');
 
         $this->path = $path;
+        $this->cache_size = $cache_size;
     }
 
     public function __invoke($ctx)
@@ -17,12 +22,54 @@ class MFS_AppServer_Apps_FileServe
         $path = $this->path.'/'.$ctx['env']['PATH_INFO'];
 
         if (!file_exists($path))
-            return array(404, array('Content-type', 'text/plain'), 'File not found');
+            return array(404, array('Content-Type', 'text/plain'), 'File not found');
 
         if (!is_readable($path))
-            return array(403, array('Content-type', 'text/plain'), 'Forbidden');
+            return array(403, array('Content-Type', 'text/plain'), 'Forbidden');
 
-        return array(200, array('Content-type', self::getContentType($path)), file_get_contents($path));
+        $etag = isset($ctx['env']['HTTP_IF_NONE_MATCH']) ? $ctx['env']['HTTP_IF_NONE_MATCH'] : null;
+        $lastmod = isset($ctx['env']['HTTP_IF_MODIFIED_SINCE']) ? $ctx['env']['HTTP_IF_MODIFIED_SINCE'] : null;
+
+        return $this->serve($path, $etag, $lastmod);
+    }
+
+    private function serve($path, $req_etag, $req_lastmod)
+    {
+        if (isset($this->cache[$path])) {
+            list($data, $mtime, $etag) = $this->cache[$path];
+        } else {
+            $data = file_get_contents($path);
+            $mtime = gmdate('D, d M Y H:i:s', filemtime($path)).' GMT';
+            $etag = hash('sha1', $data.$mtime);
+
+            if (strlen($data) <= $this->cache_size) {
+                foreach ($this->cache as $k => $v) {
+                    if ($this->cache_size >= strlen($data) + $this->actual_cache_size) {
+                        break;
+                    }
+
+                    $this->actual_cache_size -= strlen($v[0]);
+                    unset($this->cache[$k]);
+                }
+
+                $this->cache[$path] = array($data, $mtime, $etag);
+            }
+        }
+
+        if ($req_etag === $etag)
+            return array(304, array(), '');
+
+        if ($req_lastmod === $mtime)
+            return array(304, array(), '');
+
+        $headers = array(
+            'Content-Type',     self::getContentType($path),
+            'Content-Length',   strlen($data),
+            'Last-Modified',    $mtime,
+            'ETag',             $etag,
+        );
+
+        return array(200, $headers, $data);
     }
 
     private static function getContentType($path)
