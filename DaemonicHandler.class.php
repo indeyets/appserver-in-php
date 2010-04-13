@@ -6,6 +6,7 @@ class DaemonicHandler implements iHandler
 {
     protected $protocol = null;
     private $transport = null;
+    private $app = null;
 
     public function __construct($socket_url, $protocol_name, $transport_name = 'Socket')
     {
@@ -49,6 +50,7 @@ class DaemonicHandler implements iHandler
         if (!is_callable($app))
             throw new InvalidArgumentException('not a valid app');
 
+        $this->app = null;
         $this->app = $app;
 
         $this->log('Serving '.(is_object($this->app) ? get_class($this->app) : $this->app).' app…');
@@ -85,6 +87,7 @@ class DaemonicHandler implements iHandler
         $this->log("-> calling handler");
 
         $result = call_user_func($this->app, $context);
+        unset($context);
 
         if (!is_array($result) or count($result) != 3)
             throw new BadProtocolException("App did not return proper result");
