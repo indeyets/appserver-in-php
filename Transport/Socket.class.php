@@ -30,7 +30,6 @@ class MFS_AppServer_Transport_Socket extends MFS_AppServer_Transport_BaseTranspo
 
     protected function addSocket($addr)
     {
-        var_dump('hello');
         $errno = 0;
         $errstr = '';
         $this->socket = stream_socket_server($addr, $errno, $errstr);
