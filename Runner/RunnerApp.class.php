@@ -4,6 +4,22 @@ namespace MFS\AppServer\Runner;
 
 class RunnerApp extends \pakeApp
 {
+    const VERSION = '0.2.0';
+
+    protected function __construct()
+    {
+        parent::__construct();
+
+        self::$EXEC_NAME = 'aip';
+        self::$OPTIONS = array(
+            // array('--interactive', '-i', \pakeGetopt::NO_ARGUMENT,       "Start aip in interactive (shell-like) mode."),
+            array('--help',        '-H', \pakeGetopt::NO_ARGUMENT,       "Display this help message."),
+            array('--usage',       '-h', \pakeGetopt::NO_ARGUMENT,       "Display usage."),
+            array('--force-tty',   '',   \pakeGetopt::NO_ARGUMENT,       "Force coloured output"),
+            array('--version',     '-V', \pakeGetopt::NO_ARGUMENT,       "Display the program version."),
+        );
+    }
+
     public static function get_instance()
     {
         if (!self::$instance)
@@ -53,5 +69,21 @@ class RunnerApp extends \pakeApp
 
         pake_echo_comment('Starting server…');
         $runner->go();
+    }
+
+    public function showVersion()
+    {
+        parent::showVersion();
+        echo sprintf('AiP  version %s', \pakeColor::colorize(self::VERSION, 'INFO'))."\n";
+    }
+
+    public function usage($hint_about_help = true)
+    {
+        echo ' '.self::$EXEC_NAME."             - to list commands\n";
+        echo ' '.self::$EXEC_NAME." command     - to run specific command\n";
+
+        if (true === $hint_about_help) {
+            echo \pakeColor::colorize("Try ".self::$EXEC_NAME." -H for more information", 'INFO')."\n";
+        }
     }
 }
