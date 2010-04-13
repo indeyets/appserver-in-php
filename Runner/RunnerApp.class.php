@@ -30,6 +30,8 @@ class MFS_AppServer_Runner_RunnerApp extends pakeApp
             $config_file = getcwd().'/config.yaml';
         }
 
+        pake_echo_comment('Loading configuration…');
+
         if (!file_exists($config_file)) {
             throw new pakeException("Configuration file is not found: ".$config_file);
         }
@@ -38,10 +40,16 @@ class MFS_AppServer_Runner_RunnerApp extends pakeApp
 
         $runner = new Runner();
         foreach ($config['servers'] as $server) {
-            require_once dirname($config_file).'/'.$server['app']['file'];
+            if (!class_exists($server['app']['class'])) {
+                require dirname($config_file).'/'.$server['app']['file'];
+                pake_echo_action('load class', $server['app']['class']);
+            }
+
             $runner->addServer($server['app']['class'], $server['app']['middlewares'], $server['protocol'], $server['socket'], $server['min-children'], $server['max-children']);
+            pake_echo_action('register', $server['app']['class'].' server via '.$server['protocol'].' at '.$server['socket'].'. ('.$server['min-children'].'-'.$server['max-children'].' children)');
         }
 
+        pake_echo_comment('Starting server…');
         $runner->go();
     }
 }
