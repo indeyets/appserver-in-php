@@ -21,9 +21,17 @@ class MFS_AppServer_Runner
         foreach ($this->servers as $server) {
             $app = new $server[0];
 
+            if (method_exists($app, '__invoke')) {
+                $app = array($app, '__invoke');
+            }
+
             foreach (array_reverse($server[1]) as $mw_name) {
                 $mw_class = 'MFS_AppServer_Middleware_'.$mw_name;
                 $app = new $mw_class($app);
+
+                if (method_exists($app, '__invoke')) {
+                    $app = array($app, '__invoke');
+                }
             }
 
             $handler = new MFS_AppServer_DaemonicHandler($server[3], $server[2], 'Socket');

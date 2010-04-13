@@ -5,7 +5,7 @@ function MFS_AppServer_Runner_autoload($class_name)
     static $files = null;
 
     if (null === $files) {
-        $root = __DIR__.'/';
+        $root = dirname(__FILE__).'/';
 
         $files = array(
             // low-level stuff
@@ -22,4 +22,4 @@ function MFS_AppServer_Runner_autoload($class_name)
 spl_autoload_register('MFS_AppServer_Runner_autoload');
 
 require 'pake/init.php';
-require realpath(__DIR__.'/../autoload.php');
+require realpath(dirname(__FILE__).'/../autoload.php');
