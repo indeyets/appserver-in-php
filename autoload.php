@@ -31,5 +31,6 @@ require dirname(__FILE__).'/MOD_PHP/autoload.php';
 require dirname(__FILE__).'/Middleware/PHP_Compat/autoload.php';
 require dirname(__FILE__).'/Middleware/Session/autoload.php';
 require dirname(__FILE__).'/Middleware/URLMap/autoload.php';
+require dirname(__FILE__).'/Middleware/Logger/autoload.php';
 
 require dirname(__FILE__).'/Apps/FileServe/autoload.php';

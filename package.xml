@@ -27,21 +27,18 @@
         <active>yes</active>
     </contributor>
 
-    <date>2010-04-13</date>
+    <date>2010-04-29</date>
     <version>
-        <release>0.2.0</release>
-        <api>0.2.0</api>
+        <release>0.2.1</release>
+        <api>0.2.1</api>
     </version>
     <stability>
-        <release>stable</release>
+        <release>beta</release>
         <api>stable</api>
     </stability>
     <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
     <notes>
-        - major internals overhaul
-        - HTTP protocol can optionally use "httpparser" php extension http://github.com/dhotson/httpparser-php
-        - simple file-serving app "FileServe" is bundled now
-        - added "aip" command-line tool, which works as a pre-forking server (not windows-compatible yet)
+        - dev branch
     </notes>
 
     <contents>
@@ -104,6 +101,12 @@
                     <file role="php" name="autoload.php" />
                     <file role="php" name="URLMap.class.php" />
                     <file role="doc" name="_notes" install-as="URLMap Middleware.readme" />
+                </dir>
+
+                <dir name="Logger">
+                    <file role="php" name="autoload.php" />
+                    <file role="php" name="Logger.class.php" />
+                    <file role="php" name="README" install-as="Logger Middleware.readme" />
                 </dir>
             </dir>
 
@@ -179,6 +182,24 @@
     </phprelease>
 
     <changelog>
+        <release>
+            <date>2010-04-13</date>
+            <version>
+                <release>0.2.0</release>
+                <api>0.2.0</api>
+            </version>
+            <stability>
+                <release>stable</release>
+                <api>stable</api>
+            </stability>
+            <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
+            <notes>
+                - major internals overhaul
+                - HTTP protocol can optionally use "httpparser" php extension http://github.com/dhotson/httpparser-php
+                - simple file-serving app "FileServe" is bundled now
+                - added "aip" command-line tool, which works as a pre-forking server (not windows-compatible yet)
+            </notes>
+        </release>
         <release>
             <date>2009-12-18</date>
             <version>
