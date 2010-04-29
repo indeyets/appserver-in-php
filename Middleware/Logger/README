@@ -1,0 +1,28 @@
+This middleware provides Logging facility
+
+Class accepts 3 parameters (2 required and 1 optional)
+
+1. application (callback)
+2. string with file-path OR opened stream
+3. (optional) format of log-record. Default is Apache's Common Log format
+
+examples:
+
+    <?php
+    use MFS\AppServer\Middleware\Logger\Logger as aip_logger;
+    
+    $fp = fopen('/var/log/myapplication/access.log', 'a');
+    $logged_app = new aip_logger($app, $fp);
+    ?>
+
+    <?php
+    use MFS\AppServer\Middleware\Logger\Logger as aip_logger;
+    
+    $logged_app = new aip_logger($app, '/var/log/myapplication/access.log');
+    ?>
+
+    <?php
+    use MFS\AppServer\Middleware\Logger\Logger as aip_logger;
+    
+    $logged_app = new aip_logger($app, STDOUT, '"%r" %>s %b');
+    ?>
