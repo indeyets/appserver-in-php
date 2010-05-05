@@ -10,7 +10,7 @@ function autoload($class_name)
         $root = __DIR__.'/';
 
         $files = array(
-            'MFS\AppServer\Middleware\Session\Session'                  => $root.'PHP_Compat.class.php',
+            'MFS\AppServer\Middleware\Session\Session'                  => $root.'Session.class.php',
             'MFS\AppServer\Middleware\Session\_Engine'                  => $root.'_Engine.class.php',
 
             'MFS\AppServer\Middleware\Session\Storage'                  => $root.'interfaces.php',
