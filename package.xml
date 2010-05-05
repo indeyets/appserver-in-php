@@ -27,18 +27,19 @@
         <active>yes</active>
     </contributor>
 
-    <date>2010-04-29</date>
+    <date>2010-05-05</date>
     <version>
         <release>0.2.1</release>
         <api>0.2.1</api>
     </version>
     <stability>
-        <release>beta</release>
+        <release>stable</release>
         <api>stable</api>
     </stability>
     <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
     <notes>
-        - dev branch
+        - added Logger middleware (apache Common Log compatible)
+        - fixed typo in Session middleware
     </notes>
 
     <contents>
