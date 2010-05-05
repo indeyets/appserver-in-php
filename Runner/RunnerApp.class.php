@@ -2,7 +2,7 @@
 
 class MFS_AppServer_Runner_RunnerApp extends pakeApp
 {
-    const VERSION = '0.2.0';
+    const VERSION = '0.2.1';
 
     protected function __construct()
     {
