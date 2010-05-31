@@ -153,7 +153,7 @@ class MFS_AppServer_Middleware_PHP_Compat
                 //  UPLOAD_ERR_EXTENSION
 
                 if (empty($tmp_dir)) {
-                    $_FILES[$disposition['name']] = array(
+                    $fdata = array(
                         'name' => '',
                         'type' => '',
                         'tmp_name' => '',
@@ -161,7 +161,7 @@ class MFS_AppServer_Middleware_PHP_Compat
                         'size' => 0,
                     );
                 } elseif ($b_end - $b_start > self::IniString_to_Bytes(ini_get('upload_max_filesize'))) {
-                    $_FILES[$disposition['name']] = array(
+                    $fdata = array(
                         'name' => '',
                         'type' => '',
                         'tmp_name' => '',
@@ -169,7 +169,7 @@ class MFS_AppServer_Middleware_PHP_Compat
                         'size' => 0,
                     );
                 } elseif (0 === strlen($disposition['filename'])) {
-                    $_FILES[$disposition['name']] = array(
+                    $fdata = array(
                         'name' => '',
                         'type' => '',
                         'tmp_name' => '',
@@ -180,7 +180,7 @@ class MFS_AppServer_Middleware_PHP_Compat
                     if ($tmp_file !== false)
                         unlink($tmp_file);
 
-                    $_FILES[$disposition['name']] = array(
+                    $fdata = array(
                         'name' => '',
                         'type' => '',
                         'tmp_name' => '',
@@ -189,7 +189,7 @@ class MFS_AppServer_Middleware_PHP_Compat
                     );
                 } else {
                     $filesize = filesize($tmp_file);
-                    $_FILES[$disposition['name']] = array(
+                    $fdata = array(
                         'name' => $disposition['filename'],
                         'type' => '',
                         'tmp_name' => $tmp_file,
@@ -197,6 +197,19 @@ class MFS_AppServer_Middleware_PHP_Compat
                         'size' => $filesize,
                     );
                 }
+
+                // Files can be submitted as arrays. If field name is "file[xyz]",
+                // name must be stored as "file[name][xyz]". To avoid manual parsing
+                // of the tricky syntax, we use eval().
+
+                // First, we quote everything except square brackets.
+                $sel = preg_replace('/([^\[\]]+)/', '\'\1\'', $disposition['name']);
+
+                // Second, insert a special key between the name of the field and
+                // the rest of the array path.
+                $parts = explode('[', $sel, 2);
+                foreach (array_keys($fdata) as $key)
+                    eval('$_FILES[' . $parts[0] . '][\'' . $key . '\'][' . $parts[1] . ' = $fdata[\'' . $key . '\'];');
             } else {
                 $post_strs[] = urlencode($disposition['name']).'='.urlencode($file_data);
             }
