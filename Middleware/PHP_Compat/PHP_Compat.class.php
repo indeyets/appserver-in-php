@@ -210,8 +210,9 @@ class PHP_Compat
                 // Second, insert a special key between the name of the field and
                 // the rest of the array path.
                 $parts = explode('[', $sel, 2);
-                foreach (array_keys($fdata) as $key)
-                    eval('$_FILES[' . $parts[0] . '][\'' . $key . '\'][' . $parts[1] . ' = $fdata[\'' . $key . '\'];');
+                foreach (array_keys($fdata) as $key) {
+                    eval('$_FILES['.$parts[0]."]['".$key."'][".$parts[1].' = $fdata[\''.$key."'];");
+                }
             } else {
                 $post_strs[] = urlencode($disposition['name']).'='.urlencode($file_data);
             }
