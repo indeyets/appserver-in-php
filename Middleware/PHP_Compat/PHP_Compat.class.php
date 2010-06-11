@@ -211,7 +211,11 @@ class PHP_Compat
                 // the rest of the array path.
                 $parts = explode('[', $sel, 2);
                 foreach (array_keys($fdata) as $key) {
-                    eval('$_FILES['.$parts[0]."]['".$key."'][".$parts[1].' = $fdata[\''.$key."'];");
+                    if (count($parts) == 1) {
+                        $_FILES[$parts[0]][$key] = $fdata[$key];
+                    } else {
+                        eval($code = '$_FILES[' . $parts[0] . '][\'' . $key . '\'][' . $parts[1] . ' = $fdata[\'' . $key . '\'];');
+                    }
                 }
             } else {
                 $post_strs[] = urlencode($disposition['name']).'='.urlencode($file_data);
