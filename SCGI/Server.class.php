@@ -83,7 +83,11 @@ class Server implements \MFS\AppServer\iProtocol
         }
 
         $response->sendHeaders();
-        $this->write($response_data[2]); // body
+
+        if (!is_resource($response_data[2]))
+            $this->write($response_data[2]); // body
+        else while(!feof($response_data[2]))
+            $this->write(fread($response_data[2], 1024));
     }
 
     public function getHeaders()
