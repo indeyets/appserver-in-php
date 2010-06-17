@@ -10,7 +10,7 @@ pake_task('demo');
 
 function run_install()
 {
-    pake_superuser_sh('pear install -f AppServer_backport52-0.2.1.tgz');
+    pake_superuser_sh('pear install -f AppServer_backport52-0.2.2.tgz');
 }
 
 function run_demo()

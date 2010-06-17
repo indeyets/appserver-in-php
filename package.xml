@@ -27,10 +27,10 @@
         <active>yes</active>
     </contributor>
 
-    <date>2010-05-05</date>
+    <date>2010-06-17</date>
     <version>
-        <release>0.2.1</release>
-        <api>0.2.1</api>
+        <release>0.2.2</release>
+        <api>0.2.2</api>
     </version>
     <stability>
         <release>stable</release>
@@ -38,8 +38,10 @@
     </stability>
     <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
     <notes>
-        - added Logger middleware (apache Common Log compatible)
-        - fixed typo in Session middleware
+        - Middleware/PHP_Compat: added support for files uploaded to array-vars (Justin Forest)
+        - Applications can return streams instead of strings as response-body
+        - FileServe doesn't cache files anymore
+        - FileServe returns files as streams
     </notes>
 
     <contents>
@@ -183,6 +185,22 @@
     </phprelease>
 
     <changelog>
+        <release>
+            <date>2010-05-05</date>
+            <version>
+                <release>0.2.1</release>
+                <api>0.2.1</api>
+            </version>
+            <stability>
+                <release>stable</release>
+                <api>stable</api>
+            </stability>
+            <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
+            <notes>
+                - added Logger middleware (apache Common Log compatible)
+                - fixed typo in Session middleware
+            </notes>
+        </release>
         <release>
             <date>2010-04-13</date>
             <version>
