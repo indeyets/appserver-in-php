@@ -88,6 +88,7 @@ class Server implements \MFS\AppServer\iProtocol
         if (is_string($response_data[2])) {
             $this->write($response_data[2]);
         } elseif (is_resource($response_data[2])) {
+            fseek($response_data[2], 0);
             while(!feof($response_data[2])) {
                 $this->write(fread($response_data[2], 1024));
             }
