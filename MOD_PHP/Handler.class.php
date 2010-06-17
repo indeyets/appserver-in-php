@@ -50,6 +50,7 @@ class MFS_AppServer_MOD_PHP_Handler implements MFS_AppServer_iHandler
             if (is_string($result[2])) {
                 echo $result[2];
             } elseif (is_resource($result[2])) {
+                fseek($result[2], 0);
                 while(!feof($result[2])) {
                     $this->write(fread($result[2], 1024));
                 }

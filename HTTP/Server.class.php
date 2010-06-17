@@ -23,6 +23,7 @@ class MFS_AppServer_HTTP_Server implements MFS_AppServer_iProtocol
 
         // response is stream
         if (is_resource($response_data[2])) {
+            fseek($response_data[2], 0);
             while (!feof($response_data[2])) {
                 $this->write(fread($response_data[2], 1024));
             }
