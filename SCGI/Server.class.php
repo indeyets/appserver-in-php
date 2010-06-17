@@ -81,10 +81,15 @@ class MFS_AppServer_SCGI_Server implements MFS_AppServer_iProtocol
 
         $response->sendHeaders();
 
-        if (!is_resource($response_data[2]))
-            $this->write($response_data[2]); // body
-        else while(!feof($response_data[2]))
-            $this->write(fread($response_data[2], 1024));
+        // body
+        if (is_string($response_data[2])) {
+            $this->write($response_data[2]);
+        } elseif (is_resource($response_data[2])) {
+            while(!feof($response_data[2])) {
+                $this->write(fread($response_data[2], 1024));
+            }
+            fclose($response_data[2]);
+        }
     }
 
     public function getHeaders()
