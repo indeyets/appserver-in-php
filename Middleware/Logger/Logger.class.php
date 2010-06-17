@@ -59,7 +59,13 @@ class MFS_AppServer_Middleware_Logger
         // gather post-request data
         $data['%>s'] = strval($result[0]);
 
-        $len = strlen($result[2]);
+        if (is_string($result[2])) {
+            $len = strlen($result[2]);
+        } elseif (is_resource($result[2])) {
+            $stat = fstat($result[2]);
+            $len = $stat['size'];
+        }
+
         $data['%b'] = ($len == 0 ? '-' : strval($len));
 
         // output data
