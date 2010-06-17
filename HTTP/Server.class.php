@@ -16,14 +16,20 @@ class Server implements \MFS\AppServer\iProtocol
             $response .= $response_data[1][$i].': '.$response_data[1][++$i]."\r\n";
         }
         $response .= "\r\n";
-        if (!is_resource($response_data[2]))
+
+        // reponse is string
+        if (is_string($response_data[2]))
             $response .= $response_data[2];
 
         $this->write($response); // body
 
-        if (is_resource($response_data[2]))
-            while (!feof($response_data[2]))
+        // response is stream
+        if (is_resource($response_data[2])) {
+            while (!feof($response_data[2])) {
                 $this->write(fread($response_data[2], 1024));
+            }
+            fclose($response_data[2]);
+        }
     }
 
     public function readRequest($stream)
