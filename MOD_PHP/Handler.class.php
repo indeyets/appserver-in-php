@@ -39,6 +39,7 @@ class Handler implements \MFS\AppServer\iHandler
 
             $result = call_user_func($app, $context);
 
+            // headers
             $response = new Response();
             $response->setStatus($result[0]);
             for ($i = 0, $cnt = count($result[1]); $i < $cnt; $i++) {
@@ -46,7 +47,15 @@ class Handler implements \MFS\AppServer\iHandler
             }
             unset($response);
 
-            echo $result[2];
+            // body
+            if (is_string($result[2])) {
+                echo $result[2];
+            } elseif (is_resource($result[2])) {
+                while(!feof($result[2])) {
+                    $this->write(fread($result[2], 1024));
+                }
+                fclose($result[2]);
+            }
             unset($result);
 
             $this->log("-> done with request");
