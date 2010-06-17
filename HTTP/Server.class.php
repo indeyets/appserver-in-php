@@ -39,7 +39,7 @@ class MFS_AppServer_HTTP_Server implements MFS_AppServer_iProtocol
 
         if (extension_loaded('httpparser')) {
             $parser = new HttpParser();
-            $parser->execute($_headers_str, 0);
+            $parser->execute($_headers_str."\r\n", 0);
             $this->headers = $parser->getEnvironment();
             unset($parser);
         } else {
