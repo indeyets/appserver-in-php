@@ -6,17 +6,12 @@ class FileServe
 {
     private $path;
 
-    private $cache = array();
-    private $cache_size = 0;
-    private $actual_cache_size = 0;
-
-    public function __construct($path, $cache_size = 0)
+    public function __construct($path)
     {
         if (!is_dir($path))
             throw new \Exception('"'.$path.'" is not a directory');
 
         $this->path = $path;
-        $this->cache_size = $cache_size;
     }
 
     public function __invoke($ctx)
@@ -37,26 +32,14 @@ class FileServe
 
     private function serve($path, $req_etag, $req_lastmod)
     {
-        if (isset($this->cache[$path])) {
-            list($data, $mtime, $etag) = $this->cache[$path];
-        } else {
-            $data = file_get_contents($path);
-            $mtime = gmdate('D, d M Y H:i:s', filemtime($path)).' GMT';
-            $etag = hash('sha1', $data.$mtime);
+        $stream = fopen($path, 'rb');
+        $mtime = gmdate('D, d M Y H:i:s', filemtime($path)).' GMT';
+        $stat = fstat($stream);
 
-            if (strlen($data) <= $this->cache_size) {
-                foreach ($this->cache as $k => $v) {
-                    if ($this->cache_size >= strlen($data) + $this->actual_cache_size) {
-                        break;
-                    }
-
-                    $this->actual_cache_size -= strlen($v[0]);
-                    unset($this->cache[$k]);
-                }
-
-                $this->cache[$path] = array($data, $mtime, $etag);
-            }
-        }
+        $hash = hash_init('sha1');
+        hash_update_stream($hash, $stream);
+        hash_update($hash, $mtime);
+        $etag = hash_final($hash);
 
         if ($req_etag === $etag)
             return array(304, array(), '');
@@ -66,12 +49,12 @@ class FileServe
 
         $headers = array(
             'Content-Type',     self::getContentType($path),
-            'Content-Length',   strlen($data),
+            'Content-Length',   $stat['size'],
             'Last-Modified',    $mtime,
             'ETag',             $etag,
         );
 
-        return array(200, $headers, $data);
+        return array(200, $headers, $stream);
     }
 
     private static function getContentType($path)
