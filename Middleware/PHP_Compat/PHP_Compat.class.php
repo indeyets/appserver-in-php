@@ -212,7 +212,7 @@ class PHP_Compat
                 $parts = explode('[', $sel, 2);
                 foreach (array_keys($fdata) as $key) {
                     if (count($parts) == 1) {
-                        $_FILES[$parts[0]][$key] = $fdata[$key];
+                        $_FILES[$disposition['name']][$key] = $fdata[$key];
                     } else {
                         eval($code = '$_FILES[' . $parts[0] . '][\'' . $key . '\'][' . $parts[1] . ' = $fdata[\'' . $key . '\'];');
                     }
