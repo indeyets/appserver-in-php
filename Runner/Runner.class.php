@@ -11,9 +11,17 @@ class Runner
         $this->servers = array();
     }
 
-    public function addServer($app_class, array $middlewares, $protocol, $socket, $min_instances = 1, $max_instances = 1)
+    public function addServer($app_class, array $middlewares, $protocol, $socket, $transport = 'Socket', $min_instances = 1, $max_instances = 1)
     {
-        $this->servers[] = array($app_class, $middlewares, $protocol, $socket, $min_instances, $max_instances);
+        $this->servers[] = array(
+            'app' => $app_class,
+            'middlewares' => $middlewares,
+            'protocol' => $protocol,
+            'socket' => $socket,
+            'transport' => $transport,
+            'min_instances' => $min_instances,
+            'max_instances' => $max_instances
+        );
     }
 
     public function go()
@@ -21,16 +29,16 @@ class Runner
         $is_parent = true;
 
         foreach ($this->servers as $server) {
-            $app = new $server[0];
+            $app = new $server['app'];
 
-            foreach (array_reverse($server[1]) as $mw_name) {
+            foreach (array_reverse($server['middlewares']) as $mw_name) {
                 $mw_class = 'MFS\AppServer\Middleware\\'.$mw_name.'\\'.$mw_name;
                 $app = new $mw_class($app);
             }
 
-            $handler = new \MFS\AppServer\DaemonicHandler($server[3], $server[2], 'Socket');
+            $handler = new \MFS\AppServer\DaemonicHandler($server['socket'], $server['protocol'], $server['transport']);
 
-            for ($i = 0; $i < $server[4]; $i++) {
+            for ($i = 0; $i < $server['min_instances']; $i++) {
                 $pid = pcntl_fork();
 
                 if ($pid == -1) {

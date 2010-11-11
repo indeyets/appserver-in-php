@@ -63,7 +63,11 @@ class RunnerApp extends \pakeApp
                 pake_echo_action('load class', $server['app']['class']);
             }
 
-            $runner->addServer($server['app']['class'], $server['app']['middlewares'], $server['protocol'], $server['socket'], $server['min-children'], $server['max-children']);
+            if (!isset($server['transport'])) {
+                $server['transport'] = 'Socket';
+            }
+
+            $runner->addServer($server['app']['class'], $server['app']['middlewares'], $server['protocol'], $server['socket'], $server['transport'], $server['min-children'], $server['max-children']);
             pake_echo_action('register', $server['app']['class'].' server via '.$server['protocol'].' at '.$server['socket'].'. ('.$server['min-children'].'-'.$server['max-children'].' children)');
         }
 
