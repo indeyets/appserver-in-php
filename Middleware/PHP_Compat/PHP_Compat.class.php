@@ -1,6 +1,7 @@
 <?php
 
 namespace MFS\AppServer\Middleware\PHP_Compat;
+use MFS\AppServer\StringStreamKeeper;
 
 class PHP_Compat
 {
@@ -33,6 +34,8 @@ class PHP_Compat
         $context['_COOKIE'] = $ck;
 
         // _POST and _FILES
+        $stream_name = null;
+
         if ($context['env']['REQUEST_METHOD'] == 'POST') {
             $context['_POST'] = array();
             $context['_FILES'] = array();
@@ -71,7 +74,7 @@ class PHP_Compat
         if (isset($_old_stdin)) {
             // remove our "fake" stream
             fclose($context['stdin']);
-            StringStreamKeeper::cleanup();
+            StringStreamKeeper::cleanup($stream_name);
             $context['stdin'] = $_old_stdin;
         }
 

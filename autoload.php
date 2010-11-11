@@ -10,9 +10,12 @@ function autoload($class_name)
         $root = __DIR__.'/';
 
         $files = array(
-            'MFS\AppServer\iHandler'        => $root.'interfaces.php',
-            'MFS\AppServer\iProtocol'       => $root.'interfaces.php',
-            'MFS\AppServer\DaemonicHandler' => $root.'DaemonicHandler.class.php',
+            'MFS\AppServer\iHandler'           => $root.'interfaces.php',
+            'MFS\AppServer\iProtocol'          => $root.'interfaces.php',
+            'MFS\AppServer\DaemonicHandler'    => $root.'DaemonicHandler.class.php',
+
+            'MFS\AppServer\StringStreamKeeper' => $root.'StringStream.class.php',
+            'MFS\AppServer\StringStream'       => $root.'StringStream.class.php',
         );
     }
 

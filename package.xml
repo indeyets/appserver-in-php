@@ -42,6 +42,7 @@
             <file role="php" name="autoload.php" />
             <file role="php" name="DaemonicHandler.class.php" />
             <file role="php" name="interfaces.php" />
+            <file role="php" name="StringStream.class.php" />
             <file role="doc" name="AUTHORS" />
             <file role="doc" name="LICENSE" />
 
@@ -78,7 +79,6 @@
                     <file role="php" name="exceptions.php" />
                     <file role="php" name="Cookies.class.php" />
                     <file role="php" name="PHP_Compat.class.php" />
-                    <file role="php" name="StringStream.class.php" />
                     <file role="doc" name="_readme" install-as="PHP_Compat Middleware.readme" />
                 </dir>
 

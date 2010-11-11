@@ -14,6 +14,9 @@ class Server implements \MFS\AppServer\iProtocol
     private $headers = null;
     private $body = null;
 
+    private $stream_name = null;
+    private $stream = null;
+
     public function writeResponse($response_data)
     {
         $response = 'HTTP/1.0 '.$response_data[0]."\r\n";
@@ -65,22 +68,21 @@ class Server implements \MFS\AppServer\iProtocol
         $headers['SCRIPT_NAME'] = '';
         $headers['CONTENT_LENGTH'] = strlen($this->body);
 
+        if (isset($input['content-type'])) {
+            $headers['CONTENT_TYPE'] = $input['content-type'];
+            unset($input['content-type']);
+        }
+
         $headers['REQUEST_METHOD'] = $input['METHOD'];
         unset($input['METHOD']);
 
-
-        // $this->headers['HTTP_VERSION'] = $this->headers['VERSION'];
-
-        $url = $headers['REQUEST_URI'] = $input['PATH'];
-        unset($input['PATH']);
-
-        if (false === $pos = strpos($url, '?')) {
-            $headers['PATH_INFO'] = $url;
-            $headers['QUERY_STRING'] = '';
-        } else {
-            $headers['PATH_INFO'] = substr($url, 0, $pos);
-            $headers['QUERY_STRING'] = strval(substr($url, $pos + 1));
+        if (isset($input['QUERY'])) {
+            $headers['QUERY_STRING'] = $input['QUERY'];
+            unset($input['QUERY']);
         }
+        $headers['PATH_INFO'] = $input['PATH'];
+        $headers['REQUEST_URI'] = $input['URI'];
+        unset($input['PATH'], $input['URI']);
 
         if (false === $pos = strpos($input['host'], ':')) {
             $host = $input['host'];
@@ -118,6 +120,15 @@ class Server implements \MFS\AppServer\iProtocol
     {
         $this->headers = null;
         $this->body = null;
+
+        if (null !== $this->stream_name) {
+            if (is_resource($this->stream)) {
+                fclose($this->stream);
+                $this->stream = null;
+            }
+            \MFS\AppServer\StringStreamKeeper::cleanup($this->stream_name);
+            $this->stream_name = null;
+        }
     }
 
     public function getHeaders()
@@ -127,6 +138,11 @@ class Server implements \MFS\AppServer\iProtocol
 
     public function getStdin()
     {
+        if (null === $this->stream_name) {
+            $this->stream_name = \MFS\AppServer\StringStreamKeeper::keep($this->body);
+            $this->stream = fopen($this->stream_name, 'r');
+        }
+
         return $this->stream;
     }
 

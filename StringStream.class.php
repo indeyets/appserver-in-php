@@ -1,26 +1,33 @@
 <?php
-namespace MFS\AppServer\Middleware\PHP_Compat;
+namespace MFS\AppServer;
 
 class StringStreamKeeper
 {
     const STREAM_NAME = 'mfsstring';
-    private static $string = null;
+    private static $strings = null;
 
     public static function keep($string)
     {
-        self::$string = $string;
+        if (null === self::$strings) {
+            self::$strings = array();
+        }
 
-        return self::STREAM_NAME.'://only_one';
+        $name = hash('sha1', $string);
+        self::$strings[$name] = $string;
+
+        return self::STREAM_NAME.'://'.$name;
     }
 
-    public static function cleanup()
+    public static function cleanup($_name)
     {
-        self::$string = null;
+        $name = substr($_name, strlen(self::STREAM_NAME.'://'));
+        unset(self::$strings[$name]);
     }
 
-    public static function get()
+    public static function get($_name)
     {
-        return self::$string;
+        $name = substr($_name, strlen(self::STREAM_NAME.'://'));
+        return self::$strings[$name];
     }
 }
 
@@ -35,7 +42,7 @@ class StringStream
             throw new InvalidArgumentException('StringStream is a read-only stream');
         }
 
-        $this->buffer = StringStreamKeeper::get();
+        $this->buffer = StringStreamKeeper::get($path);
         $this->position = 0;
 
         return true;
