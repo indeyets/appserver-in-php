@@ -49,41 +49,57 @@ class Server implements \MFS\AppServer\iProtocol
         list($this->sender, $this->conn_id, $this->path, $rest) = explode(' ', $message, 4);
 
         $hd = self::parse_netstring($rest);
-        $this->headers = json_decode($hd[0], true);
-
-        $this->headers['REQUEST_METHOD'] = $this->headers['METHOD'];
-        $this->headers['HTTP_VERSION'] = $this->headers['VERSION'];
-
-        $url = $this->headers['REQUEST_URI'] = $this->headers['PATH'];
-        if (false === $pos = strpos($url, '?')) {
-            $this->headers['PATH_INFO'] = $url;
-            $this->headers['QUERY_STRING'] = '';
-        } else {
-            $this->headers['PATH_INFO'] = substr($url, 0, $pos);
-            $this->headers['QUERY_STRING'] = strval(substr($url, $pos + 1));
-        }
-
-        $this->headers['SERVER_SOFTWARE'] = 'appserver-in-php';
-        $this->headers['GATEWAY_INTERFACE'] = 'CGI/1.1';
-        $this->headers['SCRIPT_NAME'] = '';
-
-        if (false === $pos = strpos($this->headers['host'], ':')) {
-            $host = $this->headers['host'];
-            $port = 80;
-        } else {
-            $host = substr($this->headers['host'], 0, $pos);
-            $port = substr($this->headers['host'], $pos + 1);
-        }
-
-        $this->headers['HTTP_HOST'] = $host.':'.$port;
-        $this->headers['SERVER_NAME'] = $host;
-        $this->headers['SERVER_PORT'] = strval($port);
-
-        ksort($this->headers);
+        $_headers = json_decode($hd[0], true);
 
         $rest = $hd[1];
         $hd = self::parse_netstring($rest);
         $this->body = $hd[0];
+
+        $this->headers = $this->processHeaders($_headers);
+    }
+
+    private function processHeaders($input)
+    {
+        $headers['SERVER_SOFTWARE'] = 'appserver-in-php';
+        $headers['GATEWAY_INTERFACE'] = 'CGI/1.1';
+        $headers['SCRIPT_NAME'] = '';
+        $headers['CONTENT_LENGTH'] = strlen($this->body);
+
+        $headers['REQUEST_METHOD'] = $input['METHOD'];
+        unset($input['METHOD']);
+
+
+        // $this->headers['HTTP_VERSION'] = $this->headers['VERSION'];
+
+        $url = $headers['REQUEST_URI'] = $input['PATH'];
+        unset($input['PATH']);
+
+        if (false === $pos = strpos($url, '?')) {
+            $headers['PATH_INFO'] = $url;
+            $headers['QUERY_STRING'] = '';
+        } else {
+            $headers['PATH_INFO'] = substr($url, 0, $pos);
+            $headers['QUERY_STRING'] = strval(substr($url, $pos + 1));
+        }
+
+        if (false === $pos = strpos($input['host'], ':')) {
+            $host = $input['host'];
+            $port = 80;
+        } else {
+            $host = substr($input['host'], 0, $pos);
+            $port = substr($input['host'], $pos + 1);
+        }
+
+        $headers['SERVER_NAME'] = $host;
+        $headers['SERVER_PORT'] = strval($port);
+
+        foreach ($input as $k => $v) {
+            $headers['HTTP_'.strtoupper(str_replace('-', '_', $k))] = $v;
+        }
+
+        ksort($headers);
+
+        return $headers;
     }
 
     public static function parse_netstring($ns)
