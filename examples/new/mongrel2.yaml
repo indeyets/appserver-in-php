@@ -1,0 +1,12 @@
+---
+servers:
+  -
+    protocol: Mongrel2
+    transport: ZeroMQ
+    socket: ['82209006-86FF-4982-B5EA-D1E29E55D481', 'tcp://127.0.0.1:9997', 'tcp://127.0.0.1:9996']
+    min-children: 3
+    max-children: 3
+    app:
+      class: MyApp
+      file: MyApp.class.php
+      middlewares: [PHP_Compat]

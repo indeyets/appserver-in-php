@@ -22,8 +22,8 @@
 
     <date>2010-06-17</date>
     <version>
-        <release>0.2.2</release>
-        <api>0.2.2</api>
+        <release>0.2.3</release>
+        <api>0.2.3</api>
     </version>
     <stability>
         <release>stable</release>
@@ -65,6 +65,11 @@
                 <file role="php" name="Cookies.class.php" />
                 <file role="php" name="Handler.class.php" />
                 <file role="php" name="Response.class.php" />
+            </dir>
+
+            <dir name="Mongrel2">
+                <file role="php" name="autoload.php" />
+                <file role="php" name="Server.class.php" />
             </dir>
 
             <dir name="Middleware">
@@ -117,6 +122,7 @@
                 <file role="php" name="LibEventStream.class.php" />
                 <file role="php" name="LibEventUnbuffered.class.php" />
                 <file role="php" name="Socket.class.php" />
+                <file role="php" name="ZeroMQ.class.php" />
             </dir>
 
             <dir name="Apps">

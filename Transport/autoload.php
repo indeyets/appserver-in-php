@@ -17,6 +17,7 @@ function autoload($class_name)
             __NAMESPACE__.'\LibEventStream'     => __DIR__.'/LibEventStream.class.php',
             __NAMESPACE__.'\LibEventUnbuffered' => __DIR__.'/LibEventUnbuffered.class.php',
             __NAMESPACE__.'\Socket'             => __DIR__.'/Socket.class.php',
+            __NAMESPACE__.'\ZeroMQ'             => __DIR__.'/ZeroMQ.class.php',
         );
     }
 
