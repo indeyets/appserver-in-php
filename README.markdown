@@ -12,12 +12,26 @@ new garbage collector for cyclic references, which is critical for long-running
 apps. We also have a special "backported" version for those of you, who are stuck 
 with PHP 5.2.
 
+Instalation
+-----------
+
 You can get latest release using PEAR:
 
     pear channel-discover pear.indeyets.pp.ru
     pear install indeyets/AppServer
 
-Or, if you need version backported to php 5.2:
+Or, if you need version backported to php 5.2 (unsupported):
 
     pear channel-discover pear.indeyets.pp.ru
     pear install indeyets/AppServer_backport52
+
+
+Usage
+-----
+
+Take a look at [example](https://github.com/indeyets/appserver-in-php/tree/master/examples/new/).
+
+* MyApp.class.php — application class. "__invoke()" method is the entry point
+* config.yaml — defines that this application should be served both as HTTP and SCGI
+
+run with "aip app path/to/config.yaml" command
