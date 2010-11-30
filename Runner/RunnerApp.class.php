@@ -44,6 +44,10 @@ class RunnerApp extends \pakeApp
     {
         if (isset($args[0])) {
             $config_file = $args[0];
+
+            if (is_dir($config_file)) {
+                $config_file = realpath($config_file.'/config.yaml');
+            }
         } else {
             $config_file = getcwd().'/config.yaml';
         }
@@ -56,18 +60,13 @@ class RunnerApp extends \pakeApp
 
         $config = \pakeYaml::loadFile($config_file);
 
-        $runner = new Runner();
+        $runner = new Runner(dirname($config_file));
         foreach ($config['servers'] as $server) {
-            if (!class_exists($server['app']['class'])) {
-                require dirname($config_file).'/'.$server['app']['file'];
-                pake_echo_action('load class', $server['app']['class']);
-            }
-
             if (!isset($server['transport'])) {
                 $server['transport'] = 'Socket';
             }
 
-            $runner->addServer($server['app']['class'], $server['app']['middlewares'], $server['protocol'], $server['socket'], $server['transport'], $server['min-children'], $server['max-children']);
+            $runner->addServer($server);
             pake_echo_action('register', $server['app']['class'].' server via '.$server['protocol'].' at '.$server['socket'].'. ('.$server['min-children'].'-'.$server['max-children'].' children)');
         }
 
