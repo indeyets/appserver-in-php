@@ -2,10 +2,14 @@
 
 namespace MFS\AppServer\Runner;
 
+declare(ticks=1);
+
 class Runner
 {
     private $servers;
     private $cwd;
+
+    private $kids = array();
 
     public function __construct($cwd)
     {
@@ -20,8 +24,6 @@ class Runner
 
     public function go()
     {
-        $_servers = array();
-
         foreach ($this->servers as $server) {
             $handler = new \MFS\AppServer\DaemonicHandler($server['socket'], $server['protocol'], $server['transport']);
 
@@ -30,36 +32,41 @@ class Runner
 
                 // store, how we started child process
                 // (so, that later we can restart it with same settings)
-                $_servers[$pid] = array($handler, $server['app']);
+                $this->kids[$pid] = array($handler, $server['app']);
             }
         }
 
-        // should be called one time for each child?
-        $status = null;
         while (true) {
+            pcntl_signal(SIGTERM, array($this, 'sigterm'), false);
+            pcntl_signal(SIGINT,  array($this, 'sigterm'), false);
+            pcntl_signal(SIGHUP,  array($this, 'sighup'),  false);
+
+            $status = null;
             $old_pid = pcntl_wait($status);
 
             if (0 === $old_pid) {
-                echo "[no children]\n";
+                echo "[no workers]\n";
                 return;
             }
 
             if (-1 === $old_pid) {
-                echo "[pcntl_wait error]\n";
-                return;
+                continue; // signal arrived
             }
 
-            echo "[restarting child]\n";
+            echo "[Restarting Worker]\n";
+            pcntl_signal(SIGTERM, SIG_DFL);
+            pcntl_signal(SIGINT,  SIG_DFL);
+            pcntl_signal(SIGHUP,  SIG_DFL);
 
-            list($handler, $app) = $_servers[$old_pid];
-            unset($_servers[$old_pid]);
+            list($handler, $app) = $this->kids[$old_pid];
+            unset($this->kids[$old_pid]);
 
             $pid = $this->startWorker($handler, $app);
-            $_servers[$pid] = array($handler, $app);
+            $this->kids[$pid] = array($handler, $app);
         }
     }
 
-    public function startWorker($handler, $app)
+    protected function startWorker($handler, $app)
     {
         $pid = pcntl_fork();
 
@@ -75,7 +82,7 @@ class Runner
         return $pid;
     }
 
-    public function worker($handler, $app_data)
+    protected function worker($handler, $app_data)
     {
         if (!class_exists($app_data['class'])) {
             require $this->cwd.'/'.$app_data['file'];
@@ -89,8 +96,34 @@ class Runner
         }
 
         try {
+            pcntl_signal(SIGUSR1, array($handler, 'graceful'), false);
             $handler->serve($app);
+            pcntl_signal(SIGUSR1,  SIG_DFL);
         } catch (\Exception $e) {
+        }
+    }
+
+
+    protected function sigterm($signo)
+    {
+        pcntl_signal(SIGTERM, SIG_DFL);
+        pcntl_signal(SIGHUP,  SIG_DFL);
+
+        echo "\n[Stopping Workers]\n";
+        foreach ($this->kids as $pid => $data) {
+            posix_kill($pid, SIGTERM);
+            unset($this->kids[$pid]);
+        }
+
+        die();
+    }
+
+    protected function sighup($signo)
+    {
+        echo "[Reload requested]\n";
+
+        foreach ($this->kids as $pid => $data) {
+            posix_kill($pid, SIGUSR1);
         }
     }
 }
