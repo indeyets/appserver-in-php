@@ -4,6 +4,9 @@ namespace MFS\AppServer;
 
 class DaemonicHandler implements iHandler
 {
+    private $in_request = false;
+    private $should_stop = false;
+
     protected $protocol = null;
     private $transport = null;
     private $app = null;
@@ -47,6 +50,8 @@ class DaemonicHandler implements iHandler
 
     public function serve($app)
     {
+        declare(ticks=1);
+
         if (!is_callable($app))
             throw new InvalidArgumentException('not a valid app');
 
@@ -71,6 +76,7 @@ class DaemonicHandler implements iHandler
     public function onRequest($stream)
     {
         $this->log("got request");
+        $this->in_request = true;
 
         if (false === $this->protocol->readRequest($stream)) {
             return;
@@ -99,12 +105,29 @@ class DaemonicHandler implements iHandler
 
         $this->protocol->doneWithRequest();
         $this->log("-> done with request");
+        $this->in_request = false;
 
         gc_collect_cycles();
+
+        if ($this->should_stop) {
+            die();
+        }
     }
 
     public function log($message)
     {
         echo $message."\n";
+    }
+
+
+    // signal handler
+    public function graceful()
+    {
+        if ($this->in_request) {
+            $this->should_stop = true;
+            return;
+        }
+
+        die();
     }
 }
