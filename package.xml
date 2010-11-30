@@ -165,6 +165,9 @@
             <extension>
               <name>pcntl</name>
             </extension>
+            <extension>
+              <name>posix</name>
+            </extension>
         </optional>
     </dependencies>
 

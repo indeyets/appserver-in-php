@@ -2,6 +2,9 @@
 <?php
 namespace MFS\AppServer\Runner;
 
+if (!extension_loaded('posix') or !extension_loaded('pcntl'))
+    die('"aip" tool requires "posix" and "pcntl" extensions of PHP');
+
 require 'AppServer/Runner/autoload.php';
 
 $runner = RunnerApp::get_instance();
