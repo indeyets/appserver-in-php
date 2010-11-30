@@ -15,6 +15,10 @@ class Socket extends BaseTransport
         $this->in_loop = true;
         while ($this->in_loop) {
             $conn = stream_socket_accept($this->socket, -1);
+
+            if (false === $conn)
+                return;
+
             self::log('Socket', 'accepted');
             // stream_set_blocking($socket, 0);
 
