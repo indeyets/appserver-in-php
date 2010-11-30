@@ -20,8 +20,6 @@ class Runner
 
     public function go()
     {
-        $is_parent = true;
-
         foreach ($this->servers as $server) {
             $handler = new \MFS\AppServer\DaemonicHandler($server['socket'], $server['protocol'], $server['transport']);
 
@@ -32,34 +30,35 @@ class Runner
                     die('could not fork');
                 } elseif ($pid === 0) {
                     // we are the child
-                    $is_parent = false;
-
-                    if (!class_exists($server['app']['class'])) {
-                        require $this->cwd.'/'.$server['app']['file'];
-                    }
-
-                    $app = new $server['app']['class'];
-
-                    foreach (array_reverse($server['app']['middlewares']) as $mw_name) {
-                        $mw_class = 'MFS\AppServer\Middleware\\'.$mw_name.'\\'.$mw_name;
-                        $app = new $mw_class($app);
-                    }
-
-                    try {
-                        $handler->serve($app);
-                    } catch (\Exception $e) {
-                    }
-                    die();
+                    $this->worker($handler, $server['app']);
+                    die('worker died');
                 } else {
                     // parent-process, just continue
                 }
             }
         }
 
-        if ($is_parent) {
-            // should be called one time for each child?
-            $status = null;
-            pcntl_wait($status); //Protect against Zombie children
+        // should be called one time for each child?
+        $status = null;
+        pcntl_wait($status); //Protect against Zombie children
+    }
+
+    public function worker($handler, $app_data)
+    {
+        if (!class_exists($app_data['class'])) {
+            require $this->cwd.'/'.$app_data['file'];
+        }
+
+        $app = new $app_data['class'];
+
+        foreach (array_reverse($app_data['middlewares']) as $mw_name) {
+            $mw_class = 'MFS\AppServer\Middleware\\'.$mw_name.'\\'.$mw_name;
+            $app = new $mw_class($app);
+        }
+
+        try {
+            $handler->serve($app);
+        } catch (\Exception $e) {
         }
     }
 }
