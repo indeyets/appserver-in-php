@@ -30,7 +30,7 @@ class Runner
 
                 // store, how we started child process
                 // (so, that later we can restart it with same settings)
-                $_servers[$pid] = array($handler, $server);
+                $_servers[$pid] = array($handler, $server['app']);
             }
         }
 
@@ -51,11 +51,11 @@ class Runner
 
             echo "[restarting child]\n";
 
-            list($handler, $server) = $_servers[$old_pid];
+            list($handler, $app) = $_servers[$old_pid];
             unset($_servers[$old_pid]);
 
-            $pid = $this->startWorker($handler, $server['app']);
-            $_servers[$pid] = array($handler, $server);
+            $pid = $this->startWorker($handler, $app);
+            $_servers[$pid] = array($handler, $app);
         }
     }
 
