@@ -20,27 +20,59 @@ class Runner
 
     public function go()
     {
+        $_servers = array();
+
         foreach ($this->servers as $server) {
             $handler = new \MFS\AppServer\DaemonicHandler($server['socket'], $server['protocol'], $server['transport']);
 
             for ($i = 0; $i < $server['min-children']; $i++) {
-                $pid = pcntl_fork();
+                $pid = $this->startWorker($handler, $server['app']);
 
-                if ($pid == -1) {
-                    die('could not fork');
-                } elseif ($pid === 0) {
-                    // we are the child
-                    $this->worker($handler, $server['app']);
-                    die('worker died');
-                } else {
-                    // parent-process, just continue
-                }
+                // store, how we started child process
+                // (so, that later we can restart it with same settings)
+                $_servers[$pid] = array($handler, $server);
             }
         }
 
         // should be called one time for each child?
         $status = null;
-        pcntl_wait($status); //Protect against Zombie children
+        while (true) {
+            $old_pid = pcntl_wait($status);
+
+            if (0 === $old_pid) {
+                echo "[no children]\n";
+                return;
+            }
+
+            if (-1 === $old_pid) {
+                echo "[pcntl_wait error]\n";
+                return;
+            }
+
+            echo "[restarting child]\n";
+
+            list($handler, $server) = $_servers[$old_pid];
+            unset($_servers[$old_pid]);
+
+            $pid = $this->startWorker($handler, $server['app']);
+            $_servers[$pid] = array($handler, $server);
+        }
+    }
+
+    public function startWorker($handler, $app)
+    {
+        $pid = pcntl_fork();
+
+        if ($pid == -1) {
+            die('could not fork');
+        } elseif ($pid === 0) {
+            // we are the child
+            $this->worker($handler, $app);
+            die('worker died');
+        }
+
+        // This is PARENT process
+        return $pid;
     }
 
     public function worker($handler, $app_data)
