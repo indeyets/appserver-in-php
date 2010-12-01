@@ -19,11 +19,17 @@
         <email>korchasa@gmail.com</email>
         <active>yes</active>
     </contributor>
+    <contributor>
+        <name>Justin Forest</name>
+        <user></user>
+        <email>justin.forest@gmail.com</email>
+        <active>yes</active>
+    </contributor>
 
-    <date>2010-06-17</date>
+    <date>2010-12-01</date>
     <version>
-        <release>0.2.3</release>
-        <api>0.2.3</api>
+        <release>0.3.0</release>
+        <api>0.3.0</api>
     </version>
     <stability>
         <release>stable</release>
@@ -31,10 +37,10 @@
     </stability>
     <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
     <notes>
-        - Middleware/PHP_Compat: added support for files uploaded to array-vars (Justin Forest)
-        - Applications can return streams instead of strings as response-body
-        - FileServe doesn't cache files anymore
-        - FileServe returns files as streams
+        - Mongrel2 web-server support. see http://mongrel2.org/home
+        - "aip" tool supports SIGTERM, SIGINT and SIGHUP (graceful restart) signals
+        - StringStream class is reusable now
+        - use unquoted field-name, if file is uploaded to non-array var. closes gh-6 bug
     </notes>
 
     <contents>
@@ -189,6 +195,24 @@
     </phprelease>
 
     <changelog>
+        <release>
+            <date>2010-06-17</date>
+            <version>
+                <release>0.2.2</release>
+                <api>0.2.2</api>
+            </version>
+            <stability>
+                <release>stable</release>
+                <api>stable</api>
+            </stability>
+            <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
+            <notes>
+                - Middleware/PHP_Compat: added support for files uploaded to array-vars (Justin Forest)
+                - Applications can return streams instead of strings as response-body
+                - FileServe doesn't cache files anymore
+                - FileServe returns files as streams
+            </notes>            
+        </release>
         <release>
             <date>2010-05-05</date>
             <version>
