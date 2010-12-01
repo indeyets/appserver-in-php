@@ -20,12 +20,15 @@ class MyApp
         if (!isset($context['_COOKIE']['Hello']))
             $context['_COOKIE']->setcookie('Hello', 'world!');
 
-        $status = 200;
-        $headers = array('Conent-type', 'text/html; charset=utf-8');
         // replacing {data} in the "template" by our dynamic string and sending it out
         $body = str_replace('{data}', $this->prepareData($context), $this->tpl);
 
-        return array($status, $headers, $body);
+        $headers = array(
+            'Conent-type', 'text/html; charset=utf-8',
+            'Content-length', strlen($body)
+        );
+
+        return array(200, $headers, $body);
     }
 
     private function prepareData($context)
