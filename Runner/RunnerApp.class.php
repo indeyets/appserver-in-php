@@ -70,7 +70,7 @@ class RunnerApp extends \pakeApp
             pake_echo_action('register', $server['app']['class'].' server via '.$server['protocol'].' at '.$server['socket'].'. ('.$server['min-children'].'-'.$server['max-children'].' children)');
         }
 
-        pake_echo_comment('Starting server…');
+        pake_echo_comment('Starting workers…');
         $runner->go();
     }
 
