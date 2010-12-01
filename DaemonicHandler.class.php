@@ -28,8 +28,6 @@ class DaemonicHandler implements iHandler
         $this->setTransport(new $transport_class($socket_url, array($this, 'onRequest')));
         $protocol_class = 'MFS\\AppServer\\'.$protocol_name.'\\Server';
         $this->setProtocol(new $protocol_class);
-
-        $this->log('Initialized Daemonic Handler');
     }
 
     public function setProtocol($protocol)
@@ -45,7 +43,6 @@ class DaemonicHandler implements iHandler
     public function __destruct()
     {
         unset($this->protocol);
-        $this->log("DeInitialized Application: ".get_class($this));
     }
 
     public function serve($app)
@@ -58,24 +55,16 @@ class DaemonicHandler implements iHandler
         $this->app = null;
         $this->app = $app;
 
-        $this->log('Serving '.(is_object($this->app) ? get_class($this->app) : $this->app).' app…');
-        $this->log('Protocol '.get_class($this->protocol).' protocol…');
-        $this->log('Transport '.get_class($this->transport).' transport…');
-        $this->log("Entering runloop…");
-
         try {
             $this->transport->loop();
         } catch (\Exception $e) {
             $this->protocol->doneWithRequest();
             $this->log('[Exception] '.get_class($e).': '.$e->getMessage());
         }
-
-        $this->log("Left runloop…");
     }
 
     public function onRequest($stream)
     {
-        $this->log("got request");
         $this->in_request = true;
 
         if (false === $this->protocol->readRequest($stream)) {
@@ -90,8 +79,6 @@ class DaemonicHandler implements iHandler
             }
         );
 
-        $this->log("-> calling handler");
-
         $result = call_user_func($this->app, $context);
         unset($context);
 
@@ -104,7 +91,6 @@ class DaemonicHandler implements iHandler
         unset($result);
 
         $this->protocol->doneWithRequest();
-        $this->log("-> done with request");
         $this->in_request = false;
 
         gc_collect_cycles();

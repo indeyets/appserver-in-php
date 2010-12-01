@@ -19,12 +19,7 @@ class Socket extends BaseTransport
             if (false === $conn)
                 return;
 
-            self::log('Socket', 'accepted');
-            // stream_set_blocking($socket, 0);
-
-            self::log('Socket', 'callback begin');
             call_user_func($this->callback, $conn);
-            self::log('Socket', 'callback end');
         }
     }
 
