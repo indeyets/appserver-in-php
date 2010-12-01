@@ -4,7 +4,7 @@ namespace MFS\AppServer\Runner;
 
 class RunnerApp extends \pakeApp
 {
-    const VERSION = '0.3.0';
+    const VERSION = '0.3.1';
 
     protected function __construct()
     {

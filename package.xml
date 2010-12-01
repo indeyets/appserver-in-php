@@ -26,10 +26,10 @@
         <active>yes</active>
     </contributor>
 
-    <date>2010-12-01</date>
+    <date>2010-12-02</date>
     <version>
-        <release>0.3.0</release>
-        <api>0.3.0</api>
+        <release>0.3.1</release>
+        <api>0.3.1</api>
     </version>
     <stability>
         <release>stable</release>
@@ -37,10 +37,7 @@
     </stability>
     <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
     <notes>
-        - Mongrel2 web-server support. see http://mongrel2.org/home
-        - "aip" tool supports SIGTERM, SIGINT and SIGHUP (graceful restart) signals
-        - StringStream class is reusable now
-        - use unquoted field-name, if file is uploaded to non-array var. closes gh-6 bug
+        - Better handling of slow requests
     </notes>
 
     <contents>
@@ -195,6 +192,24 @@
     </phprelease>
 
     <changelog>
+        <release>
+            <date>2010-12-01</date>
+            <version>
+                <release>0.3.0</release>
+                <api>0.3.0</api>
+            </version>
+            <stability>
+                <release>stable</release>
+                <api>stable</api>
+            </stability>
+            <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
+            <notes>
+                - Mongrel2 web-server support. see http://mongrel2.org/home
+                - "aip" tool supports SIGTERM, SIGINT and SIGHUP (graceful restart) signals
+                - StringStream class is reusable now
+                - use unquoted field-name, if file is uploaded to non-array var. closes gh-6 bug
+            </notes>
+        </release>
         <release>
             <date>2010-06-17</date>
             <version>
