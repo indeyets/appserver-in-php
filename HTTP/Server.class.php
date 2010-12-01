@@ -37,7 +37,9 @@ class Server implements \MFS\AppServer\iProtocol
     {
         $this->stream = $stream;
 
-        $_headers_str = stream_get_line($this->stream, 0, "\r\n\r\n");
+        do {
+            $_headers_str = stream_get_line($this->stream, 0, "\r\n\r\n");
+        } while (false === $_headers_str);
 
         if (extension_loaded('httpparser')) {
             $parser = new \HttpParser();
