@@ -39,6 +39,11 @@ class Server implements \MFS\AppServer\iProtocol
 
         do {
             $_headers_str = stream_get_line($this->stream, 0, "\r\n\r\n");
+
+            if ('' === $_headers_str) {
+                // client just disconnected
+                return false;
+            }
         } while (false === $_headers_str);
 
         if (extension_loaded('httpparser')) {
