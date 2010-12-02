@@ -58,6 +58,11 @@ class Server implements \MFS\AppServer\iProtocol
         $hd = self::parse_netstring($rest);
         $this->body = $hd[0];
 
+        if ($_headers['METHOD'] == 'JSON' and $this->body == '{"type":"disconnect"}') {
+            // client disconnected. we don't care (for now…)
+            return false;
+        }
+
         $this->headers = $this->processHeaders($_headers);
     }
 
