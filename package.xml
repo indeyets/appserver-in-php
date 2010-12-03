@@ -26,10 +26,10 @@
         <active>yes</active>
     </contributor>
 
-    <date>2010-12-02</date>
+    <date>2010-12-03</date>
     <version>
-        <release>0.3.1</release>
-        <api>0.3.1</api>
+        <release>0.3.2</release>
+        <api>0.3.2</api>
     </version>
     <stability>
         <release>stable</release>
@@ -37,7 +37,9 @@
     </stability>
     <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
     <notes>
-        - Better handling of slow requests
+        - Handle internal notifications from Mongrel2 correctly
+        - Correctly handle premature disconnection of HTTP-clients
+        - Check if session.save_path is writable before writing anything there
     </notes>
 
     <contents>
@@ -192,6 +194,21 @@
     </phprelease>
 
     <changelog>
+        <release>
+            <date>2010-12-02</date>
+            <version>
+                <release>0.3.1</release>
+                <api>0.3.1</api>
+            </version>
+            <stability>
+                <release>stable</release>
+                <api>stable</api>
+            </stability>
+            <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
+            <notes>
+                - Better handling of slow requests
+            </notes>
+        </release>
         <release>
             <date>2010-12-01</date>
             <version>
