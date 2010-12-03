@@ -20,6 +20,14 @@ class FileStorage implements Storage
             ),
             $options
         );
+
+        $dir = $this->options['save_path'];
+
+        if (empty($dir) or !is_dir($dir))
+            throw new RuntimeException('"'.$dir.'" is not a valid directory');
+
+        if (!is_writable($dir))
+            throw new RuntimeException('Noe enough rights to write to "'.$dir.'"');
     }
 
     public function open($name)
@@ -83,12 +91,6 @@ class FileStorage implements Storage
     private function validateSessionFile()
     {
         $dir = $this->options['save_path'];
-
-        if (empty($dir) or !is_dir($dir))
-            throw new RuntimeException('"'.$dir.'" is not a valid directory');
-
-        if (!is_writable($dir))
-            throw new RuntimeException('Noe enough rights to write to "'.$dir.'"');
 
         $file = $dir.'/'.$this->name.'.session';
 
