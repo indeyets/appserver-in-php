@@ -1,4 +1,4 @@
-#!/usr/bin/env php -d html_errors=off
+#!@PHP-BIN@ -d html_errors=off
 <?php
 namespace MFS\AppServer\Runner;
 

@@ -138,7 +138,9 @@
             </dir>
 
             <dir name="Runner">
-                <file role="script" baseinstalldir="/" name="bin/aip" />
+                <file role="script" baseinstalldir="/" name="bin/aip">
+                  <tasks:replace type="pear-config" from="@PHP-BIN@" to="php_bin"/>
+                </file>
                 <file role="php" name="autoload.php" />
                 <file role="php" name="RunnerApp.class.php" />
                 <file role="php" name="Runner.class.php" />
