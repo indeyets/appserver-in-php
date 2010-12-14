@@ -16,7 +16,7 @@ class FileServe
 
     public function __invoke($ctx)
     {
-        $path = $this->path.'/'.$ctx['env']['PATH_INFO'];
+        $path = $this->path.$ctx['env']['PATH_INFO'];
 
         if (!file_exists($path))
             return array(404, array('Content-Type', 'text/plain'), 'File not found');
