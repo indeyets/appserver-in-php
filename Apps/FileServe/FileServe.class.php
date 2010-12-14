@@ -33,6 +33,7 @@ class FileServe
     private function serve($path, $req_etag, $req_lastmod)
     {
         $stream = fopen($path, 'rb');
+
         $mtime = gmdate('D, d M Y H:i:s', filemtime($path)).' GMT';
         $stat = fstat($stream);
 
@@ -40,6 +41,8 @@ class FileServe
         hash_update_stream($hash, $stream);
         hash_update($hash, $mtime);
         $etag = hash_final($hash);
+
+        fseek($stream, 0, SEEK_SET);
 
         if ($req_etag === $etag)
             return array(304, array(), '');
