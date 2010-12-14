@@ -25,11 +25,11 @@ class ZeroMQ extends BaseTransport
         $this->in_loop = true;
         while ($this->in_loop) {
             $message = $this->reqs->recv();
-            self::log('ZeroMQ', 'received message');
+            // self::log('ZeroMQ', 'received message');
 
-            self::log('ZeroMQ', 'callback begin');
+            // self::log('ZeroMQ', 'callback begin');
             call_user_func($this->callback, array($message, $this->resp));
-            self::log('ZeroMQ', 'callback end');
+            // self::log('ZeroMQ', 'callback end');
         }
     }
 
