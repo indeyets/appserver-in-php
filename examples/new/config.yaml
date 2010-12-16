@@ -8,7 +8,7 @@ servers:
     app:
       class: MyApp
       file: MyApp.class.php
-      middlewares: [PHP_Compat]
+      middlewares: [PHP_Compat, Logger]
   -
     protocol: SCGI
     socket: 'tcp://127.0.0.1:9999'
@@ -17,4 +17,4 @@ servers:
     app:
       class: MyApp
       file: MyApp.class.php
-      middlewares: [PHP_Compat]
+      middlewares: [PHP_Compat, Logger]
