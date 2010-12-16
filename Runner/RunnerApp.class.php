@@ -113,7 +113,7 @@ class RunnerApp extends \pakeApp
             'max-children' => 1,
             'app' => array(
                 'class' => 'MFS\AppServer\Apps\FileServe\FileServe',
-                'parameters' => array($path),
+                'parameters' => array($path, true),
                 'file' => '',
                 'middlewares' => array('Logger'),
             ),
@@ -122,7 +122,7 @@ class RunnerApp extends \pakeApp
         $runner = new Runner($path);
 
         $runner->addServer($server);
-        pake_echo_action('app+', $server['app']['class'].' server via '.$server['protocol'].' at '.$server['socket'].'. ('.$server['min-children'].'-'.$server['max-children'].' workers)');
+        pake_echo_action('app+', 'Serving files from "'.$path.'" via '.$server['protocol'].' at '.$server['socket'].'. ('.$server['min-children'].'-'.$server['max-children'].' workers)');
 
         pake_echo_comment('Starting workers…');
         $runner->go();
