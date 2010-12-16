@@ -18,9 +18,10 @@ class FileServe
 
     public function __invoke($ctx)
     {
+        $url = $ctx['env']['PATH_INFO'];
+
         // Normalize URL
-        $_url = trim($ctx['env']['PATH_INFO'], '/');
-        $_pieces = explode('/', $_url);
+        $_pieces = explode('/', trim($url, '/'));
         $_result = array();
         foreach ($_pieces as $piece) {
             if (strlen($piece) == 0)
@@ -41,17 +42,19 @@ class FileServe
             $_result[] = $piece;
         }
 
-        $_result_url = implode('/', $_result);
-
-        if ($_result_url !== $_url) {
-            if (substr($ctx['env']['PATH_INFO'], -1) == '/') {
-                 $_result_url .= '/';
+        if (count($_result) == 0) {
+            $_result_url = '/';
+        } else {
+            $_result_url = '/'.implode('/', $_result);
+            if (strlen($url) > 1 and substr($url, -1) == '/') {
+                $_result_url .= '/';
             }
-
-            return $this->redirect('/'.$_result_url, $ctx['env']);
         }
 
-        $url = $ctx['env']['PATH_INFO'];
+        if ($_result_url !== $url) {
+            return $this->redirect($_result_url, $ctx['env']);
+        }
+
         $path = $this->path.$url;
 
         // Sanity checks
