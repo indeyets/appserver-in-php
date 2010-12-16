@@ -12,9 +12,18 @@ class Server implements \MFS\AppServer\iProtocol
     {
         $response = 'HTTP/1.0 '.$response_data[0]."\r\n";
 
+        $server_set = false;
         for ($i = 0, $cnt = count($response_data[1]); $i < $cnt; $i++) {
+            if ($response_data[1][$i] === 'Server') {
+                $server_set = true;
+            }
             $response .= $response_data[1][$i].': '.$response_data[1][++$i]."\r\n";
         }
+
+        if (false === $server_set) {
+            $response .= 'Server: AiP (http://github.com/indeyets/appserver-in-php)'."\r\n";
+        }
+
         $response .= "\r\n";
 
         // reponse is string

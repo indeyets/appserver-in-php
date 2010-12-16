@@ -96,7 +96,7 @@ class FileServe
         }
 
         $title = 'Files from '.htmlspecialchars($dir_as_requested);
-        $aip_ad = '<a href="https://github.com/indeyets/appserver-in-php">AiP</a>';
+        $aip_ad = '<a href="http://github.com/indeyets/appserver-in-php">AiP</a>';
 
         $html_prefix = '<!DOCTYPE html><html lang="en"><head><title>'.$title.'</title></head><body>';
         $html_suffix = '<hr>Served by '.$aip_ad.', on '.gmdate('D, d M Y H:i:s', time()).' GMT</body></html>';
