@@ -26,10 +26,10 @@
         <active>yes</active>
     </contributor>
 
-    <date>2010-12-14</date>
+    <date>2010-12-16</date>
     <version>
-        <release>0.3.3</release>
-        <api>0.3.3</api>
+        <release>0.4.0</release>
+        <api>0.4.0</api>
     </version>
     <stability>
         <release>stable</release>
@@ -37,12 +37,11 @@
     </stability>
     <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
     <notes>
-        - properly set php-path into "aip" tool
-        - MOD_PHP Handler: added missing exception to MOD_PHP namespace
-        - FileServe: assume, that PATH_INFO has leading slash
-        - FileServe: set seek-position to beginning of stream, before returning it
-        - ZeroMQ: less noise to console
-        - Logger: second parameter (output stream) is optional now, and defaults to STDOUT
+        - HTTP Handler: advertise AiP via "Server" header
+        - FileServe: does not allow to request files from parent folder anymore
+        - FileServe: new optional parameter of constructor to enable directory listings (disabled, by default)
+        - FileServe: normalize URLs before serving files. for example: "//a/..///b/c/" will result in redirect to "/b/c/"
+        - aip tool: new command "aip files [path/to/dir]", which runs http file server on localhost:8080
     </notes>
 
     <contents>
@@ -199,6 +198,26 @@
     </phprelease>
 
     <changelog>
+        <release>
+            <date>2010-12-14</date>
+            <version>
+                <release>0.3.3</release>
+                <api>0.3.3</api>
+            </version>
+            <stability>
+                <release>stable</release>
+                <api>stable</api>
+            </stability>
+            <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
+            <notes>
+                - properly set php-path into "aip" tool
+                - MOD_PHP Handler: added missing exception to MOD_PHP namespace
+                - FileServe: assume, that PATH_INFO has leading slash
+                - FileServe: set seek-position to beginning of stream, before returning it
+                - ZeroMQ: less noise to console
+                - Logger: second parameter (output stream) is optional now, and defaults to STDOUT
+            </notes>
+        </release>
         <release>
             <date>2010-12-03</date>
             <version>
