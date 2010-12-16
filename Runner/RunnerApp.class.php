@@ -32,11 +32,31 @@ class RunnerApp extends \pakeApp
     {
         pake_desc('Run server. usage: aip app [config.yaml]');
         pake_task('MFS\AppServer\Runner\RunnerApp::app');
+
+        pake_desc('Run server. usage: aip files [path/to/dir]');
+        pake_task('MFS\AppServer\Runner\RunnerApp::files');
     }
 
     protected function runDefaultTask()
     {
         $this->display_tasks_and_comments();
+    }
+
+
+    public function showVersion()
+    {
+        parent::showVersion();
+        echo sprintf('AiP  version %s', \pakeColor::colorize(self::VERSION, 'INFO'))."\n";
+    }
+
+    public function usage($hint_about_help = true)
+    {
+        echo ' '.self::$EXEC_NAME."             - to list commands\n";
+        echo ' '.self::$EXEC_NAME." command     - to run specific command\n";
+
+        if (true === $hint_about_help) {
+            echo \pakeColor::colorize("Try ".self::$EXEC_NAME." -H for more information", 'INFO')."\n";
+        }
     }
 
 
@@ -67,26 +87,44 @@ class RunnerApp extends \pakeApp
             }
 
             $runner->addServer($server);
-            pake_echo_action('register', $server['app']['class'].' server via '.$server['protocol'].' at '.$server['socket'].'. ('.$server['min-children'].'-'.$server['max-children'].' children)');
+            pake_echo_action('app+', $server['app']['class'].' server via '.$server['protocol'].' at '.$server['socket'].'. ('.$server['min-children'].'-'.$server['max-children'].' workers)');
         }
 
         pake_echo_comment('Starting workers…');
         $runner->go();
     }
 
-    public function showVersion()
+    public static function run_files($task, $args)
     {
-        parent::showVersion();
-        echo sprintf('AiP  version %s', \pakeColor::colorize(self::VERSION, 'INFO'))."\n";
-    }
-
-    public function usage($hint_about_help = true)
-    {
-        echo ' '.self::$EXEC_NAME."             - to list commands\n";
-        echo ' '.self::$EXEC_NAME." command     - to run specific command\n";
-
-        if (true === $hint_about_help) {
-            echo \pakeColor::colorize("Try ".self::$EXEC_NAME." -H for more information", 'INFO')."\n";
+        if (isset($args[0])) {
+            if (!is_dir($args[0])) {
+                throw new pakeException('"'.$args[0].'" is not a valid directory');
+            }
+            $path = realpath($args[0]);
+        } else {
+            $path = realpath('.');
         }
+
+        $server = array(
+            'protocol' => 'HTTP',
+            'transport' => 'Socket',
+            'socket' => 'tcp://127.0.0.1:8080',
+            'min-children' => 1,
+            'max-children' => 1,
+            'app' => array(
+                'class' => 'MFS\AppServer\Apps\FileServe\FileServe',
+                'parameters' => array($path),
+                'file' => '',
+                'middlewares' => array('Logger'),
+            ),
+        );
+
+        $runner = new Runner($path);
+
+        $runner->addServer($server);
+        pake_echo_action('app+', $server['app']['class'].' server via '.$server['protocol'].' at '.$server['socket'].'. ('.$server['min-children'].'-'.$server['max-children'].' workers)');
+
+        pake_echo_comment('Starting workers…');
+        $runner->go();
     }
 }
