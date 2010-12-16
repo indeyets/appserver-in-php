@@ -11,7 +11,7 @@ class FileServe
         if (!is_dir($path))
             throw new \Exception('"'.$path.'" is not a directory');
 
-        $this->path = $path;
+        $this->path = realpath($path);
     }
 
     public function __invoke($ctx)
