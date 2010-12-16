@@ -76,11 +76,11 @@ class FileServe
         // Serve directory listing
         if (is_dir($path)) {
             // directories should have trailing slash
-            if (substr($ctx['env']['PATH_INFO'], -1) !== '/') {
-                return $this->redirect($ctx['env']['PATH_INFO'].'/', $ctx['env']);
+            if (substr($url, -1) !== '/') {
+                return $this->redirect($url.'/', $ctx['env']);
             }
 
-            return $this->serveListing($path, $ctx['env']['PATH_INFO']);
+            return $this->serveListing($path, $url);
         }
 
         // … or file
