@@ -88,7 +88,12 @@ class Runner
             require $this->cwd.'/'.$app_data['file'];
         }
 
-        $app = new $app_data['class'];
+        if (isset($app_data['parameters']) and count($app_data['parameters']) > 0) {
+            $reflect  = new \ReflectionClass($app_data['class']);
+            $app = $reflect->newInstanceArgs($app_data['parameters']);
+        } else {
+            $app = new $app_data['class'];
+        }
 
         foreach (array_reverse($app_data['middlewares']) as $mw_name) {
             $mw_class = 'MFS\AppServer\Middleware\\'.$mw_name.'\\'.$mw_name;
