@@ -40,9 +40,7 @@ class PHP_Compat
             $context['_POST'] = array();
             $context['_FILES'] = array();
 
-            echo "getting buffer\n";
             $buffer = stream_get_contents($context['stdin'], $context['env']['CONTENT_LENGTH']);
-            echo "got buffer\n";
 
             if (isset($this->options['forward_stream']) and $this->options['forward_stream'] === true) {
                 // user asks us to provide a valid stream to app
@@ -54,7 +52,6 @@ class PHP_Compat
             if (isset($context['env']['CONTENT_TYPE']) and strpos($context['env']['CONTENT_TYPE'], 'multipart/form-data') === 0) {
                 self::parseMultipart($context['env']['CONTENT_TYPE'], $buffer, $context['_POST'], $context['_FILES']);
             } else {
-                echo "parsing…\n";
                 parse_str($buffer, $context['_POST']);
             }
             unset($buffer); // free memory
