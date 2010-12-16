@@ -24,6 +24,13 @@ class FileServe
         if (!is_readable($path))
             return array(403, array('Content-Type', 'text/plain'), 'Forbidden');
 
+        $path = realpath($path);
+
+        if (strpos($path, $this->path) !== 0) {
+            // gone out of "chroot"?
+            return array(404, array('Content-Type', 'text/plain'), 'File not found');
+        }
+
         $etag = isset($ctx['env']['HTTP_IF_NONE_MATCH']) ? $ctx['env']['HTTP_IF_NONE_MATCH'] : null;
         $lastmod = isset($ctx['env']['HTTP_IF_MODIFIED_SINCE']) ? $ctx['env']['HTTP_IF_MODIFIED_SINCE'] : null;
 
