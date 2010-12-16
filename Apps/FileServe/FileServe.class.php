@@ -20,6 +20,7 @@ class FileServe
     {
         $path = $this->path.$ctx['env']['PATH_INFO'];
 
+        // Sanity checks
         if (!file_exists($path))
             return array(404, array('Content-Type', 'text/plain'), 'File not found');
 
@@ -38,10 +39,18 @@ class FileServe
         if (!is_readable($path))
             return array(403, array('Content-Type', 'text/plain'), 'Forbidden');
 
+
+        // Serve directory listing
         if (is_dir($path)) {
+            // directories should have trailing slash
+            if (substr($ctx['env']['PATH_INFO'], -1) !== '/') {
+                return $this->redirect($ctx['env']['PATH_INFO'].'/', $ctx['env']);
+            }
+
             return $this->serveListing($path, $ctx['env']['PATH_INFO']);
         }
 
+        // … or file
         $etag = isset($ctx['env']['HTTP_IF_NONE_MATCH']) ? $ctx['env']['HTTP_IF_NONE_MATCH'] : null;
         $lastmod = isset($ctx['env']['HTTP_IF_MODIFIED_SINCE']) ? $ctx['env']['HTTP_IF_MODIFIED_SINCE'] : null;
 
@@ -118,6 +127,20 @@ class FileServe
         return array(200, array('Content-type', 'text/html; charset=utf-8'), $html_prefix.$body.$html_suffix);
     }
 
+
+    private function redirect($to, $env)
+    {
+        $new_path = 'http://'.$env['HTTP_HOST'].$to;
+
+        return array(
+            301,
+            array(
+                'Content-Type', 'text/plain',
+                'Location', $new_path
+            ),
+            'Document moved to: '.$new_path
+        );
+    }
 
     private static function getContentType($path)
     {
