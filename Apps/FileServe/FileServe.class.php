@@ -5,13 +5,15 @@ namespace MFS\AppServer\Apps\FileServe;
 class FileServe
 {
     private $path;
+    private $directory_listings;
 
-    public function __construct($path)
+    public function __construct($path, $directory_listings = false)
     {
         if (!is_dir($path))
             throw new \Exception('"'.$path.'" is not a directory');
 
         $this->path = realpath($path);
+        $this->directory_listings = $directory_listings;
     }
 
     public function __invoke($ctx)
@@ -21,14 +23,23 @@ class FileServe
         if (!file_exists($path))
             return array(404, array('Content-Type', 'text/plain'), 'File not found');
 
-        if (!is_readable($path))
-            return array(403, array('Content-Type', 'text/plain'), 'Forbidden');
-
         $path = realpath($path);
+
+        if (false === $path) {
+            // resolving failed. not enough rights for intermediate folder?
+            return array(404, array('Content-Type', 'text/plain'), 'File not found');
+        }
 
         if (strpos($path, $this->path) !== 0) {
             // gone out of "chroot"?
             return array(404, array('Content-Type', 'text/plain'), 'File not found');
+        }
+
+        if (!is_readable($path))
+            return array(403, array('Content-Type', 'text/plain'), 'Forbidden');
+
+        if (is_dir($path)) {
+            return $this->serveListing($path, $ctx['env']['PATH_INFO']);
         }
 
         $etag = isset($ctx['env']['HTTP_IF_NONE_MATCH']) ? $ctx['env']['HTTP_IF_NONE_MATCH'] : null;
@@ -36,6 +47,7 @@ class FileServe
 
         return $this->serve($path, $etag, $lastmod);
     }
+
 
     private function serve($path, $req_etag, $req_lastmod)
     {
@@ -66,6 +78,46 @@ class FileServe
 
         return array(200, $headers, $stream);
     }
+
+    private function serveListing($dir, $dir_as_requested)
+    {
+        if ($this->directory_listings !== true) {
+            // Listings are forbidden
+            return array(403, array('Content-Type', 'text/plain'), 'Forbidden');
+        }
+
+        $title = 'Files from '.htmlspecialchars($dir_as_requested);
+        $aip_ad = '<a href="https://github.com/indeyets/appserver-in-php">AiP</a>';
+
+        $html_prefix = '<!DOCTYPE html><html lang="en"><head><title>'.$title.'</title></head><body>';
+        $html_suffix = '<hr>Served by '.$aip_ad.', on '.gmdate('D, d M Y H:i:s', time()).' GMT</body></html>';
+
+        $body = '<h1>Directory listing of '.htmlspecialchars($dir_as_requested).'</h1>';
+
+        $body .= '<ul>';
+
+        if ($dir_as_requested != '/') {
+            $body .= '<li><a href="../">⇧ to upper level</a></li>';
+        }
+
+        $di = new \DirectoryIterator($dir);
+        foreach ($di as $item) {
+            if ($item->isDot())
+                continue;
+
+            $path = $item->getFilename();
+            if ($item->isDir()) {
+                $path .= '/';
+            }
+
+            $body .= '<li><a href="'.$path.'">'.$path.'</a></li>';
+        }
+
+        $body .= '</ul>';
+
+        return array(200, array('Content-type', 'text/html; charset=utf-8'), $html_prefix.$body.$html_suffix);
+    }
+
 
     private static function getContentType($path)
     {
