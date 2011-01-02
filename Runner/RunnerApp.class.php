@@ -113,9 +113,12 @@ class RunnerApp extends \pakeApp
             'max-children' => 1,
             'app' => array(
                 'class' => 'MFS\AppServer\Apps\FileServe\FileServe',
-                'parameters' => array($path, true),
+                'parameters' => array($path),
                 'file' => '',
-                'middlewares' => array('Logger'),
+                'middlewares' => array(
+                    'Logger',
+                    array('class' => 'MFS\AppServer\Middleware\Directory\Directory', 'parameters' => array($path, true)),
+                ),
             ),
         );
 
