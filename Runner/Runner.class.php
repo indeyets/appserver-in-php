@@ -95,9 +95,17 @@ class Runner
             $app = new $app_data['class'];
         }
 
-        foreach (array_reverse($app_data['middlewares']) as $mw_name) {
-            $mw_class = 'MFS\AppServer\Middleware\\'.$mw_name.'\\'.$mw_name;
-            $app = new $mw_class($app);
+        foreach (array_reverse($app_data['middlewares']) as $middleware) {
+            if (is_array($middleware)) {
+                $mw_class = $middleware['class'];
+                $mw_params = array_merge(array($app), $middleware['parameters']);
+
+                $reflect  = new \ReflectionClass($mw_class);
+                $app = $reflect->newInstanceArgs($mw_params);
+            } else {
+                $mw_class = 'MFS\AppServer\Middleware\\'.$middleware.'\\'.$middleware;
+                $app = new $mw_class($app);
+            }
         }
 
         try {
