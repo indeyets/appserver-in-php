@@ -1,20 +1,21 @@
 ---
+apps:
+  -
+    app: &MyApp
+      class: MyApp
+      file: MyApp.class.php
+      middlewares: [HTTPParser, Logger]
+
 servers:
   -
     protocol: HTTP
     socket: 'tcp://127.0.0.1:8080'
     min-children: 5
     max-children: 10
-    app:
-      class: MyApp
-      file: MyApp.class.php
-      middlewares: [PHP_Compat, Logger]
+    app: *MyApp
   -
     protocol: SCGI
     socket: 'tcp://127.0.0.1:9999'
     min-children: 1
     max-children: 2
-    app:
-      class: MyApp
-      file: MyApp.class.php
-      middlewares: [PHP_Compat, Logger]
+    app: *MyApp
