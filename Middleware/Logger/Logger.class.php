@@ -30,7 +30,7 @@ class Logger
 
             $this->should_close = true;
         } elseif (!is_resource($stream)) {
-            throw new \InvalidArgumentException('second parameter should be a writable stream');
+            throw new \MFS\AppServer\InvalidArgumentException('second parameter should be a writable stream');
         }
 
         $this->app = $app;
