@@ -4,7 +4,7 @@ apps:
     app: &MyApp
       class: MyApp
       file: MyApp.class.php
-      middlewares: [HTTPParser, Logger]
+      middlewares: [Logger, Compress, HTTPParser]
 
 servers:
   -
