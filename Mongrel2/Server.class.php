@@ -23,7 +23,7 @@ class Server implements \MFS\AppServer\iProtocol
 
         $len_set = false;
         for ($i = 0, $cnt = count($response_data[1]); $i < $cnt; $i++) {
-            if ($response_data[1][$i] == 'Content-Length')
+            if (strtolower($response_data[1][$i]) == 'content-length')
                 $len_set = true;
             $response .= $response_data[1][$i].': '.$response_data[1][++$i]."\r\n";
         }
@@ -36,7 +36,7 @@ class Server implements \MFS\AppServer\iProtocol
         }
 
         if (!$len_set) {
-            $response .= 'Content-length: '.strlen($body)."\r\n";
+            $response .= 'Content-Length: '.strlen($body)."\r\n";
         }
 
         $response .= "\r\n";

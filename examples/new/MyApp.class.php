@@ -25,7 +25,7 @@ class MyApp
 
         $headers = array(
             'Conent-type', 'text/html; charset=utf-8',
-            'Content-length', strlen($body)
+            'Content-Length', strlen($body)
         );
 
         return array(200, $headers, $body);
