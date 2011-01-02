@@ -34,9 +34,10 @@ require __DIR__.'/HTTP/autoload.php';
 require __DIR__.'/MOD_PHP/autoload.php';
 require __DIR__.'/Mongrel2/autoload.php';
 
-require __DIR__.'/Middleware/PHP_Compat/autoload.php';
+require __DIR__.'/Middleware/HTTPParser/autoload.php';
 require __DIR__.'/Middleware/Session/autoload.php';
 require __DIR__.'/Middleware/URLMap/autoload.php';
 require __DIR__.'/Middleware/Logger/autoload.php';
+require __DIR__.'/Middleware/PHP_Compat/autoload.php'; // <-- deprecated
 
 require __DIR__.'/Apps/FileServe/autoload.php';

@@ -26,22 +26,18 @@
         <active>yes</active>
     </contributor>
 
-    <date>2010-12-16</date>
+    <date>2011-01-02</date>
     <version>
-        <release>0.4.0</release>
-        <api>0.4.0</api>
+        <release>0.4.0.99</release>
+        <api>0.5.0</api>
     </version>
     <stability>
-        <release>stable</release>
+        <release>beta</release>
         <api>stable</api>
     </stability>
     <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
     <notes>
-        - HTTP Handler: advertise AiP via "Server" header
-        - FileServe: does not allow to request files from parent folder anymore
-        - FileServe: new optional parameter of constructor to enable directory listings (disabled, by default)
-        - FileServe: normalize URLs before serving files. for example: "//a/..///b/c/" will result in redirect to "/b/c/"
-        - aip tool: new command "aip files [path/to/dir]", which runs http file server on localhost:8080
+        - renamed PHP_Compat middleware to HTTPParser
     </notes>
 
     <contents>
@@ -81,12 +77,16 @@
             </dir>
 
             <dir name="Middleware">
-                <dir name="PHP_Compat">
+                <dir name="HTTPParser">
                     <file role="php" name="autoload.php" />
                     <file role="php" name="exceptions.php" />
                     <file role="php" name="Cookies.class.php" />
+                    <file role="php" name="HTTPParser.class.php" />
+                </dir>
+
+                <dir name="PHP_Compat">
+                    <file role="php" name="autoload.php" />
                     <file role="php" name="PHP_Compat.class.php" />
-                    <file role="doc" name="_readme" install-as="PHP_Compat Middleware.readme" />
                 </dir>
 
                 <dir name="Session">
@@ -198,6 +198,25 @@
     </phprelease>
 
     <changelog>
+        <release>
+            <date>2010-12-16</date>
+            <version>
+                <release>0.4.0</release>
+                <api>0.4.0</api>
+            </version>
+            <stability>
+                <release>stable</release>
+                <api>stable</api>
+            </stability>
+            <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
+            <notes>
+                - HTTP Handler: advertise AiP via "Server" header
+                - FileServe: does not allow to request files from parent folder anymore
+                - FileServe: new optional parameter of constructor to enable directory listings (disabled, by default)
+                - FileServe: normalize URLs before serving files. for example: "//a/..///b/c/" will result in redirect to "/b/c/"
+                - aip tool: new command "aip files [path/to/dir]", which runs http file server on localhost:8080
+            </notes>
+        </release>
         <release>
             <date>2010-12-14</date>
             <version>

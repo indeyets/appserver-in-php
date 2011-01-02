@@ -1,6 +1,6 @@
 <?php
 
-namespace MFS\AppServer\Middleware\PHP_Compat;
+namespace MFS\AppServer\Middleware\HTTPParser;
 
 class LogicException extends \LogicException {}
 

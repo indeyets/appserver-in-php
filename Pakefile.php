@@ -10,7 +10,7 @@ pake_task('demo');
 
 function run_install()
 {
-    pake_superuser_sh('pear install -f AppServer-0.4.0.tgz');
+    pake_superuser_sh('pear install -f AppServer-0.4.0.99.tgz');
 }
 
 function run_demo()

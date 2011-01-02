@@ -11,11 +11,6 @@ function autoload($class_name)
 
         $files = array(
             'MFS\AppServer\Middleware\PHP_Compat\PHP_Compat'               => $root.'PHP_Compat.class.php',
-            'MFS\AppServer\Middleware\PHP_Compat\Cookies'                  => $root.'Cookies.class.php',
-
-            'MFS\AppServer\Middleware\PHP_Compat\InvalidArgumentException' => $root.'exceptions.php',
-            'MFS\AppServer\Middleware\PHP_Compat\UnexpectedValueException' => $root.'exceptions.php',
-            'MFS\AppServer\Middleware\PHP_Compat\BadProtocolException'     => $root.'exceptions.php',
         );
     }
 
