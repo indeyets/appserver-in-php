@@ -34,6 +34,7 @@ require __DIR__.'/HTTP/autoload.php';
 require __DIR__.'/MOD_PHP/autoload.php';
 require __DIR__.'/Mongrel2/autoload.php';
 
+require __DIR__.'/Middleware/Cascade/autoload.php';
 require __DIR__.'/Middleware/HTTPParser/autoload.php';
 require __DIR__.'/Middleware/Session/autoload.php';
 require __DIR__.'/Middleware/URLMap/autoload.php';

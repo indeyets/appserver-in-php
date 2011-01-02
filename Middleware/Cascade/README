@@ -1,0 +1,3 @@
+Cascade middleware tries request on several applications, until one of those returns response, which is not 404.
+
+This is useful, if you want to implement static caching of responses, for example.

@@ -77,6 +77,13 @@
             </dir>
 
             <dir name="Middleware">
+                <dir name="Cascade">
+                    <file role="php" name="autoload.php" />
+                    <file role="php" name="exceptions.php" />
+                    <file role="php" name="Cascade.class.php" />
+                    <file role="doc" name="README" install-as="Cascade Middleware.readme" />
+                </dir>
+
                 <dir name="HTTPParser">
                     <file role="php" name="autoload.php" />
                     <file role="php" name="exceptions.php" />
