@@ -84,6 +84,11 @@
                     <file role="doc" name="README" install-as="Cascade Middleware.readme" />
                 </dir>
 
+                <dir name="Compress">
+                    <file role="php" name="autoload.php" />
+                    <file role="php" name="Compress.class.php" />
+                </dir>
+
                 <dir name="Directory">
                     <file role="php" name="autoload.php" />
                     <file role="php" name="Directory.class.php" />
