@@ -39,6 +39,7 @@ require __DIR__.'/Mongrel2/autoload.php';
 
 require __DIR__.'/Middleware/Cascade/autoload.php';
 require __DIR__.'/Middleware/Compress/autoload.php';
+require __DIR__.'/Middleware/ConditionalGet/autoload.php';
 require __DIR__.'/Middleware/Directory/autoload.php';
 require __DIR__.'/Middleware/HTTPParser/autoload.php';
 require __DIR__.'/Middleware/Session/autoload.php';

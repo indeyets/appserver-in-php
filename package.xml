@@ -89,6 +89,11 @@
                     <file role="php" name="Compress.class.php" />
                 </dir>
 
+                <dir name="ConditionalGet">
+                    <file role="php" name="autoload.php" />
+                    <file role="php" name="ConditionalGet.class.php" />
+                </dir>
+
                 <dir name="Directory">
                     <file role="php" name="autoload.php" />
                     <file role="php" name="Directory.class.php" />
