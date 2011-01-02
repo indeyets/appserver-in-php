@@ -23,6 +23,9 @@ function autoload($class_name)
         require $files[$class_name];
 }
 
+// used in middlewares
+class InvalidArgumentException extends \InvalidArgumentException {}
+
 spl_autoload_register('MFS\AppServer\autoload');
 
 
