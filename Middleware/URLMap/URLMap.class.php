@@ -10,7 +10,7 @@ class URLMap
     {
         foreach ($map as $location => $app) {
             if (!is_callable($app))
-                throw new InvalidArgumentException('invalid app supplied for "'.$location.'" path');
+                throw new \MFS\AppServer\InvalidArgumentException('invalid app supplied for "'.$location.'" path');
 
             $i = new \stdClass();
             $i->app = $app;

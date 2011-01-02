@@ -9,7 +9,7 @@ class ConditionalGet
     public function __construct($app)
     {
         if (!is_callable($app))
-            throw new MFS\AppServer\InvalidArgumentException('invalid app supplied');
+            throw new \MFS\AppServer\InvalidArgumentException('invalid app supplied');
 
         $this->app = $app;
     }

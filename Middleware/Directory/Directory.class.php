@@ -14,7 +14,7 @@ class Directory
             throw new \Exception('"'.$path.'" is not a directory');
 
         if (!is_callable($file_app))
-            throw new UnexpectedValueException('invalid file_app supplied');
+            throw new \MFS\AppServer\InvalidArgumentException('invalid app supplied');
 
         $this->path = realpath($path);
         $this->file_app = $file_app;

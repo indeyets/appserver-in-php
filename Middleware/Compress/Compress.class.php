@@ -9,7 +9,7 @@ class Compress
     public function __construct($app)
     {
         if (!is_callable($app))
-            throw new UnexpectedValueException('invalid app supplied');
+            throw new \MFS\AppServer\InvalidArgumentException('invalid app supplied');
 
         $this->app = $app;
     }

@@ -16,7 +16,7 @@ class Logger
     public function __construct($app, $stream = STDOUT, $format = self::COMBINED_FORMAT)
     {
         if (!is_callable($app))
-            throw new \InvalidArgumentException('not a valid app');
+            throw new \MFS\AppServer\InvalidArgumentException('invalid app supplied');
 
         if (is_string($stream)) {
             if (file_exists($stream))

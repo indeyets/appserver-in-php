@@ -9,7 +9,7 @@ class Session
     public function __construct($app)
     {
         if (!is_callable($app))
-            throw new InvalidArgumentException('not a valid app');
+            throw new \MFS\AppServer\InvalidArgumentException('invalid app supplied');
 
         $this->app = $app;
     }

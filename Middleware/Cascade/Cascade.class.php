@@ -15,7 +15,7 @@ class Cascade
 
         foreach ($apps as $i => $app) {
             if (!is_callable($app))
-                throw new UnexpectedValueException('invalid app supplied on position #'.$i);
+                throw new \MFS\AppServer\InvalidArgumentException('invalid app supplied on position #'.$i);
         }
 
         $this->apps = $apps;
