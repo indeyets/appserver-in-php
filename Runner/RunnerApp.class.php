@@ -118,6 +118,7 @@ class RunnerApp extends \pakeApp
                 'middlewares' => array(
                     'Logger',
                     array('class' => 'MFS\AppServer\Middleware\Directory\Directory', 'parameters' => array($path, true)),
+                    'ConditionalGet',
                 ),
             ),
         );

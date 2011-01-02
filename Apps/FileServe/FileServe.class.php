@@ -48,20 +48,16 @@ class FileServe
         if (!is_readable($path))
             return array(403, array('Content-Type', 'text/plain'), 'Forbidden');
 
-        // Serve directory listing
+        // Only files are served
         if (is_dir($path)) {
             return array(403, array('Content-Type', 'text/plain'), 'Forbidden');
         }
 
-        // … or file
-        $etag = isset($ctx['env']['HTTP_IF_NONE_MATCH']) ? $ctx['env']['HTTP_IF_NONE_MATCH'] : null;
-        $lastmod = isset($ctx['env']['HTTP_IF_MODIFIED_SINCE']) ? $ctx['env']['HTTP_IF_MODIFIED_SINCE'] : null;
-
-        return $this->serve($path, $etag, $lastmod);
+        return $this->serve($path);
     }
 
 
-    private function serve($path, $req_etag, $req_lastmod)
+    private function serve($path)
     {
         $stream = fopen($path, 'rb');
 
@@ -74,12 +70,6 @@ class FileServe
         $etag = hash_final($hash);
 
         fseek($stream, 0, SEEK_SET);
-
-        if ($req_etag === $etag)
-            return array(304, array(), '');
-
-        if ($req_lastmod === $mtime)
-            return array(304, array(), '');
 
         $headers = array(
             'Content-Type',     self::getContentType($path),
