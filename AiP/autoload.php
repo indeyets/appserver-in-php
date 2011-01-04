@@ -139,5 +139,5 @@ class SplClassLoader
     }
 }
 
-$_aip_loader = new SplClassLoader('AiP', __DIR__);
+$_aip_loader = new SplClassLoader('AiP', realpath(__DIR__.'/..'));
 $_aip_loader->register();
