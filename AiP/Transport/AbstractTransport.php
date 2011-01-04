@@ -1,7 +1,7 @@
 <?php
-namespace MFS\AppServer\Transport;
+namespace AiP\Transport;
 
-abstract class BaseTransport implements iTransport
+abstract class AbstractTransport implements \AiP\Transport
 {
     protected $addr;
     protected $callback;

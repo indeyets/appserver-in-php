@@ -1,7 +1,7 @@
 <?php
-namespace MFS\AppServer\Transport;
+namespace AiP;
 
-interface iTransport
+interface Transport
 {
     public function loop();
     public function unloop();

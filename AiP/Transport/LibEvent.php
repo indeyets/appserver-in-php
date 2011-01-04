@@ -1,7 +1,10 @@
 <?php
-namespace MFS\AppServer\Transport;
+namespace AiP\Transport;
 
-class LibEvent extends BaseTransport
+use AiP\Transport\LibEvent\RuntimeException;
+use AiP\Transport\LibEvent\LogicException;
+
+class LibEvent extends AbstractTransport
 {
     const EV_BUFFER_READ          = 0x01;
     const EV_BUFFER_WRITE         = 0x02;
@@ -92,7 +95,7 @@ class LibEvent extends BaseTransport
         }
 
         $buffer = $this->connection_buffers[$conn_num];
-        LibEventStream::setTransport($this);
+        LibEvent\Stream::setTransport($this);
         $stream = fopen('libevent-buffer://'.$conn_num, 'w+');
         self::log('Connection', $conn_num, 'buffer opened');
 

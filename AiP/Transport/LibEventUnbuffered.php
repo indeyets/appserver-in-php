@@ -1,7 +1,9 @@
 <?php
-namespace MFS\AppServer\Transport;
+namespace AiP\Transport;
 
-class LibEventUnbuffered extends BaseTransport
+use AiP\Transport\LibEvent\RuntimeException;
+
+class LibEventUnbuffered extends AbstractTransport
 {
     protected $event_base;
 

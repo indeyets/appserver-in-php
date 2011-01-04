@@ -1,7 +1,9 @@
 <?php
-namespace MFS\AppServer\Transport;
+namespace AiP\Transport;
 
-class Socket extends BaseTransport
+use Socket\RuntimeException;
+
+class Socket extends AbstractTransport
 {
     protected $socket = null;
 

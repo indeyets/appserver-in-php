@@ -1,7 +1,7 @@
 <?php
-namespace MFS\AppServer\Transport;
+namespace AiP\Transport;
 
-class ZeroMQ extends BaseTransport
+class ZeroMQ extends AbstractTransport
 {
     private $pieces = null;
 

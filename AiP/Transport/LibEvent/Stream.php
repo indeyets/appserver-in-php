@@ -1,8 +1,8 @@
 <?php
 
-namespace MFS\AppServer\Transport;
+namespace AiP\Transport\LibEvent;
 
-class LibEventStream
+class Stream
 {
     static $transport;
 
@@ -58,4 +58,4 @@ class LibEventStream
     }
 }
 
-stream_wrapper_register("libevent-buffer", __NAMESPACE__."\LibEventStream");
+stream_wrapper_register("libevent-buffer", __NAMESPACE__."\Stream");
