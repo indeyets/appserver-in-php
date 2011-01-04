@@ -1,9 +1,12 @@
 <?php
-namespace MFS\AppServer\SCGI;
+namespace AiP\Protocol;
 
-// FIXME: split protocol-part from appserver interface
-//        writeResponse, for example, is appserver-specific
-class Server implements \MFS\AppServer\iProtocol
+use SCGI\Response;
+
+use SCGI\LogicException;
+use SCGI\BadProtocolException;
+
+class SCGI implements \AiP\Protocol
 {
     private $stream = null;
     private $headers = null;

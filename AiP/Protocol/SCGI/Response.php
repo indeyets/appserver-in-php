@@ -1,5 +1,5 @@
 <?php
-namespace MFS\AppServer\SCGI;
+namespace AiP\Protocol\SCGI;
 
 class Response
 {
