@@ -3,9 +3,9 @@
 require_once "PHPUnit/Framework/TestCase.php";
 error_reporting(E_ALL | E_STRICT);
 
-require '../autoload.php';
+require '../../../autoload.php';
 
-use \MFS\AppServer\Middleware\Session\FileStorage;
+use \AiP\Middleware\Session\Storage\FileStorage;
 
 class FileStorageTest extends PHPUnit_Framework_TestCase
 {
