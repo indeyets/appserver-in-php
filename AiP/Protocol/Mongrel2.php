@@ -131,7 +131,7 @@ class Mongrel2 implements \AiP\Protocol
                 fclose($this->stream);
                 $this->stream = null;
             }
-            \MFS\AppServer\StringStreamKeeper::cleanup($this->stream_name);
+            \AiP\Common\StringStream\Keeper::cleanup($this->stream_name);
             $this->stream_name = null;
         }
     }

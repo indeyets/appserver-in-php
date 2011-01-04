@@ -31,10 +31,10 @@ class App extends \pakeApp
     public function load_pakefile()
     {
         pake_desc('Run server. usage: aip app [config.yaml]');
-        pake_task('MFS\AppServer\Runner\RunnerApp::app');
+        pake_task(__NAMESPACE__.'\App::app');
 
         pake_desc('Run server. usage: aip files [path/to/dir]');
-        pake_task('MFS\AppServer\Runner\RunnerApp::files');
+        pake_task(__NAMESPACE__'\App::files');
     }
 
     protected function runDefaultTask()
