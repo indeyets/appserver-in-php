@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <package packagerversion="1.9.0" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
-    <name>AppServer</name>
+    <name>aip</name>
     <channel>pear.indeyets.pp.ru</channel>
     <summary>A set of components for building extremely fast universal web-apps</summary>
     <description>
@@ -28,8 +28,8 @@
 
     <date>2011-01-02</date>
     <version>
-        <release>0.4.0.99</release>
-        <api>0.5.0</api>
+        <release>0.9.0</release>
+        <api>0.9.0</api>
     </version>
     <stability>
         <release>beta</release>
@@ -37,138 +37,166 @@
     </stability>
     <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
     <notes>
-        - renamed PHP_Compat middleware to HTTPParser
+        - first release under new name
     </notes>
 
     <contents>
-        <dir name="/" baseinstalldir="AppServer">
-            <file role="php" name="autoload.php" />
-            <file role="php" name="DaemonicHandler.class.php" />
-            <file role="php" name="interfaces.php" />
-            <file role="php" name="StringStream.class.php" />
-            <file role="doc" name="AUTHORS" />
-            <file role="doc" name="LICENSE" />
+        <dir name="/" baseinstalldir="/">
+            <file role="script" baseinstalldir="/" name="bin/aip">
+              <tasks:replace type="pear-config" from="@PHP-BIN@" to="php_bin"/>
+            </file>
 
-            <dir name="HTTP">
+            <dir name="AiP">
+                <dir name="App">
+                    <file role="php" name="FileServe.php" />
+                </dir>
+
                 <file role="php" name="autoload.php" />
-                <file role="php" name="Server.class.php" />
-            </dir>
 
-            <dir name="SCGI">
-                <file role="php" name="autoload.php" />
-                <file role="php" name="Client.class.php" />
-                <file role="php" name="ClientRequest.class.php" />
-                <file role="php" name="exceptions.php" />
-                <file role="php" name="Response.class.php" />
-                <file role="php" name="Server.class.php" />
-            </dir>
-
-            <dir name="MOD_PHP">
-                <file role="php" name="autoload.php" />
-                <file role="php" name="exceptions.php" />
-                <file role="php" name="Cookies.class.php" />
-                <file role="php" name="Handler.class.php" />
-                <file role="php" name="Response.class.php" />
-            </dir>
-
-            <dir name="Mongrel2">
-                <file role="php" name="autoload.php" />
-                <file role="php" name="Server.class.php" />
-            </dir>
-
-            <dir name="Middleware">
-                <dir name="Cascade">
-                    <file role="php" name="autoload.php" />
-                    <file role="php" name="exceptions.php" />
-                    <file role="php" name="Cascade.class.php" />
-                    <file role="doc" name="README" install-as="Cascade Middleware.readme" />
-                </dir>
-
-                <dir name="Compress">
-                    <file role="php" name="autoload.php" />
-                    <file role="php" name="Compress.class.php" />
-                </dir>
-
-                <dir name="ConditionalGet">
-                    <file role="php" name="autoload.php" />
-                    <file role="php" name="ConditionalGet.class.php" />
-                </dir>
-
-                <dir name="Directory">
-                    <file role="php" name="autoload.php" />
-                    <file role="php" name="Directory.class.php" />
-                </dir>
-
-                <dir name="HTTPParser">
-                    <file role="php" name="autoload.php" />
-                    <file role="php" name="exceptions.php" />
-                    <file role="php" name="Cookies.class.php" />
-                    <file role="php" name="HTTPParser.class.php" />
-                </dir>
-
-                <dir name="PHP_Compat">
-                    <file role="php" name="autoload.php" />
-                    <file role="php" name="PHP_Compat.class.php" />
-                </dir>
-
-                <dir name="Session">
-                    <file role="php" name="autoload.php" />
-                    <file role="php" name="exceptions.php" />
-                    <file role="php" name="interfaces.php" />
-                    <file role="php" name="Session.class.php" />
-                    <file role="php" name="_Engine.class.php" />
-
-                    <dir name="storage">
-                        <file role="php" name="FileStorage.class.php" />
+                <dir name="Common">
+                    <dir name="StringStream">
+                        <file role="php" name="InvalidArgumentException.php" />
+                        <file role="php" name="Keeper.php" />
                     </dir>
 
-                    <dir name="tests">
-                        <file role="test" name="_EngineTest.php" />
-                        <file role="test" name="FileStorageTest.php" />
+                    <file role="php" name="StringStream.php" />
+                </dir>
+
+                <dir name="Handler">
+                    <dir name="Daemonic">
+                        <file role="php" name="BadProtocolException.php" />
+                        <file role="php" name="InvalidArgumentException.php" />
+                        <file role="php" name="LogicException.php" />
                     </dir>
+
+                    <file role="php" name="Daemonic.php" />
+
+                    <dir name="MOD_PHP">
+                        <file role="php" name="Cookies.php" />
+                        <file role="php" name="InvalidArgumentException.php" />
+                        <file role="php" name="LogicException.php" />
+                        <file role="php" name="OutOfBoundsException.php" />
+                        <file role="php" name="Response.php" />
+                        <file role="php" name="UnexpectedValueException.php" />
+                    </dir>
+
+                    <file role="php" name="MOD_PHP.php" />
                 </dir>
 
-                <dir name="URLMap">
-                    <file role="php" name="autoload.php" />
-                    <file role="php" name="exceptions.php" />
-                    <file role="php" name="URLMap.class.php" />
-                    <file role="doc" name="_notes" install-as="URLMap Middleware.readme" />
+                <file role="php" name="Handler.php" />
+
+                <dir name="Middleware">
+                    <dir name="Cascade">
+                        <file role="php" name="UnexpectedValueException.php" />
+                        <file role="doc" name="README" install-as="Cascade Middleware.readme" />
+                    </dir>
+
+                    <file role="php" name="Cascade.php" />
+                    <file role="php" name="Compress.php" />
+                    <file role="php" name="ConditionalGet.php" />
+                    <file role="php" name="Directory.php" />
+
+                    <dir name="HTTPParser">
+                        <file role="php" name="BadProtocolException.php" />
+                        <file role="php" name="Cookies.php" />
+                        <file role="php" name="LogicException.php" />
+                        <file role="php" name="OutOfBoundsException.php" />
+                        <file role="php" name="UnexpectedValueException.php" />
+                    </dir>
+
+                    <file role="php" name="HTTPParser.php" />
+                    <file role="php" name="InvalidApplicationException.php" />
+                    <file role="php" name="InvalidArgumentException.php" />
+
+                    <dir name="Logger">
+                        <file role="php" name="README" install-as="Logger Middleware.readme" />
+                    </dir>
+
+                    <file role="php" name="Logger.php" />
+
+                    <dir name="Session">
+                        <file role="php" name="Engine.php" />
+                        <file role="php" name="LogicException.php" />
+                        <file role="php" name="OutOfBoundsException.php" />
+
+                        <dir name="Storage">
+                            <file role="php" name="FileStorage.php" />
+                            <file role="php" name="IdIsTakenException.php" />
+                            <file role="php" name="LogicException.php" />
+                            <file role="php" name="RuntimeException.php" />
+                        </dir>
+
+                        <file role="php" name="Storage.php" />
+
+                        <dir name="tests">
+                            <file role="test" name="EngineTest.php" />
+                            <file role="test" name="FileStorageTest.php" />
+                        </dir>
+
+                        <file role="php" name="UnexpectedValueException.php" />
+                    </dir>
+
+                    <file role="php" name="Session.php" />
+
+                    <dir name="URLMap">
+                        <file role="doc" name="_notes" install-as="URLMap Middleware.readme" />
+                        <file role="php" name="UnexpectedValueException.php" />
+                    </dir>
+
+                    <file role="php" name="URLMap.php" />
                 </dir>
 
-                <dir name="Logger">
-                    <file role="php" name="autoload.php" />
-                    <file role="php" name="Logger.class.php" />
-                    <file role="php" name="README" install-as="Logger Middleware.readme" />
+                <dir name="Protocol">
+                    <file role="php" name="HTTP.php" />
+                    <file role="php" name="Mongrel2.php" />
+
+                    <dir name="SCGI">
+                        <file role="php" name="BadProtocolException.php" />
+                        <file role="php" name="Client.php" />
+                        <file role="php" name="ClientRequest.php" />
+                        <file role="php" name="LogicException.php" />
+                        <file role="php" name="Response.php" />
+                        <file role="php" name="RuntimeException.php" />
+                        <file role="php" name="UnexpectedValueException.php" />
+                    </dir>
+
+                    <file role="php" name="SCGI.php" />
                 </dir>
-            </dir>
 
-            <dir name="Transport">
-                <file role="php" name="autoload.php" />
-                <file role="php" name="exceptions.php" />
-                <file role="php" name="interfaces.php" />
-                <file role="php" name="BaseTransport.class.php" />
-                <file role="php" name="LibEvent.class.php" />
-                <file role="php" name="LibEventStream.class.php" />
-                <file role="php" name="LibEventUnbuffered.class.php" />
-                <file role="php" name="Socket.class.php" />
-                <file role="php" name="ZeroMQ.class.php" />
-            </dir>
+                <file role="php" name="Protocol.php" />
 
-            <dir name="Apps">
-                <dir name="FileServe">
-                    <file role="php" name="autoload.php" />
-                    <file role="php" name="FileServe.class.php" />
+                <dir name="Runner">
+                    <file role="php" name="App.php" />
                 </dir>
+
+                <file role="php" name="Runner.php" />
+
+                <dir name="Transport">
+                    <file role="php" name="AbstractTransport.php" />
+                    <file role="php" name="InvalidArgumentException.php" />
+
+                    <dir name="LibEvent">
+                        <file role="php" name="LogicException.php" />
+                        <file role="php" name="RuntimeException.php" />
+                        <file role="php" name="Stream.php" />
+                    </dir>
+
+                    <file role="php" name="LibEvent.php" />
+                    <file role="php" name="LibEventUnbuffered.php" />
+
+                    <dir name="Socket">
+                        <file role="php" name="RuntimeException.php" />
+                    </dir>
+
+                    <file role="php" name="Socket.php" />
+                    <file role="php" name="ZeroMQ.php" />
+                </dir>
+
+                <file role="php" name="Transport.php" />
             </dir>
 
-            <dir name="Runner">
-                <file role="script" baseinstalldir="/" name="bin/aip">
-                  <tasks:replace type="pear-config" from="@PHP-BIN@" to="php_bin"/>
-                </file>
-                <file role="php" name="autoload.php" />
-                <file role="php" name="RunnerApp.class.php" />
-                <file role="php" name="Runner.class.php" />
-            </dir>
+            <file role="doc" baseinstalldir="AiP" name="AUTHORS" />
+            <file role="doc" baseinstalldir="AiP" name="LICENSE" />
         </dir>
     </contents>
 
@@ -215,186 +243,10 @@
 
     <phprelease>
         <filelist>
-            <install as="aip" name="Runner/bin/aip" />
+            <install as="aip" name="bin/aip" />
         </filelist>
     </phprelease>
 
     <changelog>
-        <release>
-            <date>2010-12-16</date>
-            <version>
-                <release>0.4.0</release>
-                <api>0.4.0</api>
-            </version>
-            <stability>
-                <release>stable</release>
-                <api>stable</api>
-            </stability>
-            <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
-            <notes>
-                - HTTP Handler: advertise AiP via "Server" header
-                - FileServe: does not allow to request files from parent folder anymore
-                - FileServe: new optional parameter of constructor to enable directory listings (disabled, by default)
-                - FileServe: normalize URLs before serving files. for example: "//a/..///b/c/" will result in redirect to "/b/c/"
-                - aip tool: new command "aip files [path/to/dir]", which runs http file server on localhost:8080
-            </notes>
-        </release>
-        <release>
-            <date>2010-12-14</date>
-            <version>
-                <release>0.3.3</release>
-                <api>0.3.3</api>
-            </version>
-            <stability>
-                <release>stable</release>
-                <api>stable</api>
-            </stability>
-            <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
-            <notes>
-                - properly set php-path into "aip" tool
-                - MOD_PHP Handler: added missing exception to MOD_PHP namespace
-                - FileServe: assume, that PATH_INFO has leading slash
-                - FileServe: set seek-position to beginning of stream, before returning it
-                - ZeroMQ: less noise to console
-                - Logger: second parameter (output stream) is optional now, and defaults to STDOUT
-            </notes>
-        </release>
-        <release>
-            <date>2010-12-03</date>
-            <version>
-                <release>0.3.2</release>
-                <api>0.3.2</api>
-            </version>
-            <stability>
-                <release>stable</release>
-                <api>stable</api>
-            </stability>
-            <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
-            <notes>
-                - Handle internal notifications from Mongrel2 correctly
-                - Correctly handle premature disconnection of HTTP-clients
-                - Check if session.save_path is writable before writing anything there
-            </notes>
-        </release>
-        <release>
-            <date>2010-12-02</date>
-            <version>
-                <release>0.3.1</release>
-                <api>0.3.1</api>
-            </version>
-            <stability>
-                <release>stable</release>
-                <api>stable</api>
-            </stability>
-            <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
-            <notes>
-                - Better handling of slow requests
-            </notes>
-        </release>
-        <release>
-            <date>2010-12-01</date>
-            <version>
-                <release>0.3.0</release>
-                <api>0.3.0</api>
-            </version>
-            <stability>
-                <release>stable</release>
-                <api>stable</api>
-            </stability>
-            <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
-            <notes>
-                - Mongrel2 web-server support. see http://mongrel2.org/home
-                - "aip" tool supports SIGTERM, SIGINT and SIGHUP (graceful restart) signals
-                - StringStream class is reusable now
-                - use unquoted field-name, if file is uploaded to non-array var. closes gh-6 bug
-            </notes>
-        </release>
-        <release>
-            <date>2010-06-17</date>
-            <version>
-                <release>0.2.2</release>
-                <api>0.2.2</api>
-            </version>
-            <stability>
-                <release>stable</release>
-                <api>stable</api>
-            </stability>
-            <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
-            <notes>
-                - Middleware/PHP_Compat: added support for files uploaded to array-vars (Justin Forest)
-                - Applications can return streams instead of strings as response-body
-                - FileServe doesn't cache files anymore
-                - FileServe returns files as streams
-            </notes>            
-        </release>
-        <release>
-            <date>2010-05-05</date>
-            <version>
-                <release>0.2.1</release>
-                <api>0.2.1</api>
-            </version>
-            <stability>
-                <release>stable</release>
-                <api>stable</api>
-            </stability>
-            <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
-            <notes>
-                - added Logger middleware (apache Common Log compatible)
-                - fixed typo in Session middleware
-            </notes>
-        </release>
-        <release>
-            <date>2010-04-13</date>
-            <version>
-                <release>0.2.0</release>
-                <api>0.2.0</api>
-            </version>
-            <stability>
-                <release>stable</release>
-                <api>stable</api>
-            </stability>
-            <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
-            <notes>
-                - major internals overhaul
-                - HTTP protocol can optionally use "httpparser" php extension http://github.com/dhotson/httpparser-php
-                - simple file-serving app "FileServe" is bundled now
-                - added "aip" command-line tool, which works as a pre-forking server (not windows-compatible yet)
-            </notes>
-        </release>
-        <release>
-            <date>2009-12-18</date>
-            <version>
-                <release>0.1.1</release>
-                <api>0.1.0</api>
-            </version>
-            <stability>
-                <release>beta</release>
-                <api>stable</api>
-            </stability>
-            <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
-            <notes>
-                - added URLMap middleware
-                - defined "Transport" infrastructure for socket-oriented protocols
-                - added streamed-sockets transport
-                - added libevent transport
-                - add direct HTTP-protocol handler (appserver can work without server now)
-                - various cleanup
-            </notes>
-        </release>
-        <release>
-            <date>2009-12-04</date>
-            <version>
-                <release>0.1.0</release>
-                <api>0.1.0</api>
-            </version>
-            <stability>
-                <release>beta</release>
-                <api>stable</api>
-            </stability>
-            <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
-            <notes>
-                -
-            </notes>
-        </release>
     </changelog>
 </package>
