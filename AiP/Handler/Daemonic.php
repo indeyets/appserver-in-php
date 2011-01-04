@@ -1,8 +1,12 @@
 <?php
 
-namespace MFS\AppServer;
+namespace AiP\Handler;
 
-class DaemonicHandler implements iHandler
+use Daemonic\LogicException;
+use Daemonic\InvalidArgumentException;
+use Daemonic\BadProtocolException;
+
+class Daemonic implements \AiP\Handler
 {
     private $in_request = false;
     private $should_stop = false;
@@ -24,10 +28,13 @@ class DaemonicHandler implements iHandler
             gc_enable();
         }
 
-        $transport_class = 'MFS\\AppServer\\Transport\\'.$transport_name;
-        $this->setTransport(new $transport_class($socket_url, array($this, 'onRequest')));
-        $protocol_class = 'MFS\\AppServer\\'.$protocol_name.'\\Server';
-        $this->setProtocol(new $protocol_class);
+        $transport_class = 'AiP\Transport\\'.$transport_name;
+        $transport_obj = new $transport_class($socket_url, array($this, 'onRequest'));
+        $this->setTransport($transport_obj);
+
+        $protocol_class = 'AiP\Protocol\\'.$protocol_name;
+        $protocol_obj = new $protocol_class();
+        $this->setProtocol($protocol_obj);
     }
 
     public function setProtocol($protocol)
