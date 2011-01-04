@@ -23,7 +23,7 @@ class App extends \pakeApp
     public static function get_instance()
     {
         if (!self::$instance)
-            self::$instance = new RunnerApp();
+            self::$instance = new App();
 
         return self::$instance;
     }
@@ -80,7 +80,7 @@ class App extends \pakeApp
 
         $config = \pakeYaml::loadFile($config_file);
 
-        $runner = new Runner(dirname($config_file));
+        $runner = new \AiP\Runner(dirname($config_file));
         foreach ($config['servers'] as $server) {
             if (!isset($server['transport'])) {
                 $server['transport'] = 'Socket';
@@ -98,7 +98,7 @@ class App extends \pakeApp
     {
         if (isset($args[0])) {
             if (!is_dir($args[0])) {
-                throw new pakeException('"'.$args[0].'" is not a valid directory');
+                throw new \pakeException('"'.$args[0].'" is not a valid directory');
             }
             $path = realpath($args[0]);
         } else {
@@ -123,7 +123,7 @@ class App extends \pakeApp
             ),
         );
 
-        $runner = new Runner($path);
+        $runner = new AiP\Runner($path);
 
         $runner->addServer($server);
         pake_echo_action('app+', 'Serving files from "'.$path.'" via '.$server['protocol'].' at '.$server['socket'].'. ('.$server['min-children'].'-'.$server['max-children'].' workers)');

@@ -25,7 +25,7 @@ class Runner
     public function go()
     {
         foreach ($this->servers as $server) {
-            $handler = new \MFS\AppServer\DaemonicHandler($server['socket'], $server['protocol'], $server['transport']);
+            $handler = new \AiP\Handler\Daemonic($server['socket'], $server['protocol'], $server['transport']);
 
             for ($i = 0; $i < $server['min-children']; $i++) {
                 $pid = $this->startWorker($handler, $server['app']);
@@ -103,7 +103,7 @@ class Runner
                 $reflect  = new \ReflectionClass($mw_class);
                 $app = $reflect->newInstanceArgs($mw_params);
             } else {
-                $mw_class = 'MFS\AppServer\Middleware\\'.$middleware.'\\'.$middleware;
+                $mw_class = 'AiP\Middleware\\'.$middleware;
                 $app = new $mw_class($app);
             }
         }
