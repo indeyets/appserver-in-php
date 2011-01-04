@@ -1,35 +1,5 @@
 <?php
-namespace MFS\AppServer;
-
-class StringStreamKeeper
-{
-    const STREAM_NAME = 'mfsstring';
-    private static $strings = null;
-
-    public static function keep($string)
-    {
-        if (null === self::$strings) {
-            self::$strings = array();
-        }
-
-        $name = hash('sha1', $string);
-        self::$strings[$name] = $string;
-
-        return self::STREAM_NAME.'://'.$name;
-    }
-
-    public static function cleanup($_name)
-    {
-        $name = substr($_name, strlen(self::STREAM_NAME.'://'));
-        unset(self::$strings[$name]);
-    }
-
-    public static function get($_name)
-    {
-        $name = substr($_name, strlen(self::STREAM_NAME.'://'));
-        return self::$strings[$name];
-    }
-}
+namespace AiP\Common;
 
 class StringStream
 {
@@ -105,4 +75,4 @@ class StringStream
     }
 }
 
-stream_wrapper_register(StringStreamKeeper::STREAM_NAME, __NAMESPACE__."\\StringStream");
+stream_wrapper_register(StringStream\Keeper::STREAM_NAME, __NAMESPACE__.'\StringStream');

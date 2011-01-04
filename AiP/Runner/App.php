@@ -1,8 +1,8 @@
 <?php
 
-namespace MFS\AppServer\Runner;
+namespace AiP\Runner;
 
-class RunnerApp extends \pakeApp
+class App extends \pakeApp
 {
     const VERSION = '0.4.0';
 
@@ -112,12 +112,12 @@ class RunnerApp extends \pakeApp
             'min-children' => 1,
             'max-children' => 1,
             'app' => array(
-                'class' => 'MFS\AppServer\Apps\FileServe\FileServe',
+                'class' => 'AiP\App\FileServe',
                 'parameters' => array($path),
                 'file' => '',
                 'middlewares' => array(
                     'Logger',
-                    array('class' => 'MFS\AppServer\Middleware\Directory\Directory', 'parameters' => array($path, true)),
+                    array('class' => 'AiP\Middleware\Directory', 'parameters' => array($path, true)),
                     'ConditionalGet',
                 ),
             ),

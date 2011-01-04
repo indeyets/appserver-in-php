@@ -1,6 +1,6 @@
 <?php
 
-namespace MFS\AppServer\Runner;
+namespace AiP;
 
 declare(ticks=1);
 

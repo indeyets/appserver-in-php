@@ -1,6 +1,6 @@
 <?php
 
-namespace MFS\AppServer\Apps\FileServe;
+namespace AiP\App;
 
 class FileServe
 {
