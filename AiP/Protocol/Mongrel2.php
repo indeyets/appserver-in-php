@@ -1,8 +1,8 @@
 <?php
 
-namespace MFS\AppServer\Mongrel2;
+namespace AiP\Protocol;
 
-class Server implements \MFS\AppServer\iProtocol
+class Mongrel2 implements \AiP\Protocol
 {
     // iProtocol
     private $response = null;

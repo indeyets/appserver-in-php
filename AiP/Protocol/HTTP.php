@@ -1,8 +1,8 @@
 <?php
 
-namespace MFS\AppServer\HTTP;
+namespace AiP\Protocol;
 
-class Server implements \MFS\AppServer\iProtocol
+class HTTP implements \AiP\Protocol
 {
     // iProtocol
     private $stream = null;
