@@ -1,6 +1,8 @@
 <?php
 namespace AiP\Common;
 
+use StringStream\InvalidArgumentException;
+
 class StringStream
 {
     private $buffer;
@@ -12,7 +14,7 @@ class StringStream
             throw new InvalidArgumentException('StringStream is a read-only stream');
         }
 
-        $this->buffer = StringStreamKeeper::get($path);
+        $this->buffer = StringStream\Keeper::get($path);
         $this->position = 0;
 
         return true;
