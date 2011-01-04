@@ -1,6 +1,6 @@
 <?php
 
-namespace MFS\AppServer\Middleware\Cascade;
+namespace AiP\Middleware;
 
 class Cascade
 {
@@ -10,12 +10,12 @@ class Cascade
     public function __construct(array $apps, $wrong_status = 404)
     {
         if (count($apps) == 0) {
-            throw new UnexpectedValueException('$apps array is empty');
+            throw new Cascade\UnexpectedValueException('$apps array is empty');
         }
 
         foreach ($apps as $i => $app) {
             if (!is_callable($app))
-                throw new \MFS\AppServer\InvalidArgumentException('invalid app supplied on position #'.$i);
+                throw new InvalidApplicationException('invalid app supplied on position #'.$i);
         }
 
         $this->apps = $apps;

@@ -1,8 +1,8 @@
 <?php
 
-namespace MFS\AppServer\Middleware\Session;
+namespace AiP\Middleware\Session;
 
-class _Engine
+class Engine
 {
     private $cookies = array();
     private $headers = array();
@@ -75,7 +75,7 @@ class _Engine
             array(
                 'cookie_name' => ini_get('session.name'),
                 'hash_algorithm' => 'sha1',
-                'storage' => __NAMESPACE__.'\\FileStorage',
+                'storage' => __NAMESPACE__.'\Storage\File',
                 'cookie_lifetime' => ini_get('session.cookie_lifetime'),
                 'cookie_path' => ini_get('session.cookie_path'),
                 'cookie_domain' => ini_get('session.cookie_domain'),

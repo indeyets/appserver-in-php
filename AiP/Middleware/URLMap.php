@@ -1,6 +1,6 @@
 <?php
 
-namespace MFS\AppServer\Middleware\URLMap;
+namespace AiP\Middleware;
 
 class URLMap
 {
@@ -10,7 +10,7 @@ class URLMap
     {
         foreach ($map as $location => $app) {
             if (!is_callable($app))
-                throw new \MFS\AppServer\InvalidArgumentException('invalid app supplied for "'.$location.'" path');
+                throw new InvalidApplicationException('invalid app supplied for "'.$location.'" path');
 
             $i = new \stdClass();
             $i->app = $app;
@@ -24,7 +24,7 @@ class URLMap
             }
 
             if ($i->location[0] != '/')
-                throw new UnexpectedValueException('Location has to start with "/"');
+                throw new URLMap\UnexpectedValueException('Location has to start with "/"');
 
             $this->mapping[] = $i;
         }

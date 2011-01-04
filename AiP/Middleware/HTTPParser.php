@@ -12,7 +12,7 @@ class HTTPParser
     public function __construct($app, array $options = array())
     {
         if (!is_callable($app))
-            throw new InvalidArgumentException('invalid app supplied');
+            throw new InvalidApplicationException('invalid app supplied');
 
         $this->app = $app;
         $this->options = $options;

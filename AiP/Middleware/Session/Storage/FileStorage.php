@@ -1,8 +1,8 @@
 <?php
 
-namespace MFS\AppServer\Middleware\Session;
+namespace AiP\Middleware\Session\Storage;
 
-class FileStorage implements Storage
+class FileStorage implements \AiP\Middleware\Session\Storage
 {
     const MAGIC = 'MFS_SESSION';
 

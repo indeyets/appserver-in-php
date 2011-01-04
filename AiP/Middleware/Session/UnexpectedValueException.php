@@ -1,5 +1,5 @@
 <?php
 
-namespace MFS\AppServer\Middleware\Cascade;
+namespace AiP\Middleware\Session;
 
 class UnexpectedValueException extends \UnexpectedValueException {}

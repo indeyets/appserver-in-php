@@ -1,5 +1,5 @@
 <?php
 
-namespace MFS\AppServer\Middleware\URLMap;
+namespace AiP\Middleware\Cascade;
 
 class UnexpectedValueException extends \UnexpectedValueException {}

@@ -1,6 +1,6 @@
 <?php
 
-namespace MFS\AppServer\Middleware\Logger;
+namespace AiP\Middleware;
 
 class Logger
 {
@@ -16,7 +16,7 @@ class Logger
     public function __construct($app, $stream = STDOUT, $format = self::COMBINED_FORMAT)
     {
         if (!is_callable($app))
-            throw new \MFS\AppServer\InvalidArgumentException('invalid app supplied');
+            throw new InvalidApplicationException('invalid app supplied');
 
         if (is_string($stream)) {
             if (file_exists($stream))
@@ -30,7 +30,7 @@ class Logger
 
             $this->should_close = true;
         } elseif (!is_resource($stream)) {
-            throw new \MFS\AppServer\InvalidArgumentException('second parameter should be a writable stream');
+            throw new InvalidArgumentException('second parameter should be a writable stream');
         }
 
         $this->app = $app;

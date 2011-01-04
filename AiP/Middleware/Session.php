@@ -1,6 +1,6 @@
 <?php
 
-namespace MFS\AppServer\Middleware\Session;
+namespace AiP\Middleware;
 
 class Session
 {
@@ -9,7 +9,7 @@ class Session
     public function __construct($app)
     {
         if (!is_callable($app))
-            throw new \MFS\AppServer\InvalidArgumentException('invalid app supplied');
+            throw new InvalidApplicationException('invalid app supplied');
 
         $this->app = $app;
     }
@@ -17,9 +17,9 @@ class Session
     public function __invoke($context)
     {
         if (isset($context['mfs.session']))
-            throw new LogicException('"mfs.session" key is already occupied in context');
+            throw new Session\LogicException('"mfs.session" key is already occupied in context');
 
-        $ck = $context['mfs.session'] = new _Engine($context);
+        $ck = $context['mfs.session'] = new Session\Engine($context);
 
         $result = call_user_func($this->app, $context);
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace MFS\AppServer\Middleware\Session;
+namespace AiP\Middleware\Session;
 
 interface Storage
 {

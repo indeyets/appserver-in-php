@@ -9,20 +9,20 @@ Class accepts 3 parameters (2 required and 1 optional)
 examples:
 
     <?php
-    use MFS\AppServer\Middleware\Logger\Logger as aip_logger;
+    use AiP\Middleware\Logger as aip_logger;
     
     $fp = fopen('/var/log/myapplication/access.log', 'a');
     $logged_app = new aip_logger($app, $fp);
     ?>
 
     <?php
-    use MFS\AppServer\Middleware\Logger\Logger as aip_logger;
+    use AiP\Middleware\Logger as aip_logger;
     
     $logged_app = new aip_logger($app, '/var/log/myapplication/access.log');
     ?>
 
     <?php
-    use MFS\AppServer\Middleware\Logger\Logger as aip_logger;
+    use AiP\Middleware\Logger as aip_logger;
     
     $logged_app = new aip_logger($app, STDOUT, '"%r" %>s %b');
     ?>

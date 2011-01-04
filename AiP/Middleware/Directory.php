@@ -1,6 +1,6 @@
 <?php
 
-namespace MFS\AppServer\Middleware\Directory;
+namespace AiP\Middleware;
 
 class Directory
 {
@@ -11,10 +11,10 @@ class Directory
     public function __construct($file_app, $path, $directory_listings = false)
     {
         if (!is_dir($path))
-            throw new \Exception('"'.$path.'" is not a directory');
+            throw new \RuntimeException('"'.$path.'" is not a directory');
 
         if (!is_callable($file_app))
-            throw new \MFS\AppServer\InvalidArgumentException('invalid app supplied');
+            throw new InvalidApplicationException('invalid app supplied');
 
         $this->path = realpath($path);
         $this->file_app = $file_app;
