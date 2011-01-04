@@ -2,6 +2,8 @@
 
 namespace AiP\Runner;
 
+require 'pake/init.php';
+
 class App extends \pakeApp
 {
     const VERSION = '0.4.0';
@@ -34,7 +36,7 @@ class App extends \pakeApp
         pake_task(__NAMESPACE__.'\App::app');
 
         pake_desc('Run server. usage: aip files [path/to/dir]');
-        pake_task(__NAMESPACE__'\App::files');
+        pake_task(__NAMESPACE__.'\App::files');
     }
 
     protected function runDefaultTask()
