@@ -1,7 +1,8 @@
 <?php
 
-namespace MFS\AppServer\Middleware\HTTPParser;
-use MFS\AppServer\StringStreamKeeper;
+namespace AiP\Middleware;
+
+use AiP\Common\StringStream\Keeper;
 
 class HTTPParser
 {
@@ -11,7 +12,7 @@ class HTTPParser
     public function __construct($app, array $options = array())
     {
         if (!is_callable($app))
-            throw new \MFS\AppServer\InvalidArgumentException('invalid app supplied');
+            throw new InvalidArgumentException('invalid app supplied');
 
         $this->app = $app;
         $this->options = $options;
@@ -27,9 +28,9 @@ class HTTPParser
 
         // _COOKIE vars
         if (isset($context['env']['HTTP_COOKIE']))
-            $ck = new Cookies($context['env']['HTTP_COOKIE']);
+            $ck = new HTTPParser\Cookies($context['env']['HTTP_COOKIE']);
         else
-            $ck = new Cookies(null);
+            $ck = new HTTPParser\Cookies(null);
 
         $context['_COOKIE'] = $ck;
 
@@ -44,7 +45,7 @@ class HTTPParser
 
             if (isset($this->options['forward_stream']) and $this->options['forward_stream'] === true) {
                 // user asks us to provide a valid stream to app
-                $stream_name = StringStreamKeeper::keep($buffer);
+                $stream_name = Keeper::keep($buffer);
                 $_old_stdin = $context['stdin'];
                 $context['stdin'] = fopen($stream_name, 'r');
             }
@@ -71,7 +72,7 @@ class HTTPParser
         if (isset($_old_stdin)) {
             // remove our "fake" stream
             fclose($context['stdin']);
-            StringStreamKeeper::cleanup($stream_name);
+            Keeper::cleanup($stream_name);
             $context['stdin'] = $_old_stdin;
         }
 
@@ -103,7 +104,7 @@ class HTTPParser
         }
 
         if (!isset($boundary))
-            throw new BadProtocolException("Didn't find boundary-declaration in multipart");
+            throw new HTTPParser\BadProtocolException("Didn't find boundary-declaration in multipart");
 
         $post_strs = array();
         $pos = 0;
@@ -113,7 +114,7 @@ class HTTPParser
             $h_end = strpos($b, "\r\n\r\n", $h_start);
 
             if (false === $h_end) {
-                throw new BadProtocolException("Didn't find end of headers-zone");
+                throw new HTTPParser\BadProtocolException("Didn't find end of headers-zone");
             }
 
             $headers = array();
@@ -123,7 +124,7 @@ class HTTPParser
             }
 
             if (!isset($headers['Content-Disposition']))
-                throw new BadProtocolException("Didn't find Content-disposition in one of the parts of multipart: ".var_export(array_keys($headers), true));
+                throw new HTTPParser\BadProtocolException("Didn't find Content-disposition in one of the parts of multipart: ".var_export(array_keys($headers), true));
 
             // parsing dispositin-header of part
             $disposition = array();
@@ -140,7 +141,7 @@ class HTTPParser
             $b_end = strpos($b, "\r\n".$boundary, $b_start);
 
             if (false === $b_end) {
-                throw new BadProtocolException("Didn't find end of body :-/");
+                throw new HTTPParser\BadProtocolException("Didn't find end of body :-/");
             }
 
             $file_data = substr($b, $b_start, $b_end - $b_start);

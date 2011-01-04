@@ -1,6 +1,6 @@
 <?php
 
-namespace MFS\AppServer\Middleware\HTTPParser;
+namespace AiP\Middleware\HTTPParser;
 
 class Cookies implements \ArrayAccess
 {
