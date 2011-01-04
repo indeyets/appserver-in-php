@@ -1,6 +1,6 @@
 <?php
 
-namespace MFS\AppServer\MOD_PHP;
+namespace AiP\Handler\MOD_PHP;
 
 class Cookies implements \ArrayAccess
 {
@@ -38,7 +38,7 @@ class Cookies implements \ArrayAccess
     public function offsetGet($offset)
     {
         if (!$this->offsetExists($offset))
-            throw new OutOfBoundException();
+            throw new OutOfBoundsException();
 
         return $this->cookies[$offset];
     }

@@ -1,7 +1,14 @@
 <?php
-namespace MFS\AppServer\MOD_PHP;
 
-class Handler implements \MFS\AppServer\iHandler
+namespace AiP\Handler;
+
+use MOD_PHP\Response;
+use MOD_PHP\Cookies;
+
+use MOD_PHP\LogicException;
+use MOD_PHP\InvalidArgumentException;
+
+class MOD_PHP implements \AiP\Handler
 {
     private $socket = null;
     private $has_gc = true;
@@ -64,6 +71,7 @@ class Handler implements \MFS\AppServer\iHandler
             $this->log('[Exception] '.get_class($e).': '.$e->getMessage());
         }
     }
+
     public function log($message)
     {
         trigger_error($message, E_USER_NOTICE);

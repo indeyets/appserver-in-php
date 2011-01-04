@@ -1,5 +1,5 @@
 <?php
-namespace MFS\AppServer\MOD_PHP;
+namespace AiP\Handler\MOD_PHP;
 
 class Response
 {
