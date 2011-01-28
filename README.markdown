@@ -7,10 +7,8 @@ provides a common API for connecting PHP frameworks and applications to webserve
 The main idea is, that your app, if built for this protocol, will be able to 
 preload resources, preconnect to databases and response to requests **really** fast.
 
-PHP 5.3+ is recommended (and required, if you use main branch), as it provides 
-new garbage collector for cyclic references, which is critical for long-running 
-apps. We also have a special "backported" version for those of you, who are stuck 
-with PHP 5.2.
+PHP 5.3+ is required, as it provides new garbage collector for cyclic references,
+which is critical for long-running apps.
 
 Instalation
 -----------
@@ -19,11 +17,6 @@ You can get latest release using PEAR:
 
     pear channel-discover pear.indeyets.pp.ru
     pear install indeyets/AppServer
-
-Or, if you need version backported to php 5.2 (unsupported):
-
-    pear channel-discover pear.indeyets.pp.ru
-    pear install indeyets/AppServer_backport52
 
 
 Usage
@@ -35,3 +28,9 @@ Take a look at [example](https://github.com/indeyets/appserver-in-php/tree/maste
 * config.yaml — defines that this application should be served both as HTTP and SCGI
 
 run with "aip app path/to/config.yaml" command
+
+
+Discuss
+-------
+
+Please join [our discussion group](http://groups.google.com/group/aip-php-dev)
