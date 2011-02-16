@@ -32,7 +32,7 @@ class App extends \pakeApp
 
     public function load_pakefile()
     {
-        pake_desc('Run server. usage: aip app [config.yaml]');
+        pake_desc('Run server. usage: aip app [aip.yaml]');
         pake_task(__NAMESPACE__.'\App::app');
 
         pake_desc('Run server. usage: aip files [path/to/dir]');
@@ -68,10 +68,10 @@ class App extends \pakeApp
             $config_file = $args[0];
 
             if (is_dir($config_file)) {
-                $config_file = realpath($config_file.'/config.yaml');
+                $config_file = realpath($config_file.'/aip.yaml');
             }
         } else {
-            $config_file = getcwd().'/config.yaml';
+            $config_file = getcwd().'/aip.yaml';
         }
 
         pake_echo_comment('Loading configuration…');

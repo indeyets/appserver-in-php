@@ -15,5 +15,5 @@ function run_install()
 
 function run_demo()
 {
-    pake_sh('aip app '.realpath(__DIR__.'/examples/new/config.yaml'), true);
+    pake_sh('aip app '.realpath(__DIR__.'/examples/new/aip.yaml'), true);
 }
