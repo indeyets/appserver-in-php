@@ -2,6 +2,7 @@
 namespace AiP\Transport;
 
 use AiP\Transport\LibEvent\RuntimeException;
+use AiP\Transport\LibEvent\LogicException;
 
 class LibEventUnbuffered extends AbstractTransport
 {
@@ -11,6 +12,14 @@ class LibEventUnbuffered extends AbstractTransport
     protected $socket_events      = array();
 
     protected $callback;
+
+    public function __construct($addr, $callback)
+    {
+        if (!extension_loaded('libevent'))
+            throw new LogicException('LibEvent transport requires pecl/libevent extension');
+
+        parent::__construct($addr, $callback);
+    }
 
     public function loop()
     {

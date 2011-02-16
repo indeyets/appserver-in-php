@@ -1,4 +1,4 @@
 <?php
-namespace AiP\Transport;
+namespace AiP\Transport\LibEvent;
 
 class LogicException extends \LogicException {}
