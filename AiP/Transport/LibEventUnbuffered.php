@@ -58,8 +58,13 @@ class LibEventUnbuffered extends AbstractTransport
     {
         $conn = $this->acceptSocket();
 
+        $remote_addr = stream_socket_get_name($conn, true);
+        if (false === $remote_addr) {
+            $remote_addr = null;
+        }
+
         self::log('Socket', 'callback');
-        call_user_func($this->callback, $conn);
+        call_user_func($this->callback, $conn, $remote_addr);
     }
 
     protected function addSocket($addr)

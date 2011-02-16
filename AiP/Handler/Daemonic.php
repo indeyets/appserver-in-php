@@ -70,11 +70,11 @@ class Daemonic implements \AiP\Handler
         }
     }
 
-    public function onRequest($stream)
+    public function onRequest($stream, $remote_addr)
     {
         $this->in_request = true;
 
-        if (false === $this->protocol->readRequest($stream)) {
+        if (false === $this->protocol->readRequest($stream, $remote_addr)) {
             return;
         }
 

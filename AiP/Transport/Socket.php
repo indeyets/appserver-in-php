@@ -21,7 +21,12 @@ class Socket extends AbstractTransport
             if (false === $conn)
                 return;
 
-            call_user_func($this->callback, $conn);
+            $remote_addr = stream_socket_get_name($conn, true);
+            if (false === $remote_addr) {
+                $remote_addr = null;
+            }
+
+            call_user_func($this->callback, $conn, $remote_addr);
         }
     }
 

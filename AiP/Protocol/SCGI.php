@@ -19,7 +19,7 @@ class SCGI implements \AiP\Protocol
         // $this->log("DeInitialized SCGI Application: ".get_class($this));
     }
 
-    public function readRequest($stream)
+    public function readRequest($stream, $remote_addr)
     {
         $this->stream = $stream;
 

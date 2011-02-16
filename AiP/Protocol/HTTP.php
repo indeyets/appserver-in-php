@@ -42,7 +42,7 @@ class HTTP implements \AiP\Protocol
         }
     }
 
-    public function readRequest($stream)
+    public function readRequest($stream, $remote_addr)
     {
         $this->stream = $stream;
 
@@ -96,6 +96,12 @@ class HTTP implements \AiP\Protocol
         $this->headers['SERVER_SOFTWARE'] = 'appserver-in-php';
         $this->headers['GATEWAY_INTERFACE'] = 'CGI/1.1';
         $this->headers['SCRIPT_NAME'] = '';
+
+        if (null !== $remote_addr) {
+            $pos = strrpos($remote_addr, ':');
+            $this->headers['REMOTE_ADDR'] = substr($remote_addr, 0, $pos);
+            $this->headers['REMOTE_PORT'] = substr($remote_addr, $pos + 1);
+        }
 
         if (isset($this->headers['HTTP_HOST'])) {
             if (false === $pos = strpos($this->headers['HTTP_HOST'], ':')) {
