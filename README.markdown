@@ -25,9 +25,9 @@ Usage
 Take a look at [example](https://github.com/indeyets/appserver-in-php/tree/master/examples/new/).
 
 * MyApp.class.php — application class. "__invoke()" method is the entry point
-* config.yaml — defines that this application should be served both as HTTP and SCGI
+* aip.yaml — defines that this application should be served both as HTTP and SCGI
 
-run with "aip app path/to/config.yaml" command
+run with "aip app path/to/aip.yaml" command
 
 
 Discuss
