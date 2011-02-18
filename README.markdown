@@ -34,3 +34,5 @@ Discuss
 -------
 
 Please join [our discussion group](http://groups.google.com/group/aip-php-dev)
+
+There's also [#appserver-in-php](irc://chat.freenode.net#appserver-in-php) IRC-channel on [freenode](http://freenode.net)
