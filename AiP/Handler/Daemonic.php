@@ -2,9 +2,9 @@
 
 namespace AiP\Handler;
 
-use Daemonic\LogicException;
-use Daemonic\InvalidArgumentException;
-use Daemonic\BadProtocolException;
+use AiP\Handler\Daemonic\LogicException;
+use AiP\Handler\Daemonic\InvalidArgumentException;
+use AiP\Handler\Daemonic\BadProtocolException;
 
 class Daemonic implements \AiP\Handler
 {

@@ -1,10 +1,10 @@
 <?php
 namespace AiP\Protocol;
 
-use SCGI\Response;
+use AiP\Protocol\SCGI\Response;
 
-use SCGI\LogicException;
-use SCGI\BadProtocolException;
+use AiP\Protocol\SCGI\LogicException;
+use AiP\Protocol\SCGI\BadProtocolException;
 
 class SCGI implements \AiP\Protocol
 {

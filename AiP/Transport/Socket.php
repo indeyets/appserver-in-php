@@ -1,7 +1,7 @@
 <?php
 namespace AiP\Transport;
 
-use Socket\RuntimeException;
+use AiP\Transport\Socket\RuntimeException;
 
 class Socket extends AbstractTransport
 {

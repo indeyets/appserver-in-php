@@ -2,11 +2,11 @@
 
 namespace AiP\Handler;
 
-use MOD_PHP\Response;
-use MOD_PHP\Cookies;
+use AiP\Handler\MOD_PHP\Response;
+use AiP\Handler\MOD_PHP\Cookies;
 
-use MOD_PHP\LogicException;
-use MOD_PHP\InvalidArgumentException;
+use AiP\Handler\MOD_PHP\LogicException;
+use AiP\Handler\MOD_PHP\InvalidArgumentException;
 
 class MOD_PHP implements \AiP\Handler
 {

@@ -5,8 +5,8 @@ error_reporting(E_ALL | E_STRICT);
 
 require '../../../autoload.php';
 
-use \AiP\Middleware\Session\Engine;
-use \AiP\Middleware\Session\Storage;
+use AiP\Middleware\Session\Engine;
+use AiP\Middleware\Session\Storage;
 
 class DumbStorage implements Storage
 {

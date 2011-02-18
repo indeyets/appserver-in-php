@@ -5,7 +5,7 @@ error_reporting(E_ALL | E_STRICT);
 
 require '../../../autoload.php';
 
-use \AiP\Middleware\Session\Storage\FileStorage;
+use AiP\Middleware\Session\Storage\FileStorage;
 
 class FileStorageTest extends PHPUnit_Framework_TestCase
 {

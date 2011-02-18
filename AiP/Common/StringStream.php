@@ -1,7 +1,7 @@
 <?php
 namespace AiP\Common;
 
-use StringStream\InvalidArgumentException;
+use AiP\Common\StringStream\InvalidArgumentException;
 
 class StringStream
 {
