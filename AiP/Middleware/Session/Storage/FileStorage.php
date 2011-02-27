@@ -4,7 +4,7 @@ namespace AiP\Middleware\Session\Storage;
 
 class FileStorage implements \AiP\Middleware\Session\Storage
 {
-    const MAGIC = 'MFS_SESSION';
+    const MAGIC = 'AIP_SESSION';
 
     private $options;
     private $name = null;
