@@ -126,13 +126,9 @@ class Mongrel2 implements \AiP\Protocol
         $this->headers = null;
         $this->body = null;
 
-        if (null !== $this->stream_name) {
-            if (is_resource($this->stream)) {
-                fclose($this->stream);
-                $this->stream = null;
-            }
-            \AiP\Common\StringStream\Keeper::cleanup($this->stream_name);
-            $this->stream_name = null;
+        if (is_resource($this->stream)) {
+            fclose($this->stream);
+            $this->stream = null;
         }
     }
 
@@ -143,9 +139,8 @@ class Mongrel2 implements \AiP\Protocol
 
     public function getStdin()
     {
-        if (null === $this->stream_name) {
-            $this->stream_name = \MFS\AppServer\StringStreamKeeper::keep($this->body);
-            $this->stream = fopen($this->stream_name, 'r');
+        if (null === $this->stream) {
+            $this->stream = \AiP\Common\StringStream\Keeper::create($this->body)->fopen();
         }
 
         return $this->stream;

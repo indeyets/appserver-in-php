@@ -6,30 +6,40 @@ class Keeper
 {
     const STREAM_NAME = 'aipstring';
 
-    private static $strings = null;
+    private $string;
+    private $name;
 
-    public static function keep($string)
+    public static function create($string)
     {
-        if (null === self::$strings) {
-            self::$strings = array();
-        }
-
-        $name = hash('sha1', $string);
-        self::$strings[$name] = $string;
-
-        return self::STREAM_NAME.'://'.$name;
+        return new Keeper($string);
     }
 
-    public static function cleanup($_name)
+    public function __construct($string)
     {
-        $name = substr($_name, strlen(self::STREAM_NAME.'://'));
-        unset(self::$strings[$name]);
+        $this->name = self::STREAM_NAME.'://'.hash('sha1', $string);
+        $this->string = $string;
     }
 
-    public static function get($_name)
+    public function __toString()
     {
-        $name = substr($_name, strlen(self::STREAM_NAME.'://'));
-        return self::$strings[$name];
+        return $this->name;
+    }
+
+    public function get()
+    {
+        return $this->string;
+    }
+
+    public function fopen()
+    {
+        $ctx = stream_context_create(array(
+            self::STREAM_NAME => array(
+                'string' => $this
+            ),
+        ));
+
+        return fopen($this->name, 'r', false, $ctx);
     }
 }
 
+stream_wrapper_register(Keeper::STREAM_NAME, 'AiP\Common\StringStream');

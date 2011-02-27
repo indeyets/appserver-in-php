@@ -5,16 +5,25 @@ use AiP\Common\StringStream\InvalidArgumentException;
 
 class StringStream
 {
+    public $context;
+
     private $buffer;
     private $position = 0;
 
-    public function stream_open($path, $mode, $options, &$opened_path)
+    public function stream_open($path, $mode, $flags, &$opened_path)
     {
         if ($mode != 'r') {
             throw new InvalidArgumentException('StringStream is a read-only stream');
         }
 
-        $this->buffer = StringStream\Keeper::get($path);
+        $options = stream_context_get_options($this->context);
+
+        $k = StringStream\Keeper::STREAM_NAME;
+        if (!array_key_exists($k, $options) or ! $options[$k]['string'] instanceof StringStream\Keeper) {
+            throw new InvalidArgumentException('String streams must be created using the StringStream\Keeper');
+        }
+
+        $this->buffer = $options[$k]['string']->get();
         $this->position = 0;
 
         return true;
@@ -76,5 +85,3 @@ class StringStream
         }
     }
 }
-
-stream_wrapper_register(StringStream\Keeper::STREAM_NAME, __NAMESPACE__.'\StringStream');

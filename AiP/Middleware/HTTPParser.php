@@ -45,9 +45,9 @@ class HTTPParser
 
             if (isset($this->options['forward_stream']) and $this->options['forward_stream'] === true) {
                 // user asks us to provide a valid stream to app
-                $stream_name = Keeper::keep($buffer);
                 $_old_stdin = $context['stdin'];
-                $context['stdin'] = fopen($stream_name, 'r');
+
+                $context['stdin'] = Keeper::create($buffer)->fopen();
             }
 
             if (isset($context['env']['CONTENT_TYPE']) and strpos($context['env']['CONTENT_TYPE'], 'multipart/form-data') === 0) {
@@ -72,7 +72,6 @@ class HTTPParser
         if (isset($_old_stdin)) {
             // remove our "fake" stream
             fclose($context['stdin']);
-            Keeper::cleanup($stream_name);
             $context['stdin'] = $_old_stdin;
         }
 
