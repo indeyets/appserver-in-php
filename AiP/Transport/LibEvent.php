@@ -108,8 +108,10 @@ class LibEvent extends AbstractTransport
     {
         $conn_num = $args[0];
         self::log('Connection', $conn_num, 'write');
-        if ($this->connection_statuses[$conn_num] == self::STATE_WRITE)
+        if ($this->connection_statuses[$conn_num] == self::STATE_WRITE) {
             $this->closeConnection($conn_num);
+            pcntl_signal_dispatch();
+        }
     }
 
     public function onEventError($socket, $error_mask, $args)

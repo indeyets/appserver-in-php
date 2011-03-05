@@ -65,6 +65,7 @@ class LibEventUnbuffered extends AbstractTransport
 
         self::log('Socket', 'callback');
         call_user_func($this->callback, $conn, $remote_addr);
+        pcntl_signal_dispatch();
     }
 
     protected function addSocket($addr)

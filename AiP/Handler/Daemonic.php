@@ -54,8 +54,6 @@ class Daemonic implements \AiP\Handler
 
     public function serve($app)
     {
-        declare(ticks=1);
-
         if (!is_callable($app))
             throw new InvalidArgumentException('not a valid app');
 

@@ -2,8 +2,6 @@
 
 namespace AiP;
 
-declare(ticks=1);
-
 class Runner
 {
     private $servers;
@@ -42,7 +40,9 @@ class Runner
             pcntl_signal(SIGHUP,  array($this, 'sighup'),  false);
 
             $status = null;
-            $old_pid = pcntl_wait($status);
+            declare(ticks=1) {
+                $old_pid = pcntl_wait($status);
+            }
 
             if (0 === $old_pid) {
                 echo "[no workers]\n";

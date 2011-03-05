@@ -16,7 +16,9 @@ class Socket extends AbstractTransport
     {
         $this->in_loop = true;
         while ($this->in_loop) {
-            $conn = stream_socket_accept($this->socket, -1);
+            declare(ticks=1) {
+                $conn = @stream_socket_accept($this->socket, -1);
+            }
 
             if (false === $conn)
                 return;
@@ -27,6 +29,7 @@ class Socket extends AbstractTransport
             }
 
             call_user_func($this->callback, $conn, $remote_addr);
+            pcntl_signal_dispatch();
         }
     }
 
