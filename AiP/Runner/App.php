@@ -32,10 +32,10 @@ class App extends \pakeApp
 
     public function load_pakefile()
     {
-        pake_desc('Run server. usage: aip app [aip.yaml]');
+        pake_desc('Run application server. usage: aip app [path/to/[aip.yaml]]');
         pake_task(__NAMESPACE__.'\App::app');
 
-        pake_desc('Run server. usage: aip files [path/to/dir]');
+        pake_desc('Run file server. usage: aip files [path/to/dir]');
         pake_task(__NAMESPACE__.'\App::files');
     }
 
@@ -125,7 +125,7 @@ class App extends \pakeApp
             ),
         );
 
-        $runner = new AiP\Runner($path);
+        $runner = new \AiP\Runner($path);
 
         $runner->addServer($server);
         pake_echo_action('app+', 'Serving files from "'.$path.'" via '.$server['protocol'].' at '.$server['socket'].'. ('.$server['min-children'].'-'.$server['max-children'].' workers)');
