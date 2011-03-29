@@ -26,18 +26,21 @@
         <active>yes</active>
     </contributor>
 
-    <date>2011-01-02</date>
+    <date>2011-03-29</date>
     <version>
         <release>0.9.0</release>
         <api>0.9.0</api>
     </version>
     <stability>
-        <release>beta</release>
+        <release>stable</release>
         <api>stable</api>
     </stability>
     <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
     <notes>
         - first release under new name
+        - AiP is SPLClassLoader compatible now
+        - more efficient signal handling
+        - new useful Middlewares
     </notes>
 
     <contents>
