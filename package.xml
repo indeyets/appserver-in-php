@@ -126,6 +126,7 @@
                             <file role="php" name="IdIsTakenException.php" />
                             <file role="php" name="LogicException.php" />
                             <file role="php" name="RuntimeException.php" />
+                            <file role="php" name="UnexpectedValueException.php" />
                         </dir>
 
                         <file role="php" name="Storage.php" />
