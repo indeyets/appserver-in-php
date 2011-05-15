@@ -24,7 +24,7 @@ class MyApp
         $body = str_replace('{data}', $this->prepareData($context), $this->tpl);
 
         $headers = array(
-            'Conent-type', 'text/html; charset=utf-8',
+            'Content-type', 'text/html; charset=utf-8',
             'Content-Length', strlen($body)
         );
 
