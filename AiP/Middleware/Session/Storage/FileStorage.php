@@ -34,7 +34,7 @@ class FileStorage implements \AiP\Middleware\Session\Storage
     {
         $this->name = $name;
 
-        $this->validateSessionFile();
+        $this->validateSessionFile($name);
 
         $this->lock();
         $this->readData();
@@ -88,14 +88,31 @@ class FileStorage implements \AiP\Middleware\Session\Storage
         return !file_exists($this->getSessionFilename($name));
     }
 
-    private function validateSessionFile()
+    private function validateSessionFile($name)
     {
-        $dir = $this->options['save_path'];
+        $file = $this->getSessionFilename($name);
 
-        $file = $dir.'/'.$this->name.'.session';
-
-        if (file_exists($file) and !is_writable($file))
+        if (file_exists($file) and !is_writable($file)) {
             throw new RuntimeException('Noe enough rights to write to "'.$file.'"');
+        }
+    }
+
+    public function isValid($name) {
+        try {
+            $this->validateSessionFile($name);
+        } catch (RuntimeException $e) {
+            return false;
+        }
+
+        $file = $this->getSessionFilename($name);
+        if (!file_exists($file)) {
+            return false;
+        }
+        if (file_get_contents($file) == "") {
+            return false;
+        }
+
+        return true;
     }
 
     private function getSessionFilename($name = null)
