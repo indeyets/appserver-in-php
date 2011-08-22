@@ -95,8 +95,12 @@ class Engine
 
         if ($this->cookieIsSet()) {
             $this->fetchIdFromCookie();
-
-            $this->vars = $this->storage->open($this->id);
+            if ($this->storage->isValid($this->id)) {
+                $this->vars = $this->storage->open($this->id);
+            } else {
+                $this->createSessionWithNewId();
+                $this->createCookie();
+            }
         } else {
             $this->createSessionWithNewId();
             $this->createCookie();

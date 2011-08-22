@@ -9,4 +9,5 @@ interface Storage
     public function create($name);
     public function save(array $vars);
     public function destroy();
+    public function isValid($name);
 }
