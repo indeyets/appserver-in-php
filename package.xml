@@ -26,10 +26,10 @@
         <active>yes</active>
     </contributor>
 
-    <date>2011-03-29</date>
+    <date>2011-09-13</date>
     <version>
         <release>0.9.1</release>
-        <api>0.9.0</api>
+        <api>0.9.1</api>
     </version>
     <stability>
         <release>beta</release>
@@ -37,7 +37,7 @@
     </stability>
     <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
     <notes>
-        -
+        - moved to new pear-channel
     </notes>
 
     <contents>
