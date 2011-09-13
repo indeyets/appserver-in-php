@@ -32,12 +32,14 @@
         <api>0.9.1</api>
     </version>
     <stability>
-        <release>beta</release>
+        <release>stable</release>
         <api>stable</api>
     </stability>
     <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
     <notes>
-        -
+        - typo fix (by Mickaël)
+        - interface compliance fixes (by Jan Prieser)
+        - bulletproof session file handling (by Henri Bergius)
     </notes>
 
     <contents>
