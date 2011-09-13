@@ -27,7 +27,7 @@ class ZeroMQ extends AbstractTransport
             declare(ticks=1) {
                 $message = $this->reqs->recv();
             }
-            call_user_func($this->callback, array($message, $this->resp));
+            call_user_func($this->callback, array($message, $this->resp), null);
             pcntl_signal_dispatch();
         }
     }

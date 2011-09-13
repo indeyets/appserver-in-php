@@ -45,7 +45,7 @@ class Mongrel2 implements \AiP\Protocol
         $this->write($response); // body
     }
 
-    public function readRequest($input)
+    public function readRequest($input, $remote_addr)
     {
         list($message, $this->response) = $input;
 
