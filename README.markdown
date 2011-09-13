@@ -15,7 +15,7 @@ Instalation
 
 You can get latest release using PEAR:
 
-    pear channel-discover pear.indeyets.pp.ru
+    pear channel-discover pear.indeyets.ru
     pear install indeyets/AppServer
 
 
