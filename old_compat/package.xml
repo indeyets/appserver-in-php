@@ -44,7 +44,7 @@
             </pearinstaller>
             <package>
                 <name>aip</name>
-                <channel>pear.indeyets.pp.ru</channel>
+                <channel>pear.indeyets.ru</channel>
             </package>
         </required>
     </dependencies>
