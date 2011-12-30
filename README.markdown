@@ -10,7 +10,7 @@ preload resources, preconnect to databases and response to requests **really** f
 PHP 5.3+ is required, as it provides new garbage collector for cyclic references,
 which is critical for long-running apps.
 
-Instalation
+Installation
 -----------
 
 You can get latest release using PEAR:
@@ -18,6 +18,7 @@ You can get latest release using PEAR:
     pear channel-discover pear.indeyets.ru
     pear install indeyets/AppServer
 
+Alternatively, you can install AiP with [Composer](http://packagist.org/).
 
 Usage
 -----
