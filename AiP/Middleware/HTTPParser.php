@@ -88,7 +88,7 @@ class HTTPParser
     }
 
 
-    private static function parseMultipart($ct, $b, &$_POST, &$_FILES)
+    private static function parseMultipart($ct, $b, &$POST, &$FILES)
     {
         $vars_accu = array(); // place to accumulate parts of post-vars string
 
@@ -225,7 +225,7 @@ class HTTPParser
             $pos = $b_end + 2;
         }
 
-        parse_str(implode('&', $post_strs), $_POST);
+        parse_str(implode('&', $post_strs), $POST);
     }
 
     // utility functions
