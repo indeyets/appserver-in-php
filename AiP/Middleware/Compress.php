@@ -26,6 +26,13 @@ class Compress
 
         $new_headers = array('Vary', 'Accept-Encoding');
 
+        if (is_resource($body)) {
+            // FIXME: we should, probably, use pseudo-stream object here, instead
+            $_fp = $body;
+            $body = stream_get_contents($_fp);
+            fclose($_fp);
+        }
+
         // client wants compressed output
         if (false !== strpos($ctx['env']['HTTP_ACCEPT_ENCODING'], 'deflate')) { // will catch x-deflate too
             $body = gzdeflate($body, 3);
