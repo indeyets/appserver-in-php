@@ -13,7 +13,7 @@ class Response
     private $content_type = null;
     private $status = 200;
 
-    public function __construct(Server $scgi)
+    public function __construct(\AiP\Protocol $scgi)
     {
         if (null === self::$valid_statuses) {
             self::$valid_statuses = array(
