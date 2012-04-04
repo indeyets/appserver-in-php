@@ -10,7 +10,7 @@ pake_task('demo');
 
 function run_install()
 {
-    pake_superuser_sh('pear install -f aip-0.9.0.tgz');
+    pake_superuser_sh('pear install -f aip-0.9.3.tgz');
 }
 
 function run_demo()
