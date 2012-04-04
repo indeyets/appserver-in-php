@@ -210,9 +210,9 @@ class HTTPParser
                 $parts = explode('[', $sel, 2);
                 foreach (array_keys($fdata) as $key) {
                     if (count($parts) == 1) {
-                        $_FILES[$disposition['name']][$key] = $fdata[$key];
+                        $FILES[$disposition['name']][$key] = $fdata[$key];
                     } else {
-                        eval($code = '$_FILES[' . $parts[0] . '][\'' . $key . '\'][' . $parts[1] . ' = $fdata[\'' . $key . '\'];');
+                        eval($code = '$FILES[' . $parts[0] . '][\'' . $key . '\'][' . $parts[1] . ' = $fdata[\'' . $key . '\'];');
                     }
                 }
             } else {
