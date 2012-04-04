@@ -90,8 +90,6 @@ class HTTPParser
 
     private static function parseMultipart($ct, $b, &$POST, &$FILES)
     {
-        $vars_accu = array(); // place to accumulate parts of post-vars string
-
         foreach (explode('; ', $ct) as $ct_part) {
             $pos = strpos($ct_part, 'boundary=');
 

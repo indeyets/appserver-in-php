@@ -177,6 +177,11 @@ class LibEvent extends AbstractTransport
         unset($this->connection_statuses[$conn_num]);
     }
 
+    /**
+     * @param $conn_id
+     * @param $count
+     * @return string
+     */
     function readFromBuffer($conn_id, $count)
     {
         $readed = event_buffer_read($this->connection_buffers[$conn_id], $count);

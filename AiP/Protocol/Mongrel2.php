@@ -14,7 +14,6 @@ class Mongrel2 implements \AiP\Protocol
     private $headers = null;
     private $body = null;
 
-    private $stream_name = null;
     private $stream = null;
 
     public function writeResponse($response_data)

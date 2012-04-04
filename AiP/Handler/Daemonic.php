@@ -11,7 +11,10 @@ class Daemonic implements \AiP\Handler
     private $in_request = false;
     private $should_stop = false;
 
+    /** @var $protocol \AiP\Protocol */
     protected $protocol = null;
+
+    /** @var $transport \AiP\Transport */
     private $transport = null;
     private $app = null;
 
@@ -37,12 +40,12 @@ class Daemonic implements \AiP\Handler
         $this->setProtocol($protocol_obj);
     }
 
-    public function setProtocol($protocol)
+    public function setProtocol(\AiP\Protocol $protocol)
     {
         $this->protocol = $protocol;
     }
 
-    public function setTransport($transport)
+    public function setTransport(\AiP\Transport $transport)
     {
         $this->transport = $transport;
     }

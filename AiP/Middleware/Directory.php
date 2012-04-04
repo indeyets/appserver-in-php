@@ -5,7 +5,7 @@ namespace AiP\Middleware;
 class Directory
 {
     private $path;
-    private $file_app = null;
+    private $file_app;
     private $directory_listings = false;
 
     public function __construct($file_app, $path, $directory_listings = false)

@@ -10,13 +10,13 @@ class Stream
     protected $last_readed_length = 1;
     protected $position = 0;
 
-    static function setTransport($transport)
+    static function setTransport(\AiP\Transport\LibEvent $transport)
     {
         self::$transport = $transport;
     }
 
     /**
-     * @return LibEvent
+     * @return \AiP\Transport\LibEvent
      */
     static function getTransport()
     {

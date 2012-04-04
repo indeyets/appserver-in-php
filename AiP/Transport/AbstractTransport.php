@@ -17,6 +17,8 @@ abstract class AbstractTransport implements \AiP\Transport
         $this->addSocket($this->addr);
     }
 
+    abstract protected function addSocket($addr);
+
     static function log($object, $message)
     {
         echo $object.' -> '.$message."\n";

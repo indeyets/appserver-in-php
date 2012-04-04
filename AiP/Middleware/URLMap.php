@@ -15,6 +15,7 @@ class URLMap
             $i = new \stdClass();
             $i->app = $app;
 
+            $parts = array();
             if (false !== mb_ereg('\Ahttps?://(.*?)(/.*)', $location, $parts)) {
                 $i->host = $parts[1];
                 $i->location = $parts[2];

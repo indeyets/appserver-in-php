@@ -10,9 +10,6 @@ use AiP\Handler\MOD_PHP\InvalidArgumentException;
 
 class MOD_PHP implements \AiP\Handler
 {
-    private $socket = null;
-    private $has_gc = true;
-
     public function __construct()
     {
         if (PHP_SAPI === 'cli')
@@ -60,7 +57,7 @@ class MOD_PHP implements \AiP\Handler
             } elseif (is_resource($result[2])) {
                 fseek($result[2], 0);
                 while(!feof($result[2])) {
-                    $this->write(fread($result[2], 1024));
+                    echo fread($result[2], 1024);
                 }
                 fclose($result[2]);
             }

@@ -8,7 +8,6 @@ class Response
     private $scgi = null;
 
     private $headers = array();
-    private $sent_headers = false;
 
     private $content_type = null;
     private $status = 200;

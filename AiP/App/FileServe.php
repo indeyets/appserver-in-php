@@ -5,7 +5,6 @@ namespace AiP\App;
 class FileServe
 {
     private $path;
-    private $directory_listings;
 
     public function __construct($path)
     {
@@ -718,8 +717,7 @@ class FileServe
             );
         }
 
-        $name = basename($path);
-        $extension = substr($path, strrpos($path, '.') + 1);
+        $extension = pathinfo($path, PATHINFO_EXTENSION);
 
         if (isset($extensions[$extension]))
             return $extensions[$extension];

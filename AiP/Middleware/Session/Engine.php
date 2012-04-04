@@ -2,6 +2,8 @@
 
 namespace AiP\Middleware\Session;
 
+use AiP\Middleware\Session\Storage\IdIsTakenException;
+
 class Engine
 {
     private $cookies = array();
@@ -10,11 +12,11 @@ class Engine
     private $options;
 
     private $is_started = false;
-    private $is_saved = false;
 
     private $id = null;
     private $vars = array();
 
+    /** @var $storage \AiP\Middleware\Session\Storage */
     private $storage = null;
 
     public function __construct($context)
@@ -88,7 +90,7 @@ class Engine
         $class = $this->options['storage'];
 
         if (!in_array(__NAMESPACE__.'\\Storage', class_implements($class))) {
-            throw new UnexpectedValueException($storage.' class does not implement Storage interface');
+            throw new UnexpectedValueException($class.' class does not implement Storage interface');
         }
 
         $this->storage = new $class($this->options);
@@ -140,9 +142,7 @@ class Engine
 
     private function createSessionWithNewId()
     {
-        $callback = array($this->options['storage'], 'idIsFree');
-
-        while (true) {
+        do {
             $id = hash($this->options['hash_algorithm'], mt_rand());
 
             try {
@@ -150,7 +150,7 @@ class Engine
                 break; // cool, we're first here
             } catch (IdIsTakenException $e) {
             }
-        }
+        } while (true);
 
         $this->id = $id;
     }

@@ -19,7 +19,7 @@ class ClientRequest
     public function reset()
     {
         $this->method = null;
-        $this->url = null;
+        $this->uri = null;
         $this->headers = array();
         $this->post_vars = array();
         $this->files = array();
