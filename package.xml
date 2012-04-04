@@ -28,18 +28,16 @@
 
     <date>2012-04-05</date>
     <version>
-        <release>0.9.3</release>
+        <release>0.9.4</release>
         <api>0.9.1</api>
     </version>
     <stability>
-        <release>stable</release>
+        <release>beta</release>
         <api>stable</api>
     </stability>
     <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
     <notes>
-        - Some PHP-5.4 compatibility fixes
-        - Compress middleware can work with streams now
-        - typehinting fixes (SCGI should work again)
+        -
     </notes>
 
     <contents>
@@ -253,6 +251,24 @@
     </phprelease>
 
     <changelog>
+        <release>
+            <date>2012-04-05</date>
+            <version>
+                <release>0.9.3</release>
+                <api>0.9.1</api>
+            </version>
+            <stability>
+                <release>stable</release>
+                <api>stable</api>
+            </stability>
+            <license uri="http://www.milkfarmsoft.com/bsd.php">BSD license</license>
+            <notes>
+                - Some PHP-5.4 compatibility fixes
+                - Compress middleware can work with streams now
+                - typehinting fixes (SCGI should work again)
+            </notes>
+        </release>
+
         <release>
             <date>2011-09-13</date>
             <version>
