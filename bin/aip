@@ -3,7 +3,13 @@
 if (!extension_loaded('posix') or !extension_loaded('pcntl'))
     die('"aip" tool requires "posix" and "pcntl" extensions of PHP');
 
-require 'AiP/autoload.php';
+if (is_dir(realpath(__DIR__.'/../../../..').'/vendor')) {
+    // composer-friendly case
+    require realpath(__DIR__.'/../../../..').'/vendor/autoload.php';
+} else {
+    // fallback to include_path
+    require 'AiP/autoload.php';
+}
 
 $runner = AiP\Runner\App::get_instance();
 $runner->run();
