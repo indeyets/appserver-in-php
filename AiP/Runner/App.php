@@ -2,7 +2,9 @@
 
 namespace AiP\Runner;
 
-require 'pake/init.php';
+if (!defined('PAKE_DIR')) {
+    require 'pake/init.php';
+}
 
 class App extends \pakeApp
 {
