@@ -78,7 +78,7 @@ class Engine
                 'cookie_name' => ini_get('session.name'),
                 'hash_algorithm' => 'sha1',
                 'storage' => __NAMESPACE__.'\Storage\FileStorage',
-                'cookie_lifetime' => ini_get('session.cookie_lifetime'),
+                'cookie_lifetime' => (int) ini_get('session.cookie_lifetime'),
                 'cookie_path' => ini_get('session.cookie_path'),
                 'cookie_domain' => ini_get('session.cookie_domain'),
                 'cookie_secure' => ini_get('session.cookie_secure'),
