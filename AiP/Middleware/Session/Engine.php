@@ -164,13 +164,13 @@ class Engine
     // cookie stuff
     private function parseCookies($cookiestr)
     {
-        $pairs = explode('; ', $cookiestr);
+        $pairs = explode(';', $cookiestr);
 
         $this->cookies = array();
 
         foreach ($pairs as $pair) {
             list($name, $value) = explode('=', $pair);
-            $this->cookies[$name] = urldecode($value);
+            $this->cookies[trim($name)] = urldecode(trim($value));
         }
     }
 
