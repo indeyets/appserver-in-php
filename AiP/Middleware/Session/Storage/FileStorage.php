@@ -96,7 +96,7 @@ class FileStorage implements \AiP\Middleware\Session\Storage
             return false;
         }
 
-        if (file_get_contents($file) == "") {
+        if (filesize($file) === 0) {
             return false;
         }
 
