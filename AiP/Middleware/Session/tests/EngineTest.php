@@ -3,7 +3,7 @@
 require_once "PHPUnit/Framework/TestCase.php";
 error_reporting(E_ALL | E_STRICT);
 
-require '../../../autoload.php';
+require __DIR__.'/../../../autoload.php';
 
 use AiP\Middleware\Session\Engine;
 use AiP\Middleware\Session\Storage;
@@ -49,6 +49,11 @@ class DumbStorage implements Storage
     {
         unset(self::$data[$this->name]);
         $this->name = null;
+    }
+
+    public function isValid($name)
+    {
+        return true;
     }
 }
 
