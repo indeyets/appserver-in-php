@@ -9,15 +9,30 @@ use AiP\Middleware\Session\Storage\FileStorage;
 
 class FileStorageTest extends PHPUnit_Framework_TestCase
 {
+    private $dir;
+
+    public function setUp()
+    {
+        $this->dir = __DIR__.'/sessions';
+
+        if (!is_dir($this->dir)) {
+            mkdir($this->dir);
+        }
+    }
+
+    public function tearDown()
+    {
+        if (is_dir($this->dir)) {
+            rmdir($this->dir);
+        }
+    }
+
     public function test1()
     {
-        $dir = __DIR__.'/sessions';
-        mkdir($dir);
-
-        $fs = new FileStorage(array('save_path'  => $dir));
+        $fs = new FileStorage(array('save_path' => $this->dir));
         $fs->create('test');
 
-        $file = $dir.'/test.session';
+        $file = $this->dir.'/test.session';
 
         $this->assertTrue(file_exists($file));
 
@@ -41,7 +56,8 @@ class FileStorageTest extends PHPUnit_Framework_TestCase
         $data['baz'] = 'bar';
         $fs->save($data);
 
-        $data = unserialize(file_get_contents($file));
+        $str = file_get_contents($file);
+        $data = unserialize($str);
 
         $this->assertEquals(FileStorage::MAGIC, $data['magic']);
         $this->assertEquals('bar', $data['data']['foo']);
@@ -51,7 +67,5 @@ class FileStorageTest extends PHPUnit_Framework_TestCase
         $fs->destroy();
 
         $this->assertFalse(file_exists($file));
-
-        rmdir($dir);
     }
 }

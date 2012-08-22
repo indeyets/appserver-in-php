@@ -95,15 +95,19 @@ class Engine
 
         $this->storage = new $class($this->options);
 
+        // expecting the worse
+        $should_create_new = true;
+
         if ($this->cookieIsSet()) {
             $this->fetchIdFromCookie();
+
             if ($this->storage->isValid($this->id)) {
                 $this->vars = $this->storage->open($this->id);
-            } else {
-                $this->createSessionWithNewId();
-                $this->createCookie();
+                $should_create_new = false; // everything is fine
             }
-        } else {
+        }
+
+        if (true === $should_create_new) {
             $this->createSessionWithNewId();
             $this->createCookie();
         }

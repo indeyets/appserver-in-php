@@ -133,7 +133,7 @@ class FileStorage implements \AiP\Middleware\Session\Storage
         if (file_exists($file))
             $this->_fp = @fopen($file, 'r+');
         else
-            $this->_fp = @fopen($file, 'w');
+            $this->_fp = @fopen($file, 'w+');
 
         if (false === $this->_fp) {
             $this->_fp = null;
@@ -152,12 +152,16 @@ class FileStorage implements \AiP\Middleware\Session\Storage
 
     private function readData()
     {
-        $this->vars = self::unserialize(file_get_contents($this->getSessionFilename()));
+        $data = stream_get_contents($this->_fp, -1, 0);
+        $this->vars = self::unserialize($data);
     }
 
     private function flushData()
     {
-        file_put_contents($this->getSessionFilename(), self::serialize($this->vars));
+        $data = self::serialize($this->vars);
+        ftruncate($this->_fp, 0);
+        fseek($this->_fp, 0);
+        fwrite($this->_fp, $data);
     }
 
 
