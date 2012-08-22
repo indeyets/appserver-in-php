@@ -114,7 +114,7 @@ class FileStorage implements \AiP\Middleware\Session\Storage
         $file = $this->getSessionFilename($name);
 
         if (file_exists($file) and !is_writable($file)) {
-            throw new RuntimeException('Noe enough rights to write to "'.$file.'"');
+            throw new RuntimeException('Not enough rights to write to "'.$file.'"');
         }
     }
 
