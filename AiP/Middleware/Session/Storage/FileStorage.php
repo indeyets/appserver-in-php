@@ -82,6 +82,27 @@ class FileStorage implements \AiP\Middleware\Session\Storage
         $this->name = null;
     }
 
+    public function isValid($name)
+    {
+        try {
+            $this->validateSessionFile($name);
+        } catch (RuntimeException $e) {
+            return false;
+        }
+
+        $file = $this->getSessionFilename($name);
+
+        if (!file_exists($file)) {
+            return false;
+        }
+
+        if (file_get_contents($file) == "") {
+            return false;
+        }
+
+        return true;
+    }
+
 
     private function idIsFree($name)
     {
@@ -95,24 +116,6 @@ class FileStorage implements \AiP\Middleware\Session\Storage
         if (file_exists($file) and !is_writable($file)) {
             throw new RuntimeException('Noe enough rights to write to "'.$file.'"');
         }
-    }
-
-    public function isValid($name) {
-        try {
-            $this->validateSessionFile($name);
-        } catch (RuntimeException $e) {
-            return false;
-        }
-
-        $file = $this->getSessionFilename($name);
-        if (!file_exists($file)) {
-            return false;
-        }
-        if (file_get_contents($file) == "") {
-            return false;
-        }
-
-        return true;
     }
 
     private function getSessionFilename($name = null)
