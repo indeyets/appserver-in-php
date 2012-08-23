@@ -17,7 +17,13 @@ class Socket extends AbstractTransport
         $this->in_loop = true;
         while ($this->in_loop) {
             declare(ticks=1) {
-                $conn = @stream_socket_accept($this->socket, -1);
+                $read = array($this->socket);
+                $write = null;
+                $except = null;
+
+                if (1 === stream_select($read, $write, $except, null)) {
+                    $conn = @stream_socket_accept($this->socket, -1);
+                }
             }
 
             if (false === $conn)
