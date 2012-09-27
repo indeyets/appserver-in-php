@@ -25,6 +25,10 @@ class Runner
         foreach ($this->servers as $server) {
             $handler = new \AiP\Handler\Daemonic($server['socket'], $server['protocol'], $server['transport']);
 
+            // drop privileges after opening sockets, but before entering the working loop
+            // this will only work when the process is started by root
+            $this->dropPrivileges($server);
+
             for ($i = 0; $i < $server['min-children']; $i++) {
                 $pid = $this->startWorker($handler, $server['app']);
 
@@ -46,6 +50,7 @@ class Runner
 
             if (0 === $old_pid) {
                 echo "[no workers]\n";
+
                 return;
             }
 
@@ -64,6 +69,57 @@ class Runner
             $pid = $this->startWorker($handler, $app);
             $this->kids[$pid] = array($handler, $app);
         }
+    }
+
+    protected function dropPrivileges($server)
+    {
+        if (!array_key_exists('user', $server) and !array_key_exists('group', $server)) {
+            // nothing to do
+            return;
+        }
+
+        if (posix_getuid() != 0) {
+            echo "\n[Warning] Can't change uid/gid because aip is not run by superuser\n";
+            return;
+        }
+
+        if (isset($server['user'])) {
+            posix_setuid($this->getUserId($server['user']));
+        }
+
+        if (isset($server['group'])) {
+            posix_setgid($this->getGroupId($server['group']));
+        }
+    }
+
+    protected function getUserId($user)
+    {
+        if (!is_int($user)) {
+            $info = posix_getpwnam($user);
+
+            if ($info === false) {
+                throw new \Exception('User '.$user.' is not available.');
+            }
+
+            $user = $info['uid'];
+        }
+
+        return $user;
+    }
+
+    protected function getGroupId($group)
+    {
+        if (!is_int($group)) {
+            $info = posix_getgrnam($group);
+
+            if ($info === false) {
+                throw new \Exception('Group '.$group.' is not available.');
+            }
+
+            $group = $info['gid'];
+        }
+
+        return $group;
     }
 
     protected function startWorker($handler, $app)
@@ -115,7 +171,6 @@ class Runner
         } catch (\Exception $e) {
         }
     }
-
 
     protected function sigterm($signo)
     {
