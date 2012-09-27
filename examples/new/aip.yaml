@@ -12,6 +12,8 @@ servers:
     socket: 'tcp://127.0.0.1:8080'
     min-children: 5
     max-children: 10
+    user: www-data
+    group: www-data
     app: *MyApp
   -
     protocol: SCGI
