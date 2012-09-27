@@ -25,7 +25,11 @@ class Runner
         foreach ($this->servers as $server) {
             $handler = new \AiP\Handler\Daemonic($server['socket'], $server['protocol'], $server['transport']);
 
-            for ($i = 0; $i < $server['min-children']; $i++) {
+			// drop privileges after opening sockets, but before entering the working loop
+			// this will only work when the process is startet by root
+			$this->dropPrivileges($server);
+
+			for ($i = 0; $i < $server['min-children']; $i++) {
                 $pid = $this->startWorker($handler, $server['app']);
 
                 // store, how we started child process
@@ -65,6 +69,36 @@ class Runner
             $this->kids[$pid] = array($handler, $app);
         }
     }
+
+	protected function dropPrivileges($server)
+	{
+		if (isset($server['user'])) {
+			posix_setuid($this->getUserId($server['user']));
+		}
+		if (isset($server['group'])) {
+			posix_setgid($this->getGroupId($server['group']));
+		}
+	}
+
+	protected function getUserId($user)
+	{
+		if (!is_int($user)) {
+			$info = posix_getpwnam($user);
+			if($info === false) throw new Exception('User '.$user.' is not available.');
+			$user = $info['uid'];
+		}
+		return $user;
+	}
+
+	protected function getGroupId($group)
+	{
+		if (!is_int($group)) {
+			$info = posix_getgrnam($group);
+			if($info === false) throw new Exception('Group '.$group.' is not available.');
+			$group = $info['gid'];
+		}
+		return $group;
+	}
 
     protected function startWorker($handler, $app)
     {
