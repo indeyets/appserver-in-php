@@ -103,7 +103,6 @@ class FileStorage implements \AiP\Middleware\Session\Storage
         return true;
     }
 
-
     private function idIsFree($name)
     {
         return !file_exists($this->getSessionFilename($name));
@@ -141,6 +140,7 @@ class FileStorage implements \AiP\Middleware\Session\Storage
         }
 
         flock($this->_fp, LOCK_EX);
+
         return true;
     }
 
@@ -163,7 +163,6 @@ class FileStorage implements \AiP\Middleware\Session\Storage
         fseek($this->_fp, 0);
         fwrite($this->_fp, $data);
     }
-
 
     private static function serialize(array $data)
     {

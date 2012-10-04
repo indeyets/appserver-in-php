@@ -1,6 +1,6 @@
 <?php
 
-require_once "PHPUnit/Framework/TestCase.php";
+require_once 'PHPUnit/Framework/TestCase.php';
 error_reporting(E_ALL | E_STRICT);
 
 require __DIR__.'/../../../autoload.php';

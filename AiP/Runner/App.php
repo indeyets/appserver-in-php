@@ -46,7 +46,6 @@ class App extends \pakeApp
         $this->display_tasks_and_comments();
     }
 
-
     public function showVersion()
     {
         parent::showVersion();
@@ -62,7 +61,6 @@ class App extends \pakeApp
             echo \pakeColor::colorize("Try ".self::$EXEC_NAME." -H for more information", 'INFO')."\n";
         }
     }
-
 
     public static function run_app($task, $args)
     {

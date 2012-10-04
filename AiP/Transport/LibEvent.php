@@ -69,7 +69,7 @@ class LibEvent extends AbstractTransport
 
         if (false === event_base_set($event, $this->event_base))
             throw new RuntimeException("Can't set [{$socket_num}] event base.");
-        
+
         if (false === event_add($event)) {
             throw new RuntimeException("Can't add event");
         }
@@ -91,6 +91,7 @@ class LibEvent extends AbstractTransport
         if ($this->connection_statuses[$conn_num] != self::STATE_READ) {
             self::log('Connection', $conn_num, 'trying to write in read connection');
             $this->closeConnection($conn_num);
+
             return;
         }
 
@@ -141,6 +142,7 @@ class LibEvent extends AbstractTransport
         stream_set_blocking($this->socket, 0);
 
         self::log('Socket', 'accepted');
+
         return $connection;
     }
 
@@ -149,6 +151,7 @@ class LibEvent extends AbstractTransport
         $num = $this->connections_count++;
         $this->connections[$num] = $connection;
         self::log('Connection', $num, 'created');
+
         return $num;
     }
 
@@ -168,7 +171,7 @@ class LibEvent extends AbstractTransport
         $this->connection_statuses[$conn_num] = self::STATE_READ;
     }
 
-    function closeConnection($conn_num)
+    public function closeConnection($conn_num)
     {
         $this->freeBuffer($conn_num);
         fclose($this->connections[$conn_num]);
@@ -182,17 +185,19 @@ class LibEvent extends AbstractTransport
      * @param $count
      * @return string
      */
-    function readFromBuffer($conn_id, $count)
+    public function readFromBuffer($conn_id, $count)
     {
         $readed = event_buffer_read($this->connection_buffers[$conn_id], $count);
         self::log('Connection', $conn_id, 'read '.strlen($readed).' chars from buffer');
+
         return $readed;
     }
 
-    function writeToBuffer($conn_id, $data)
+    public function writeToBuffer($conn_id, $data)
     {
         $result = event_buffer_write($this->connection_buffers[$conn_id], $data);
         self::log('Connection', $conn_id, 'wrote '.strlen($data).' chars to buffer');
+
         return $result;
     }
 

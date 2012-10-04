@@ -11,7 +11,6 @@ class Cookies implements \ArrayAccess
         $this->cookies = $_COOKIE;
     }
 
-
     public function setcookie($name, $value, $expire = 0, $path = null, $domain = null, $secure = false, $httponly = false)
     {
         setcookie($name, $value, $expire, $path, $domain, $secure, $httponly);
@@ -28,7 +27,6 @@ class Cookies implements \ArrayAccess
     {
         return $this->cookies;
     }
-
 
     public function offsetExists($offset)
     {

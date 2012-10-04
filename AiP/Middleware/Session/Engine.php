@@ -142,8 +142,6 @@ class Engine
         $this->is_started = false;
     }
 
-
-
     private function createSessionWithNewId()
     {
         do {
@@ -181,12 +179,14 @@ class Engine
     private function cookieIsSet()
     {
         $name = $this->options['cookie_name'];
+
         return isset($this->cookies[$name]);
     }
 
     private function getIdFromCookie()
     {
         $name = $this->options['cookie_name'];
+
         return $this->cookies[$name];
     }
 
@@ -253,7 +253,6 @@ class Engine
 
         return $string;
     }
-
 
     public function _getHeaders()
     {

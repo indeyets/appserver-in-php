@@ -6,4 +6,3 @@ interface Handler
 {
     public function serve($app);
 }
-

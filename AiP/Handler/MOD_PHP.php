@@ -56,7 +56,7 @@ class MOD_PHP implements \AiP\Handler
                 echo $result[2];
             } elseif (is_resource($result[2])) {
                 fseek($result[2], 0);
-                while(!feof($result[2])) {
+                while (!feof($result[2])) {
                     echo fread($result[2], 1024);
                 }
                 fclose($result[2]);

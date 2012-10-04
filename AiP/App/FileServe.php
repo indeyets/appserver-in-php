@@ -55,7 +55,6 @@ class FileServe
         return $this->serve($path);
     }
 
-
     private function serve($path)
     {
         $stream = fopen($path, 'rb');

@@ -80,6 +80,7 @@ class Runner
 
         if (posix_getuid() != 0) {
             echo "\n[Warning] Can't change uid/gid because aip is not run by superuser\n";
+
             return;
         }
 

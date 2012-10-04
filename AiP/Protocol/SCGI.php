@@ -33,6 +33,7 @@ class SCGI implements \AiP\Protocol
             // could be bug in PHP or Lighttpd. sometimes, app just gets empty request
             // retrying
             $this->doneWithRequest();
+
             return false;
         }
 
@@ -92,7 +93,7 @@ class SCGI implements \AiP\Protocol
             $this->write($response_data[2]);
         } elseif (is_resource($response_data[2])) {
             fseek($response_data[2], 0);
-            while(!feof($response_data[2])) {
+            while (!feof($response_data[2])) {
                 $this->write(fread($response_data[2], 1024));
             }
             fclose($response_data[2]);

@@ -94,9 +94,9 @@ class Directory
         $ctx['Directory']['path'] = $path;
 
         $app = $this->file_app;
+
         return $app($ctx);
     }
-
 
     private function serveListing($dir, $dir_as_requested)
     {
@@ -136,7 +136,6 @@ class Directory
 
         return array(200, array('Content-type', 'text/html; charset=utf-8'), $html_prefix.$body.$html_suffix);
     }
-
 
     private function redirect($to, $env)
     {

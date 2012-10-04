@@ -33,6 +33,7 @@ class StringStream
     {
         $ret = substr($this->buffer, $this->position, $count);
         $this->position += strlen($ret);
+
         return $ret;
     }
 
@@ -56,6 +57,7 @@ class StringStream
             case SEEK_SET:
                 if ($offset < strlen($this->buffer) && $offset >= 0) {
                      $this->position = $offset;
+
                      return true;
                 } else {
                      return false;
@@ -65,6 +67,7 @@ class StringStream
             case SEEK_CUR:
                 if ($offset >= 0) {
                      $this->position += $offset;
+
                      return true;
                 } else {
                      return false;
@@ -74,6 +77,7 @@ class StringStream
             case SEEK_END:
                 if (strlen($this->buffer) + $offset >= 0) {
                      $this->position = strlen($this->buffer) + $offset;
+
                      return true;
                 } else {
                      return false;

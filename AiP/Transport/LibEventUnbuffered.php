@@ -81,6 +81,7 @@ class LibEventUnbuffered extends AbstractTransport
         stream_set_blocking($this->socket, 0);
 
         self::log('Socket', 'accepted');
+
         return $connection;
     }
 }

@@ -60,6 +60,7 @@ class Client
             function($res, $item) {
                 if ('' !== $res)
                     $res .= "\0";
+
                 return $res.$item[0]."\0".$item[1];
             },
             ''
@@ -67,7 +68,6 @@ class Client
 
         $this->write(strlen($headers_str).':');
         $this->write($headers_str.','.(null === $body ? '' : $body));
-
 
         $body = '';
         while (!feof($this->socket)) {

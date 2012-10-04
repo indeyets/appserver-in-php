@@ -1,6 +1,6 @@
 <?php
 
-require_once "PHPUnit/Framework/TestCase.php";
+require_once 'PHPUnit/Framework/TestCase.php';
 error_reporting(E_ALL | E_STRICT);
 
 require __DIR__.'/../../../autoload.php';
@@ -43,7 +43,6 @@ class DumbStorage implements Storage
         self::$data[$this->name] = $vars;
         $this->name = null;
     }
-
 
     public function destroy()
     {

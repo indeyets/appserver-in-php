@@ -87,7 +87,6 @@ class HTTPParser
         return $result;
     }
 
-
     private static function parseMultipart($ct, $b, &$POST, &$FILES)
     {
         foreach (explode('; ', $ct) as $ct_part) {
@@ -231,7 +230,7 @@ class HTTPParser
     {
         $val = trim($val);
         $last = strtolower($val{strlen($val)-1});
-        switch($last) {
+        switch ($last) {
             // The 'G' modifier is available since PHP 5.1.0
             case 'g':
                 $val *= 1024;

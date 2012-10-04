@@ -21,7 +21,6 @@ class Cookies implements \ArrayAccess
         }
     }
 
-
     public function setcookie($name, $value, $expire = 0, $path = null, $domain = null, $secure = false, $httponly = false)
     {
         $this->addHeader('Set-Cookie', self::cookie_headervalue($name, $value, $expire, $path, $domain, $secure, $httponly, false));
@@ -38,7 +37,6 @@ class Cookies implements \ArrayAccess
     {
         return $this->cookies;
     }
-
 
     public function offsetExists($offset)
     {
@@ -62,7 +60,6 @@ class Cookies implements \ArrayAccess
     {
         throw new LogicException();
     }
-
 
     public function _getHeaders()
     {

@@ -113,12 +113,12 @@ class Daemonic implements \AiP\Handler
         echo $message."\n";
     }
 
-
     // signal handler
     public function graceful()
     {
         if ($this->in_request) {
             $this->should_stop = true;
+
             return;
         }
 
