@@ -10,29 +10,27 @@ preload resources, preconnect to databases and response to requests **really** f
 PHP 5.3+ is required, as it provides new garbage collector for cyclic references,
 which is critical for long-running apps.
 
-Installation
------------
+## Installation
 
-You can get latest release using PEAR:
+The recommended way to install AiP is [through Composer](http://getcomposer.org). 
+Just create a `composer.json` file and run the `php composer.phar install` command to install it:
 
-    pear channel-discover pear.indeyets.ru
-    pear install indeyets/AppServer
+    {
+        "require": {
+            "aip/aip": "0.9.*"
+        }
+    }
 
-Alternatively, you can install AiP with [Composer](http://packagist.org/).
-
-Usage
------
+## Usage
 
 Take a look at [example](https://github.com/indeyets/appserver-in-php/tree/master/examples/new/).
 
 * MyApp.class.php — application class. "__invoke()" method is the entry point
 * aip.yaml — defines that this application should be served both as HTTP and SCGI
 
-run with "aip app path/to/aip.yaml" command
+run with `aip app [path/to/[aip.yaml]]` command
 
-
-Discuss
--------
+##Discuss
 
 Please join [our discussion group](http://groups.google.com/group/aip-php-dev)
 
