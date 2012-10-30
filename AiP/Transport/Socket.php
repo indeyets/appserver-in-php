@@ -32,15 +32,16 @@ class Socket extends AbstractTransport
                 }
             }
 
-            if (false === $conn)
-                return;
+            if (false !== $conn) {
+                $remote_addr = stream_socket_get_name($conn, true);
 
-            $remote_addr = stream_socket_get_name($conn, true);
-            if (false === $remote_addr) {
-                $remote_addr = null;
+                if (false === $remote_addr) {
+                    $remote_addr = null;
+                }
+
+                call_user_func($this->callback, $conn, $remote_addr);
             }
 
-            call_user_func($this->callback, $conn, $remote_addr);
             pcntl_signal_dispatch();
         }
     }
