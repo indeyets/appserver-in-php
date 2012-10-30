@@ -21,7 +21,7 @@
         "source": "https://github.com/indeyets/appserver-in-php"
     },
     "require": {
-        "indeyets/pake": "dev-master",
+        "indeyets/pake": "1.7.*",
         "php": ">=5.3.11",
         "ext-mbstring": "*"
     },
