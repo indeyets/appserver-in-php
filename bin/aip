@@ -3,11 +3,14 @@
 if (!extension_loaded('posix') or !extension_loaded('pcntl'))
     die('"aip" tool requires "posix" and "pcntl" extensions of PHP');
 
-if (is_dir(realpath(__DIR__.'/../../../..').'/vendor')) {
-    // composer-friendly case
-    require realpath(__DIR__.'/../../../..').'/vendor/autoload.php';
+if (is_dir(__DIR__.'/../../../../vendor') and file_exists(__DIR__.'/../../../../vendor/autoload.php')) {
+    // looks like we are installed as dependency via composer
+    require_once realpath(__DIR__.'/../../../..').'/vendor/autoload.php';
+} elseif (is_dir(__DIR__.'/../vendor') and file_exists(__DIR__.'/../vendor/autoload.php')) {
+    // looks like we are in composer dev-environment
+    require_once realpath(__DIR__.'/..').'/vendor/autoload.php';
 } else {
-    // fallback to include_path
+    // fallback to custom autoloader
     require 'AiP/autoload.php';
 }
 
