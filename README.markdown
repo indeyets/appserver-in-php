@@ -17,7 +17,7 @@ Just create a `composer.json` file and run the `php composer.phar install` comma
 
     {
         "require": {
-            "aip/aip": "0.9.*"
+            "aip/aip": "~0.9.6"
         }
     }
 
