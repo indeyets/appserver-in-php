@@ -47,7 +47,7 @@ class HTTP implements \AiP\Protocol
         $this->stream = $stream;
 
         do {
-            $_headers_str = stream_get_line($this->stream, 0, "\r\n\r\n");
+            $_headers_str = stream_get_line($this->stream, 65535, "\r\n\r\n");
 
             if ('' === $_headers_str) {
                 // client just disconnected
