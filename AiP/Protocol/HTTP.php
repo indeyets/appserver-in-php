@@ -58,14 +58,12 @@ class HTTP implements \AiP\Protocol
     {
         $this->stream = $stream;
 
-        do {
-            $_headers_str = stream_get_line($this->stream, 65535, "\r\n\r\n");
+        $_headers_str = stream_get_line($this->stream, 65535, "\r\n\r\n");
 
-            if ('' === $_headers_str) {
-                // client just disconnected
-                return false;
-            }
-        } while (false === $_headers_str);
+        if (false === $_headers_str) {
+            // client just disconnected
+            return false;
+        }
 
         if (extension_loaded('httpparser')) {
             $parser = new \HttpParser();
