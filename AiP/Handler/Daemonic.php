@@ -5,6 +5,7 @@ namespace AiP\Handler;
 use AiP\Handler\Daemonic\LogicException;
 use AiP\Handler\Daemonic\InvalidArgumentException;
 use AiP\Handler\Daemonic\BadProtocolException;
+use AiP\Transport\NoStreamException;
 
 class Daemonic implements \AiP\Handler
 {
@@ -93,7 +94,11 @@ class Daemonic implements \AiP\Handler
         if (!is_array($result) or count($result) != 3)
             throw new BadProtocolException("App did not return proper result");
 
-        $this->protocol->writeResponse($result);
+        try {
+            $this->protocol->writeResponse($result);
+        } catch (NoStreamException $e) {
+            $this->log('output stream is gone. cleaning up');
+        }
 
         // cleanup
         unset($result);

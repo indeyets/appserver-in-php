@@ -2,6 +2,8 @@
 
 namespace AiP\Protocol;
 
+use AiP\Transport\NoStreamException;
+
 class HTTP implements \AiP\Protocol
 {
     // iProtocol
@@ -27,18 +29,28 @@ class HTTP implements \AiP\Protocol
         $response .= "\r\n";
 
         // reponse is string
-        if (is_string($response_data[2]))
+        if (is_string($response_data[2])) {
             $response .= $response_data[2];
+        }
 
-        $this->write($response); // body
+        try {
+            $this->write($response); // body
 
-        // response is stream
-        if (is_resource($response_data[2])) {
-            fseek($response_data[2], 0);
-            while (!feof($response_data[2])) {
-                $this->write(fread($response_data[2], 1024));
+            // response is stream
+            if (is_resource($response_data[2])) {
+                fseek($response_data[2], 0);
+
+                while (!feof($response_data[2])) {
+                    $this->write(fread($response_data[2], 1024));
+                }
+                fclose($response_data[2]);
             }
-            fclose($response_data[2]);
+        } catch (NoStreamException $e) {
+            if (is_resource($response_data[2])) {
+                fclose($response_data[2]);
+            }
+
+            throw $e;
         }
     }
 
@@ -156,6 +168,10 @@ class HTTP implements \AiP\Protocol
 
     public function write($data)
     {
-        fwrite($this->stream, $data);
+        $retval = @fwrite($this->stream, $data);
+
+        if (false === $retval) {
+            throw new NoStreamException();
+        }
     }
 }
