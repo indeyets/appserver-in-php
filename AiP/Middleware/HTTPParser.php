@@ -37,25 +37,31 @@ class HTTPParser
         // _POST and _FILES
         $stream_name = null;
 
-        if ($context['env']['REQUEST_METHOD'] == 'POST') {
+        if ($context['env']['REQUEST_METHOD'] === 'POST') {
             $context['_POST'] = array();
             $context['_FILES'] = array();
 
-            $buffer = stream_get_contents($context['stdin'], $context['env']['CONTENT_LENGTH']);
+            $form_data = (empty($context['env']['CONTENT_TYPE']) or strpos($context['env']['CONTENT_TYPE'], 'application/x-www-form-urlencoded') === 0);
+            $multipart = (isset($context['env']['CONTENT_TYPE']) and strpos($context['env']['CONTENT_TYPE'], 'multipart/form-data') === 0);
 
-            if (isset($this->options['forward_stream']) and $this->options['forward_stream'] === true) {
-                // user asks us to provide a valid stream to app
-                $_old_stdin = $context['stdin'];
+            if ($form_data or $multipart) {
+                $buffer = stream_get_contents($context['stdin'], $context['env']['CONTENT_LENGTH']);
 
-                $context['stdin'] = Keeper::create($buffer)->fopen();
+                if (isset($this->options['forward_stream']) and $this->options['forward_stream'] === true) {
+                    // user asks us to provide a valid stream to app
+                    $_old_stdin = $context['stdin'];
+
+                    $context['stdin'] = Keeper::create($buffer)->fopen();
+                }
+
+                if ($multipart) {
+                    self::parseMultipart($context['env']['CONTENT_TYPE'], $buffer, $context['_POST'], $context['_FILES']);
+                } elseif ($form_data) {
+                    parse_str($buffer, $context['_POST']);
+                }
+
+                unset($buffer); // free memory
             }
-
-            if (isset($context['env']['CONTENT_TYPE']) and strpos($context['env']['CONTENT_TYPE'], 'multipart/form-data') === 0) {
-                self::parseMultipart($context['env']['CONTENT_TYPE'], $buffer, $context['_POST'], $context['_FILES']);
-            } else {
-                parse_str($buffer, $context['_POST']);
-            }
-            unset($buffer); // free memory
         }
 
         // EXECUTE

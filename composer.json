@@ -25,6 +25,10 @@
         "php": ">=5.3.3",
         "ext-mbstring": "*"
     },
+    "require-dev": {
+        "phpunit/php-invoker": "~1.1.2",
+        "phpunit/phpunit": "~3.7"
+    },
     "suggest": {
         "ext-pcntl": "*",
         "ext-posix": "*"
