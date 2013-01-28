@@ -40,7 +40,7 @@ class URLMap
 
     public function __invoke($ctx)
     {
-        $path = self::squeeze($ctx['env']['PATH_INFO'], '/');
+        $path = self::squeezeStart($ctx['env']['PATH_INFO'], '/');
         $script_name = $ctx['env']['SCRIPT_NAME'];
         $host        = isset($ctx['env']['HTTP_HOST']) ? $ctx['env']['HTTP_HOST'] : null;
         $server_name = isset($ctx['env']['SERVER_NAME']) ? $ctx['env']['SERVER_NAME'] : null;
@@ -71,8 +71,8 @@ class URLMap
     }
 
     // helpers
-    private static function squeeze($where, $what)
+    private static function squeezeStart($where, $what)
     {
-        return mb_ereg_replace($what.'+', $what, $where);
+        return mb_ereg_replace('^'.$what.'+', $what, $where);
     }
 }
