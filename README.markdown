@@ -1,6 +1,8 @@
 AppServer, a set of components for building fast universal web-apps in PHP
 ==========================================================================
 
+[![Latest Stable Version](https://poser.pugx.org/aip/aip/v/stable.png)](https://packagist.org/packages/aip/aip)
+
 Web server interface for PHP, inspired by Ruby’s Rack and Python’s WSGI. It 
 provides a common API for connecting PHP frameworks and applications to webservers.
 
@@ -17,7 +19,7 @@ Just create a `composer.json` file and run the `php composer.phar install` comma
 
     {
         "require": {
-            "aip/aip": "~0.9.6"
+            "aip/aip": "~0.9.11"
         }
     }
 
