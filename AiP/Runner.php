@@ -85,42 +85,12 @@ class Runner
         }
 
         if (isset($server['user'])) {
-            posix_setuid($this->getUserId($server['user']));
+            posix_setuid(self::getUserId($server['user']));
         }
 
         if (isset($server['group'])) {
-            posix_setgid($this->getGroupId($server['group']));
+            posix_setgid(self::getGroupId($server['group']));
         }
-    }
-
-    protected function getUserId($user)
-    {
-        if (!is_int($user)) {
-            $info = posix_getpwnam($user);
-
-            if ($info === false) {
-                throw new \Exception('User '.$user.' is not available.');
-            }
-
-            $user = $info['uid'];
-        }
-
-        return $user;
-    }
-
-    protected function getGroupId($group)
-    {
-        if (!is_int($group)) {
-            $info = posix_getgrnam($group);
-
-            if ($info === false) {
-                throw new \Exception('Group '.$group.' is not available.');
-            }
-
-            $group = $info['gid'];
-        }
-
-        return $group;
     }
 
     protected function startWorker($handler, $app)
@@ -194,5 +164,50 @@ class Runner
         foreach ($this->kids as $pid => $data) {
             posix_kill($pid, SIGUSR1);
         }
+    }
+
+
+    /**
+     * Converts user-name into UID
+     * @param mixed $user_name
+     * @return int
+     * @throws \Exception
+     */
+    protected static function getUserId($user_name)
+    {
+        if (is_int($user_name)) {
+            // this is a UID already
+            return $user_name;
+        }
+
+
+        $info = posix_getpwnam($user_name);
+
+        if ($info === false) {
+            throw new \Exception('User '.$user_name.' is not available.');
+        }
+
+        return $info['uid'];
+    }
+
+    /**
+     * Converts group-name into GID
+     * @param mixed $group_name
+     * @return int
+     * @throws \Exception
+     */
+    protected static function getGroupId($group_name)
+    {
+        if (is_int($group_name)) {
+            // this is a GID already
+            return $group_name;
+        }
+        $info = posix_getgrnam($group_name);
+
+        if ($info === false) {
+            throw new \Exception('Group '.$group_name.' is not available.');
+        }
+
+        return $info['gid'];
     }
 }
