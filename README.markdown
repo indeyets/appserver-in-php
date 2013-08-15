@@ -3,13 +3,14 @@ AppServer, a set of components for building fast universal web-apps in PHP
 
 [![Latest Stable Version](https://poser.pugx.org/aip/aip/v/stable.png)](https://packagist.org/packages/aip/aip)
 
-Web server interface for PHP, inspired by Ruby’s Rack and Python’s WSGI. It 
-provides a common API for connecting PHP frameworks and applications to webservers.
+Web server interface for PHP, inspired by Ruby’s [Rack](http://rack.github.io/) and
+Python’s [WSGI](http://wsgi.readthedocs.org/). It provides a common API for connecting
+PHP frameworks and applications to webservers.
 
 The main idea is, that your app, if built for this protocol, will be able to 
 preload resources, preconnect to databases and response to requests **really** fast.
 
-PHP 5.3+ is required, as it provides new garbage collector for cyclic references,
+PHP 5.3+ is required, as it provides [garbage collector](http://docs.php.net/gc) for cyclic references,
 which is critical for long-running apps.
 
 ## Installation
@@ -19,7 +20,7 @@ Just create a `composer.json` file and run the `php composer.phar install` comma
 
     {
         "require": {
-            "aip/aip": "~0.9.11"
+            "aip/aip": "~0.10.0"
         }
     }
 
