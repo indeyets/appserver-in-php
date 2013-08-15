@@ -4,17 +4,25 @@ namespace AiP;
 
 class Runner
 {
-    private $servers;
     private $cwd;
 
     private $kids = array();
+    private $servers = array();
 
+    /**
+     * @param string $cwd Runner will load files relative to this path
+     */
     public function __construct($cwd)
     {
         $this->cwd = $cwd;
-        $this->servers = array();
     }
 
+    /**
+     * Add definition of server to the stack
+     * Array should have fields: socket, protocol, transport, min-children, app
+     * Array can have fields: user, group, max-children
+     * @param array $server
+     */
     public function addServer(array $server)
     {
         $this->servers[] = $server;
@@ -23,7 +31,7 @@ class Runner
     public function go()
     {
         foreach ($this->servers as $server) {
-            $handler = new \AiP\Handler\Daemonic($server['socket'], $server['protocol'], $server['transport']);
+            $handler = new Handler\Daemonic($server['socket'], $server['protocol'], $server['transport']);
 
             // drop privileges after opening sockets, but before entering the working loop
             // this will only work when the process is started by root
@@ -63,7 +71,7 @@ class Runner
         }
     }
 
-    protected function dropPrivileges($server)
+    protected function dropPrivileges(array $server)
     {
         if (!array_key_exists('user', $server) and !array_key_exists('group', $server)) {
             // nothing to do
@@ -85,7 +93,7 @@ class Runner
         }
     }
 
-    protected function startWorker($handler, $app)
+    protected function startWorker(Handler $handler, array $app_definition)
     {
         $pid = pcntl_fork();
 
@@ -95,7 +103,7 @@ class Runner
 
         if ($pid === 0) {
             // we are the child
-            $this->worker($handler, $app);
+            $this->worker($handler, $app_definition);
             die('worker died');
         }
 
@@ -103,7 +111,7 @@ class Runner
 
         // store, how we started child process
         // (so, that later we can restart it with same settings)
-        $this->kids[$pid] = array($handler, $app);
+        $this->kids[$pid] = array($handler, $app_definition);
 
         return $pid;
     }
@@ -116,15 +124,15 @@ class Runner
         $this->startWorker($handler, $app);
     }
 
-    protected function worker($handler, $app_data)
+    protected function worker(Handler $handler, array $app_definition)
     {
         // Make sure, that we have the needed class
-        if (!class_exists($app_data['class'])) {
-            if (empty($app_data['file'])) {
-                throw new \LogicException('Class '.$app_data['class'].' can not be loaded');
+        if (!class_exists($app_definition['class'])) {
+            if (empty($app_definition['file'])) {
+                throw new \LogicException('Class '.$app_definition['class'].' can not be loaded');
             }
 
-            $path = $this->cwd.'/'.$app_data['file'];
+            $path = $this->cwd.'/'.$app_definition['file'];
 
             if (!file_exists($path)) {
                 throw new \LogicException('File '.$path.' is not found');
@@ -132,21 +140,21 @@ class Runner
 
             require $path;
 
-            if (!class_exists($app_data['class'])) {
-                throw new \LogicException('Class '.$app_data['class'].' is not found');
+            if (!class_exists($app_definition['class'])) {
+                throw new \LogicException('Class '.$app_definition['class'].' is not found');
             }
         }
 
         // Instantiate the object
-        if (isset($app_data['parameters']) and count($app_data['parameters']) > 0) {
-            $reflect  = new \ReflectionClass($app_data['class']);
-            $app = $reflect->newInstanceArgs($app_data['parameters']);
+        if (isset($app_definition['parameters']) and count($app_definition['parameters']) > 0) {
+            $reflect  = new \ReflectionClass($app_definition['class']);
+            $app = $reflect->newInstanceArgs($app_definition['parameters']);
         } else {
-            $app = new $app_data['class'];
+            $app = new $app_definition['class'];
         }
 
         // Instantiate the middlewares chain
-        foreach (array_reverse($app_data['middlewares']) as $middleware) {
+        foreach (array_reverse($app_definition['middlewares']) as $middleware) {
             if (is_array($middleware)) {
                 $mw_class = $middleware['class'];
                 $mw_params = array_merge(array($app), $middleware['parameters']);
