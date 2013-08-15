@@ -9,9 +9,6 @@ if (is_dir(__DIR__.'/../../../../vendor') and file_exists(__DIR__.'/../../../../
 } elseif (is_dir(__DIR__.'/../vendor') and file_exists(__DIR__.'/../vendor/autoload.php')) {
     // looks like we are in composer dev-environment
     require_once realpath(__DIR__.'/..').'/vendor/autoload.php';
-} else {
-    // fallback to custom autoloader
-    require 'AiP/autoload.php';
 }
 
 $runner = AiP\Runner\App::get_instance();
