@@ -30,11 +30,7 @@ class Runner
             $this->dropPrivileges($server);
 
             for ($i = 0; $i < $server['min-children']; $i++) {
-                $pid = $this->startWorker($handler, $server['app']);
-
-                // store, how we started child process
-                // (so, that later we can restart it with same settings)
-                $this->kids[$pid] = array($handler, $server['app']);
+                $this->startWorker($handler, $server['app']);
             }
         }
 
@@ -63,11 +59,7 @@ class Runner
             pcntl_signal(SIGINT,  SIG_DFL);
             pcntl_signal(SIGHUP,  SIG_DFL);
 
-            list($handler, $app) = $this->kids[$old_pid];
-            unset($this->kids[$old_pid]);
-
-            $pid = $this->startWorker($handler, $app);
-            $this->kids[$pid] = array($handler, $app);
+            $this->restartWorker($old_pid);
         }
     }
 
@@ -99,14 +91,29 @@ class Runner
 
         if ($pid == -1) {
             die('could not fork');
-        } elseif ($pid === 0) {
+        }
+
+        if ($pid === 0) {
             // we are the child
             $this->worker($handler, $app);
             die('worker died');
         }
 
         // This is PARENT process
+
+        // store, how we started child process
+        // (so, that later we can restart it with same settings)
+        $this->kids[$pid] = array($handler, $app);
+
         return $pid;
+    }
+
+    protected function restartWorker($old_pid)
+    {
+        list($handler, $app) = $this->kids[$old_pid];
+        unset($this->kids[$old_pid]);
+
+        $this->startWorker($handler, $app);
     }
 
     protected function worker($handler, $app_data)
