@@ -118,10 +118,26 @@ class Runner
 
     protected function worker($handler, $app_data)
     {
+        // Make sure, that we have the needed class
         if (!class_exists($app_data['class'])) {
-            require $this->cwd.'/'.$app_data['file'];
+            if (empty($app_data['file'])) {
+                throw new \LogicException('Class '.$app_data['class'].' can not be loaded');
+            }
+
+            $path = $this->cwd.'/'.$app_data['file'];
+
+            if (!file_exists($path)) {
+                throw new \LogicException('File '.$path.' is not found');
+            }
+
+            require $path;
+
+            if (!class_exists($app_data['class'])) {
+                throw new \LogicException('Class '.$app_data['class'].' is not found');
+            }
         }
 
+        // Instantiate the object
         if (isset($app_data['parameters']) and count($app_data['parameters']) > 0) {
             $reflect  = new \ReflectionClass($app_data['class']);
             $app = $reflect->newInstanceArgs($app_data['parameters']);
@@ -129,6 +145,7 @@ class Runner
             $app = new $app_data['class'];
         }
 
+        // Instantiate the middlewares chain
         foreach (array_reverse($app_data['middlewares']) as $middleware) {
             if (is_array($middleware)) {
                 $mw_class = $middleware['class'];
@@ -142,6 +159,7 @@ class Runner
             }
         }
 
+        // Serve the app
         try {
             pcntl_signal(SIGUSR1, array($handler, 'graceful'), false);
             $handler->serve($app);
