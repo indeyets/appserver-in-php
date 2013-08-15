@@ -13,4 +13,5 @@ if (is_dir(__DIR__.'/../../../../vendor') and file_exists(__DIR__.'/../../../../
 
 $app = new \Symfony\Component\Console\Application('aip');
 $app->add(new \AiP\Runner\AppCommand());
+$app->add(new \AiP\Runner\FilesCommand());
 $app->run();
