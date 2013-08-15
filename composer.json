@@ -21,12 +21,11 @@
         "source": "https://github.com/indeyets/appserver-in-php"
     },
     "require": {
-        "indeyets/pake": "1.7.*",
+        "symfony/console": "~2.3",
         "php": ">=5.3.3",
         "ext-mbstring": "*"
     },
     "require-dev": {
-        "phpunit/php-invoker": "~1.1.2",
         "phpunit/phpunit": "~3.7"
     },
     "suggest": {
