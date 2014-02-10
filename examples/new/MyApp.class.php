@@ -46,7 +46,7 @@ class MyApp
         $buffer .= 'Hello world! #'.$c."\n";
         $buffer .= 'Memory usage: '.$m."\n";
         $buffer .= 'Peak Memory usage: '.$p."\n";
-        $buffer .= 'Memory usage last growed at request#'.$this->local_storage['memory_peak_counter']."\n\n";
+        $buffer .= 'Memory usage last grew at request#'.$this->local_storage['memory_peak_counter']."\n\n";
         $buffer .= "HEADERS:\n".var_export($context['env'], true)."\n";
         $buffer .= "COOKIES:\n".var_export($context['_COOKIE']->__toArray(), true)."\n";
         $buffer .= "GET:\n".var_export($context['_GET'], true)."\n";
