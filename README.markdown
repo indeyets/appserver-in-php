@@ -31,7 +31,7 @@ Take a look at [example](https://github.com/indeyets/appserver-in-php/tree/maste
 * MyApp.class.php — application class. "__invoke()" method is the entry point
 * aip.yaml — defines that this application should be served both as HTTP and SCGI
 
-run with `aip app [path/to/[aip.yaml]]` command
+run with `aip app [path/to/[aip.yaml]]` command, test by pointing your browser to http://127.0.0.1:8080/
 
 ##Discuss
 
