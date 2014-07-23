@@ -38,7 +38,7 @@ class Socket extends AbstractTransport
                 // stream_socket_accept() doesn't block on some(?) of the ARM systems
                 // so, wrapping it into stream_select() which works always
                 // see https://bugs.php.net/bug.php?id=62816
-                if (1 === stream_select($read, $write, $except, null)) {
+                if (1 === @stream_select($read, $write, $except, null)) {
                     $conn = @stream_socket_accept($this->socket, 0);
                 }
             }
